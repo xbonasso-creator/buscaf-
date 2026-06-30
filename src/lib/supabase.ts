@@ -25,12 +25,21 @@ function makeStorage() {
   };
 }
 
+// En SSR (Node.js < 22) Supabase Realtime necesita el paquete "ws"
+function makeWebSocketImpl() {
+  if (typeof WebSocket !== "undefined") return undefined; // browser/Node22 nativo
+  try { return require("ws"); } catch { return undefined; }
+}
+
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
   auth: {
     storage: makeStorage(),
     autoRefreshToken: true,
     persistSession: true,
     detectSessionInUrl: false,
+  },
+  realtime: {
+    transport: makeWebSocketImpl(),
   },
 });
 
