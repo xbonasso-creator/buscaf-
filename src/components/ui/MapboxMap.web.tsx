@@ -3,6 +3,7 @@ import { router } from "expo-router";
 import type { Cafe } from "../../data/cafes";
 
 const MAPBOX_TOKEN =
+  process.env.EXPO_PUBLIC_MAPBOX_TOKEN ??
   "pk.eyJ1IjoieGVuaWFtYXJpYWEiLCJhIjoiY21yMHBrcTFxMGZvODJxcHJsY2FjNGVkbCJ9.gH7btC2-yCF6QVVbtmzEvw";
 
 type Props = { cafes: Cafe[]; height?: number };
