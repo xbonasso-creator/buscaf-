@@ -1,22 +1,24 @@
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, ImageBackground, Platform } from "react-native";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useQuieroIrStore } from "../store/quieroIrStore";
 import { Colors } from "../constants/colors";
 
 export default function QuieroIr() {
+  const insets = useSafeAreaInsets();
   const { items, toggle } = useQuieroIrStore();
 
   return (
     <View style={styles.wrapper}>
       <View style={styles.container}>
         {/* Header */}
-        <View style={styles.header}>
+        <View style={[styles.header, { paddingTop: insets.top + 8 }]}>
           <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
-            <Text style={styles.backIcon}>‹</Text>
+            <Ionicons name="arrow-back" size={20} color={Colors.text} />
           </TouchableOpacity>
           <Text style={styles.title}>Quiero ir</Text>
-          <View style={{ width: 36 }} />
+          <View style={{ width: 40 }} />
         </View>
 
         {items.length === 0 ? (
@@ -78,9 +80,8 @@ export default function QuieroIr() {
 const styles = StyleSheet.create({
   wrapper: { flex: 1, backgroundColor: Platform.OS === "web" ? "#E8E0D5" : Colors.background, alignItems: "center" },
   container: { flex: 1, width: "100%", maxWidth: 430, backgroundColor: Colors.background },
-  header: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: 16, paddingTop: 16, paddingBottom: 12 },
-  backBtn: { width: 36, height: 36, borderRadius: 18, borderWidth: 1.5, borderColor: Colors.border, alignItems: "center", justifyContent: "center" },
-  backIcon: { fontSize: 22, color: Colors.text, marginTop: -2 },
+  header: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: 20, paddingBottom: 12 },
+  backBtn: { width: 40, height: 40, borderRadius: 20, borderWidth: 1.5, borderColor: Colors.border, alignItems: "center", justifyContent: "center" },
   title: { fontSize: 18, fontWeight: "700", color: Colors.primary },
   empty: { flex: 1, alignItems: "center", justifyContent: "center", paddingHorizontal: 32, gap: 12 },
   emptyTitle: { fontSize: 16, fontWeight: "700", color: Colors.primary, textAlign: "center" },

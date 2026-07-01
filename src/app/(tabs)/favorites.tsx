@@ -31,12 +31,13 @@ export default function Favorites() {
     <View style={styles.wrapper}>
       <View style={styles.container}>
         <View style={[styles.header, canGoBack && styles.headerWithBack, { paddingTop: insets.top + 8 }]}>
-          {canGoBack && (
+          {canGoBack ? (
             <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
-              <Ionicons name="chevron-back" size={22} color={Colors.primary} />
+              <Ionicons name="arrow-back" size={20} color={Colors.text} />
             </TouchableOpacity>
-          )}
-          <Text style={[styles.title, canGoBack && styles.titleCentered]}>Favoritos</Text>
+          ) : <View style={{ width: 40 }} />}
+          <Text style={styles.titleCentered}>Favoritos</Text>
+          <View style={{ width: 40 }} />
         </View>
 
         {favorites.length === 0 ? (
@@ -82,11 +83,11 @@ export default function Favorites() {
 const styles = StyleSheet.create({
   wrapper: { flex: 1, backgroundColor: Platform.OS === "web" ? "#E8E0D5" : Colors.background, alignItems: "center" },
   container: { flex: 1, width: "100%", maxWidth: 430, backgroundColor: Colors.background },
-  header: { paddingHorizontal: 16, paddingTop: 20, paddingBottom: 8 },
-  headerWithBack: { flexDirection: "row", alignItems: "center" },
-  backBtn: { marginRight: 8, padding: 4 },
+  header: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: 20, paddingBottom: 12 },
+  headerWithBack: {},
+  backBtn: { width: 40, height: 40, borderRadius: 20, borderWidth: 1.5, borderColor: Colors.border, alignItems: "center", justifyContent: "center" },
   title: { fontSize: 22, fontWeight: "700", color: Colors.primary },
-  titleCentered: { flex: 1, textAlign: "center", marginRight: 30 },
+  titleCentered: { fontSize: 20, fontWeight: "700", color: Colors.primary, textAlign: "center" },
   empty: { flex: 1, alignItems: "center", justifyContent: "center", gap: 14, paddingHorizontal: 32 },
   emptyIcon: {
     width: 100, height: 100, borderRadius: 50,

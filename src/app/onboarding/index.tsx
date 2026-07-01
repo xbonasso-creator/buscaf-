@@ -102,16 +102,19 @@ const ILL_COMPS = [IllStep1, IllStep2, IllStep3];
 
 const STEPS = [
   {
-    title: "Descubrí cafeterías\nque te van a encantar",
-    subtitle: "Encontrá el lugar perfecto para trabajar, reunirte o disfrutar un buen café.",
+    title: "Descubrí café\nde especialidad",
+    subtitle: "Encontrá el lugar perfecto para disfrutar de un buen café.",
+    cta: "Empezar",
   },
   {
-    title: "Cafeterías cerca\nde vos",
+    title: "Cafeterías\ncerca de vos",
     subtitle: "Usamos tu ubicación para mostrarte las mejores opciones a tu alrededor.",
+    cta: "Continuar",
   },
   {
-    title: "Guardá tus\nfavoritas",
-    subtitle: "Creá tu lista de cafeterías preferidas y compartila con quien quieras.",
+    title: "Tu tour cafetero\nte espera",
+    subtitle: "Guardá en favoritos, dejá reseñas y ganá descuentos.",
+    cta: "Registrarme",
   },
 ];
 
@@ -226,7 +229,7 @@ export default function Onboarding() {
           onPress={() => goTo(step + 1)}
         >
           <Text style={[s.ctaText, step === 2 && s.ctaStartText]}>
-            {step === 2 ? "Empezar" : "Continuar"}
+            {STEPS[step].cta}
           </Text>
         </TouchableOpacity>
 

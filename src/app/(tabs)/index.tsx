@@ -59,42 +59,55 @@ function CardActions({ item }: { item: Pick<Cafe, "id" | "name" | "rating" | "im
   );
 }
 
+// ── Card L — foto full-width, nombre + rating + dirección + tags opcionales ──
 function CardDestacado({ item }: { item: Cafe }) {
+  const hasPromo = (item.promociones?.length ?? 0) > 0;
   return (
     <TouchableOpacity style={styles.cardDestacado} onPress={() => router.push(`/cafe/${item.id}`)}>
-      <ImageBackground source={{ uri: item.image }} style={styles.cardImage} imageStyle={{ borderRadius: 12 }}>
-        <CardActions item={item} />
+      {/* Imagen sin imageStyle borderRadius — el overflow:hidden del card la recorta */}
+      <ImageBackground source={{ uri: item.image }} style={styles.cardImage}>
+        {/* Actions top-right */}
+        <View style={styles.cardImageTop}>
+          <View style={{ flex: 1 }} />
+          <CardActions item={item} />
+        </View>
       </ImageBackground>
+      {/* Contenido alineado con la foto */}
       <View style={styles.cardInfo}>
         <View style={styles.cardInfoRow}>
-          <View style={{ flex: 1 }}>
-            <Text style={styles.cardName}>{item.name}</Text>
-            <Text style={styles.cardAddress}>{item.direccion}</Text>
-          </View>
+          <Text style={styles.cardName} numberOfLines={1}>{item.name}</Text>
           <StarRating rating={item.rating} />
         </View>
+        <Text style={styles.cardAddress} numberOfLines={1}>{item.direccion}</Text>
+        {/* Tag de promo opcional */}
+        {hasPromo && (
+          <View style={styles.promoTagRow}>
+            <View style={styles.promoTag}>
+              <Text style={styles.promoTagText}>{item.promociones![0].titulo}</Text>
+            </View>
+          </View>
+        )}
       </View>
     </TouchableOpacity>
   );
 }
 
+// ── Card M — solo nombre + stars + imagen con badge estado top-left ──
 function CardCalificado({ item }: { item: Cafe }) {
   return (
     <TouchableOpacity style={styles.cardCalificado} onPress={() => router.push(`/cafe/${item.id}`)}>
+      {/* Header: solo nombre y stars, sin logo */}
       <View style={styles.cardCalificadoHeader}>
-        <View style={styles.logoCircle}>
-          <Text style={styles.logoInitial}>{item.name.charAt(0)}</Text>
-        </View>
-        <View style={{ flex: 1 }}>
-          <Text style={styles.cardName} numberOfLines={1}>{item.name}</Text>
-          <StarRating rating={item.rating} />
-        </View>
+        <Text style={styles.cardMName} numberOfLines={1}>{item.name}</Text>
+        <StarRating rating={item.rating} />
       </View>
+      {/* Imagen full-width con estado top-left */}
       <ImageBackground source={{ uri: item.image }} style={styles.cardThumb} imageStyle={{ borderBottomLeftRadius: 16, borderBottomRightRadius: 16 }}>
-        <View style={{ flex: 1, justifyContent: "space-between" }}>
-          <CardActions item={item} />
-          {item.open && (
-            <View style={styles.openBadge}><Text style={styles.openText}>Abierto</Text></View>
+        <View style={styles.cardThumbTags}>
+          {item.open !== undefined && (
+            <View style={[styles.stateBadge, item.open ? styles.stateBadgeOpen : styles.stateBadgeClosed]}>
+              <Text style={styles.stateBadgeText}>{item.open ? "Abierto" : "Cerrado"}</Text>
+            </View>
           )}
         </View>
       </ImageBackground>
@@ -102,25 +115,27 @@ function CardCalificado({ item }: { item: Cafe }) {
   );
 }
 
+// ── Card Descuento — igual que Card L pero con badge de promo en imagen ──
 function CardDescuento({ item }: { item: Cafe }) {
-  // Muestra la primera promo del café
   const promo = item.promociones?.[0];
   return (
     <TouchableOpacity style={styles.cardDestacado} onPress={() => router.push(`/cafe/${item.id}`)}>
-      <ImageBackground source={{ uri: item.image }} style={styles.cardImage} imageStyle={{ borderRadius: 12 }}>
-        <View style={styles.discountBadge}>
-          <Text style={styles.discountText}>{promo?.titulo ?? "Promoción especial"}</Text>
+      <ImageBackground source={{ uri: item.image }} style={styles.cardImage}>
+        <View style={styles.cardImageTop}>
+          {/* Badge de promo top-left */}
+          <View style={styles.discountBadge}>
+            <Text style={styles.discountText}>{promo?.titulo ?? "Promoción especial"}</Text>
+          </View>
+          {/* Actions top-right */}
+          <CardActions item={item} />
         </View>
-        <CardActions item={item} />
       </ImageBackground>
       <View style={styles.cardInfo}>
         <View style={styles.cardInfoRow}>
-          <View style={{ flex: 1 }}>
-            <Text style={styles.cardName}>{item.name}</Text>
-            <Text style={styles.cardAddress}>{item.direccion}</Text>
-          </View>
+          <Text style={styles.cardName} numberOfLines={1}>{item.name}</Text>
           <StarRating rating={item.rating} />
         </View>
+        <Text style={styles.cardAddress} numberOfLines={1}>{item.direccion}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -425,23 +440,37 @@ const styles = StyleSheet.create({
   descuentosSection: { backgroundColor: Colors.primary, paddingTop: 20, paddingBottom: 24, marginVertical: 20 },
   sectionTitleLight: { fontSize: 15, fontWeight: "600", color: Colors.white, paddingHorizontal: 16, marginBottom: 8 },
   carousel: { paddingHorizontal: 16, gap: 12 },
+
+  // ── Card L ──────────────────────────────────────────────────
   cardDestacado: { width: 260, backgroundColor: Colors.white, borderRadius: 16, overflow: "hidden" },
-  cardImage: { width: "100%", height: 160, justifyContent: "space-between", padding: 10, flexDirection: "column" },
-  cardActionsRow: { flexDirection: "row", gap: 6, alignSelf: "flex-end" },
-  actionBtn: { backgroundColor: Colors.white, borderRadius: 20, padding: 8, shadowColor: "#000", shadowOpacity: 0.08, shadowRadius: 4, shadowOffset: { width: 0, height: 1 } },
-  discountBadge: { backgroundColor: Colors.promo, borderRadius: 8, paddingHorizontal: 8, paddingVertical: 4, alignSelf: "flex-start" },
-  discountText: { color: Colors.white, fontSize: 12 },
-  cardInfo: { padding: 12 },
-  cardInfoRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start" },
-  cardName: { fontSize: 14, fontWeight: "600", color: Colors.text },
-  cardAddress: { fontSize: 14, color: Colors.textLight, marginTop: 2 },
+  cardImage: { width: "100%", height: 164 },
+  cardImageTop: { flexDirection: "row", alignItems: "flex-start", padding: 8 },
+  cardActionsRow: { flexDirection: "row", gap: 6 },
+  actionBtn: { backgroundColor: Colors.white, borderRadius: 20, padding: 8, shadowColor: "#000", shadowOpacity: 0.1, shadowRadius: 4, shadowOffset: { width: 0, height: 1 } },
+  discountBadge: { backgroundColor: Colors.promo, borderRadius: 8, paddingHorizontal: 8, paddingVertical: 4 },
+  discountText: { color: Colors.white, fontSize: 12, fontWeight: "600" },
+  cardInfo: { paddingHorizontal: 12, paddingVertical: 10, gap: 3 },
+  cardInfoRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
+  cardName: { fontSize: 14, fontWeight: "700", color: Colors.text, flex: 1, marginRight: 8 },
+  cardAddress: { fontSize: 12, color: Colors.textLight },
+  promoTagRow: { flexDirection: "row", marginTop: 4 },
+  promoTag: { backgroundColor: "#FFF0E5", borderRadius: 6, paddingHorizontal: 7, paddingVertical: 3 },
+  promoTagText: { fontSize: 11, color: Colors.promo, fontWeight: "600" },
   rating: { flexDirection: "row", alignItems: "center", gap: 2 },
-  ratingText: { fontSize: 12, fontWeight: "500", color: Colors.textLight },
-  cardCalificado: { width: 180, backgroundColor: Colors.white, borderRadius: 16, overflow: "hidden", gap: 8 },
-  cardCalificadoHeader: { flexDirection: "row", gap: 8, alignItems: "center", padding: 10, paddingBottom: 0 },
+  ratingText: { fontSize: 12, fontWeight: "600", color: Colors.textLight },
+
+  // ── Card M ──────────────────────────────────────────────────
+  cardCalificado: { width: 180, backgroundColor: Colors.white, borderRadius: 16, overflow: "hidden" },
+  cardCalificadoHeader: { paddingHorizontal: 12, paddingTop: 10, paddingBottom: 6, gap: 3 },
+  cardMName: { fontSize: 14, fontWeight: "700", color: Colors.text },
   logoCircle: { width: 36, height: 36, borderRadius: 18, backgroundColor: "#F0E4D7", alignItems: "center", justifyContent: "center" },
   logoInitial: { fontSize: 15, fontWeight: "700", color: Colors.primary },
-  cardThumb: { width: "100%", height: 116, padding: 6 },
+  cardThumb: { width: "100%", height: 118, padding: 6 },
+  cardThumbTags: { flexDirection: "row", gap: 6, flexWrap: "wrap" },
+  stateBadge: { borderRadius: 8, paddingHorizontal: 8, paddingVertical: 3 },
+  stateBadgeOpen: { backgroundColor: Colors.success },
+  stateBadgeClosed: { backgroundColor: "rgba(0,0,0,0.45)" },
+  stateBadgeText: { fontSize: 11, fontWeight: "600", color: Colors.white },
   searchBarActive: { borderColor: Colors.primary },
   resultsSection: { paddingHorizontal: 16, paddingTop: 12, paddingBottom: 8 },
   resultsLabel: { fontSize: 13, color: Colors.textLight, marginBottom: 8 },

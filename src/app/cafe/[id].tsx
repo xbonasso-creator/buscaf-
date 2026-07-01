@@ -104,11 +104,10 @@ export default function CafeDetail() {
                   Linking.openURL(`https://www.google.com/maps/search/?api=1&query=${q}`);
                 }}
               >
-                <Text style={styles.infoIcon}>📍</Text>
+                <Ionicons name="location" size={20} color={Colors.primary} style={{ marginTop: 2 }} />
                 <View style={{ flex: 1 }}>
-                  <Text style={[styles.infoText, { color: Colors.primary, textDecorationLine: "underline" }]}>{CAFE.direccion}</Text>
-                  <Text style={styles.infoSubText}>{CAFE.distancia}</Text>
-                  <Text style={[styles.infoSubText, { marginTop: 4, color: Colors.textLight }]}>Abrir en Google Maps →</Text>
+                  <Text style={styles.infoText}>{CAFE.direccion}</Text>
+                  <Text style={[styles.infoSubText, { marginTop: 4, textDecorationLine: "underline" }]}>Abrir en Google Maps →</Text>
                 </View>
               </TouchableOpacity>
             </View>
@@ -165,19 +164,19 @@ export default function CafeDetail() {
                     <Text style={styles.optSectionTitle}>Cuponera de cafecitos</Text>
                     <Text style={styles.optSectionSub}>
                       {cuponeraActiva
-                        ? `${miCuponera!.sellos}/${miCuponera!.total} sellos acumulados`
-                        : "Juntá 10 sellos y tomá un café gratis."}
+                        ? `${miCuponera!.sellos}/${miCuponera!.total} sellos`
+                        : `0/${CAFE.cuponeraMax ?? 10} sellos`}
                     </Text>
                   </View>
                   {cuponeraActiva
                     ? <TouchableOpacity style={styles.optBtnSmall} onPress={() => router.push("/mis-cuponeras")}>
-                        <Text style={styles.optBtnSmallText}>Ver progreso</Text>
+                        <Text style={styles.optBtnSmallText}>Ir a cuponera</Text>
                       </TouchableOpacity>
                     : <TouchableOpacity style={styles.optBtnPrimary} onPress={() => {
                         addCuponera(cafeData.id, CAFE.name);
                         router.push("/mis-cuponeras");
                       }}>
-                        <Text style={styles.optBtnPrimaryText}>Activar</Text>
+                        <Text style={styles.optBtnPrimaryText}>Activar cuponera</Text>
                       </TouchableOpacity>
                   }
                 </View>
