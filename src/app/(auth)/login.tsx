@@ -29,8 +29,8 @@ export default function Login() {
     <Screen scroll>
       <View style={styles.container}>
         <View style={styles.header}>
-          <Text style={styles.title}>Bienvenido a Buscafé</Text>
-          <Text style={styles.subtitle}>Iniciá sesión para continuar</Text>
+          <Text style={styles.title}>Bienvenidxs a Buscafé.</Text>
+          <Text style={styles.subtitle}>Iniciá sesión o registrate para continuar.</Text>
         </View>
 
         <View style={styles.form}>

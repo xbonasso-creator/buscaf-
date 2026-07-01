@@ -215,9 +215,13 @@ export default function CafeDetail() {
             {hasEventos && (
               <View style={styles.section}>
                 <Text style={styles.sectionTitle}>Eventos</Text>
-                <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 12 }}>
+                <View style={{ gap: 12 }}>
                   {(CAFE.eventos ?? []).map(e => (
-                    <View key={e.id} style={styles.eventoCard}>
+                    <TouchableOpacity
+                      key={e.id}
+                      style={styles.eventoCard}
+                      onPress={() => router.push({ pathname: "/evento/[id]" as any, params: { id: e.id, cafeId: CAFE.id, cafeName: CAFE.name, instagram: CAFE.instagram ?? "" } })}
+                    >
                       <ImageBackground source={{ uri: e.imagen }} style={styles.eventoImg} imageStyle={{ borderRadius: 12 }}>
                         <View style={styles.eventoOverlay} />
                         <View style={styles.eventoFechaBadge}>
@@ -227,9 +231,9 @@ export default function CafeDetail() {
                       </ImageBackground>
                       <Text style={styles.eventoTitulo}>{e.titulo}</Text>
                       <Text style={styles.eventoDesc}>{e.descripcion}</Text>
-                    </View>
+                    </TouchableOpacity>
                   ))}
-                </ScrollView>
+                </View>
               </View>
             )}
 
@@ -444,8 +448,8 @@ const styles = StyleSheet.create({
   promoVigenciaText: { fontSize: 12, color: Colors.textLight },
 
   // ── Sección opcional: eventos ──
-  eventoCard: { width: 220, gap: 8 },
-  eventoImg: { width: 220, height: 140, justifyContent: "flex-end" },
+  eventoCard: { width: "100%", gap: 8 },
+  eventoImg: { width: "100%", height: 180, justifyContent: "flex-end" },
   eventoOverlay: {
     position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
     backgroundColor: "rgba(0,0,0,0.25)",

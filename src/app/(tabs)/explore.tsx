@@ -61,12 +61,13 @@ export default function Explore() {
   ];
   const filterCount = count();
 
+  const [showAll, setShowAll] = useState(false);
   const filtered = CAFES.filter(c =>
     c.name.toLowerCase().includes(search.toLowerCase()) ||
     c.direccion.toLowerCase().includes(search.toLowerCase())
   );
-  const visible = filtered.slice(0, MAX_VISIBLE);
-  const hasMore = filtered.length > MAX_VISIBLE;
+  const visible = showAll ? filtered : filtered.slice(0, MAX_VISIBLE);
+  const hasMore = !showAll && filtered.length > MAX_VISIBLE;
 
   return (
     <View style={styles.wrapper}>
@@ -145,10 +146,8 @@ export default function Explore() {
                 showsVerticalScrollIndicator={false}
                 ListFooterComponent={
                   hasMore ? (
-                    <TouchableOpacity style={styles.moreBtn}>
-                      <Text style={styles.moreText}>
-                        Ver {filtered.length - MAX_VISIBLE} cafeterías más en esta zona
-                      </Text>
+                    <TouchableOpacity style={styles.moreBtn} onPress={() => setShowAll(true)}>
+                      <Text style={styles.moreText}>Más cafeterías</Text>
                     </TouchableOpacity>
                   ) : null
                 }
@@ -251,7 +250,7 @@ const styles = StyleSheet.create({
   rating: { flexDirection: "row", alignItems: "center", gap: 3 },
   ratingText: { fontSize: 12, fontWeight: "500", color: Colors.textLight },
   moreBtn: { alignItems: "center", paddingVertical: 16 },
-  moreText: { fontSize: 14, color: Colors.textLight, textDecorationLine: "underline" },
+  moreText: { fontSize: 14, color: Colors.primary, fontWeight: "600", textDecorationLine: "underline" },
   emptyState: { flex: 1, alignItems: "center", justifyContent: "center", gap: 16, paddingHorizontal: 32, paddingBottom: 60 },
   emptyIcon: { width: 100, height: 100, borderRadius: 50, backgroundColor: "#F5E6E0", alignItems: "center", justifyContent: "center" },
   emptyTitle: { fontSize: 20, fontWeight: "700", color: Colors.primary, textAlign: "center", lineHeight: 28 },

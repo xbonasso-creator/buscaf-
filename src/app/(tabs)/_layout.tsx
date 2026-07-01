@@ -27,8 +27,9 @@ export default function TabsLayout() {
         headerShown: false,
         tabBarStyle: {
           ...styles.tabBar,
-          height: 60 + insets.bottom,
+          height: 68 + insets.bottom,
           paddingBottom: insets.bottom + 4,
+          paddingTop: 8,
           ...(Platform.OS !== "web" ? { maxWidth: undefined, alignSelf: undefined } : {}),
         },
         tabBarShowLabel: false,

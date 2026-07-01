@@ -3,6 +3,7 @@ import {
   Platform, TextInput, Modal, ScrollView, KeyboardAvoidingView,
 } from "react-native";
 import { useState } from "react";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router, useLocalSearchParams } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "../constants/colors";
@@ -53,6 +54,7 @@ const RATING_LABELS: Record<number, string> = {
 };
 
 export default function CafeResenas() {
+  const insets = useSafeAreaInsets();
   const { id, cafeName, openForm } = useLocalSearchParams<{ id: string; cafeName: string; openForm?: string }>();
 
   // TODO: cuando haya DB → useQuery('resenas', () => fetchResenas(id))
@@ -104,7 +106,7 @@ export default function CafeResenas() {
       <View style={styles.container}>
 
         {/* Header */}
-        <View style={styles.header}>
+        <View style={[styles.header, { paddingTop: insets.top + 8 }]}>
           <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
             <Ionicons name="arrow-back" size={20} color={Colors.text} />
           </TouchableOpacity>
@@ -294,10 +296,11 @@ const styles = StyleSheet.create({
   writeBtn: {
     flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 8,
     marginTop: 8, paddingVertical: 16,
-    borderWidth: 1.5, borderColor: Colors.primary, borderRadius: 14,
-    backgroundColor: Colors.white,
+    borderRadius: 14,
+    backgroundColor: Colors.primary,
+    width: "100%",
   },
-  writeBtnText: { fontSize: 15, fontWeight: "600", color: Colors.primary },
+  writeBtnText: { fontSize: 15, fontWeight: "700", color: Colors.white },
 
   // Empty state
   emptyWrapper: {

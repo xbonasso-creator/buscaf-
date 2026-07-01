@@ -60,6 +60,7 @@ export default function RootLayout() {
         <Stack.Screen name="settings/notifications" options={{ animation: "slide_from_right" }} />
         <Stack.Screen name="settings/privacy" options={{ animation: "slide_from_right" }} />
         <Stack.Screen name="settings/config" options={{ animation: "slide_from_right" }} />
+        <Stack.Screen name="evento/[id]" options={{ animation: "slide_from_right" }} />
       </Stack>
     </SafeAreaProvider>
   );

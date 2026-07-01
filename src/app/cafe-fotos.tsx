@@ -1,4 +1,5 @@
 import { View, Text, StyleSheet, TouchableOpacity, Image, FlatList, Dimensions, Platform } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router, useLocalSearchParams } from "expo-router";
 import { Colors } from "../constants/colors";
 
@@ -23,12 +24,13 @@ const GAP = 3;
 const CELL_SIZE = (Math.min(430, Dimensions.get("window").width) - GAP * (COLS + 1)) / COLS;
 
 export default function CafeFootos() {
+  const insets = useSafeAreaInsets();
   const { id, cafeName } = useLocalSearchParams<{ id: string; cafeName: string }>();
 
   return (
     <View style={styles.wrapper}>
       <View style={styles.container}>
-        <View style={styles.header}>
+        <View style={[styles.header, { paddingTop: insets.top + 8 }]}>
           <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
             <Text style={styles.backIcon}>‹</Text>
           </TouchableOpacity>
