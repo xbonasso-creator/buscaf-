@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Platform } from "react-native";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useCuponerasStore } from "../store/cuponerasStore";
 import { Colors } from "../constants/colors";
 
@@ -55,11 +56,12 @@ function CuponeraCard({ item }: { item: { id: string; cafeName: string; sellos: 
 }
 
 export default function MisCuponeras() {
+  const insets = useSafeAreaInsets();
   const { cuponeras } = useCuponerasStore();
   return (
     <View style={styles.wrapper}>
       <View style={styles.container}>
-        <View style={styles.header}>
+        <View style={[styles.header, { paddingTop: insets.top + 8 }]}>
           <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
             <Ionicons name="arrow-back" size={20} color={Colors.text} />
           </TouchableOpacity>

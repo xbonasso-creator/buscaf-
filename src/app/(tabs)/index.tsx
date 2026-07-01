@@ -90,7 +90,7 @@ function CardCalificado({ item }: { item: Cafe }) {
           <StarRating rating={item.rating} />
         </View>
       </View>
-      <ImageBackground source={{ uri: item.image }} style={styles.cardThumb} imageStyle={{ borderRadius: 10 }}>
+      <ImageBackground source={{ uri: item.image }} style={styles.cardThumb} imageStyle={{ borderBottomLeftRadius: 16, borderBottomRightRadius: 16 }}>
         <View style={{ flex: 1, justifyContent: "space-between" }}>
           <CardActions item={item} />
           {item.open && (
@@ -437,11 +437,11 @@ const styles = StyleSheet.create({
   cardAddress: { fontSize: 14, color: Colors.textLight, marginTop: 2 },
   rating: { flexDirection: "row", alignItems: "center", gap: 2 },
   ratingText: { fontSize: 12, fontWeight: "500", color: Colors.textLight },
-  cardCalificado: { width: 180, backgroundColor: Colors.white, borderRadius: 16, overflow: "hidden", padding: 10, gap: 8 },
-  cardCalificadoHeader: { flexDirection: "row", gap: 8, alignItems: "center" },
+  cardCalificado: { width: 180, backgroundColor: Colors.white, borderRadius: 16, overflow: "hidden", gap: 8 },
+  cardCalificadoHeader: { flexDirection: "row", gap: 8, alignItems: "center", padding: 10, paddingBottom: 0 },
   logoCircle: { width: 36, height: 36, borderRadius: 18, backgroundColor: "#F0E4D7", alignItems: "center", justifyContent: "center" },
   logoInitial: { fontSize: 15, fontWeight: "700", color: Colors.primary },
-  cardThumb: { width: "100%", height: 110, padding: 6 },
+  cardThumb: { width: "100%", height: 116, padding: 6 },
   searchBarActive: { borderColor: Colors.primary },
   resultsSection: { paddingHorizontal: 16, paddingTop: 12, paddingBottom: 8 },
   resultsLabel: { fontSize: 13, color: Colors.textLight, marginBottom: 8 },

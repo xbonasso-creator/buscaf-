@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ImageBackground, Image, Platform } from "react-native";
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ImageBackground, Image, Platform, Linking } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router, useLocalSearchParams } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
@@ -97,13 +97,20 @@ export default function CafeDetail() {
             {/* Dirección */}
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Dirección</Text>
-              <View style={styles.infoBox}>
+              <TouchableOpacity
+                style={styles.infoBox}
+                onPress={() => {
+                  const q = encodeURIComponent(`${CAFE.direccion}, Montevideo, Uruguay`);
+                  Linking.openURL(`https://www.google.com/maps/search/?api=1&query=${q}`);
+                }}
+              >
                 <Text style={styles.infoIcon}>📍</Text>
-                <View>
-                  <Text style={styles.infoText}>{CAFE.direccion}</Text>
+                <View style={{ flex: 1 }}>
+                  <Text style={[styles.infoText, { color: Colors.primary, textDecorationLine: "underline" }]}>{CAFE.direccion}</Text>
                   <Text style={styles.infoSubText}>{CAFE.distancia}</Text>
+                  <Text style={[styles.infoSubText, { marginTop: 4, color: Colors.textLight }]}>Abrir en Google Maps →</Text>
                 </View>
-              </View>
+              </TouchableOpacity>
             </View>
 
             {/* ── PROMOCIONES (opcional) ── */}

@@ -92,7 +92,7 @@ function IllStep3() {
   return (
     <View style={[ill.circle, { width: CIRCLE, height: CIRCLE, borderRadius: CIRCLE / 2 }]}>
       <Animated.View style={{ transform: [{ scale }] }}>
-        <Ionicons name="heart" size={CIRCLE * 0.46} color={S} />
+        <Ionicons name="heart" size={CIRCLE * 0.46} color={C} />
       </Animated.View>
     </View>
   );

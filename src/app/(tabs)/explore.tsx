@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, FlatList, Platform, useWindowDimensions } from "react-native";
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, FlatList, Platform } from "react-native";
 import { useState, useMemo } from "react";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router } from "expo-router";
@@ -6,15 +6,12 @@ import { Ionicons } from "@expo/vector-icons";
 import { useFavoritesStore } from "../../store/favoritesStore";
 import { useQuieroIrStore } from "../../store/quieroIrStore";
 import { useFiltersStore } from "../../store/filtersStore";
+import { ZONAS_MONTEVIDEO } from "../../store/locationStore";
 import { Colors } from "../../constants/colors";
 import { CAFES, type Cafe } from "../../data/cafes";
-import MapboxMap from "../../components/ui/MapboxMap";
 
 const FILTROS = ["Wi-Fi", "Abierto ahora", "Pet friendly", "Cowork", "Vegano", "Brunch"];
-
 const MAX_VISIBLE = 5;
-
-// ── LeafletMap removed — replaced by MapboxMap ──
 
 function CafeListItem({ item }: { item: Cafe }) {
   const { toggle: toggleFav, isFavorite } = useFavoritesStore();
@@ -46,12 +43,10 @@ function CafeListItem({ item }: { item: Cafe }) {
   );
 }
 
-
 export default function Explore() {
   const insets = useSafeAreaInsets();
-  const { height: windowHeight } = useWindowDimensions();
-  const [view, setView] = useState<"listado" | "mapa">("listado");
   const [search, setSearch] = useState("");
+  const [barrio, setBarrio] = useState<string | null>(null);
   const { active, toggle: toggleFilter, count } = useFiltersStore();
   const extraActive = active.filter(f => !FILTROS.includes(f));
   const sortedFiltros = [
@@ -60,14 +55,28 @@ export default function Explore() {
     ...FILTROS.filter(f => !active.includes(f)),
   ];
   const filterCount = count();
-
   const [showAll, setShowAll] = useState(false);
-  const filtered = CAFES.filter(c =>
-    c.name.toLowerCase().includes(search.toLowerCase()) ||
-    c.direccion.toLowerCase().includes(search.toLowerCase())
-  );
+
+  const filtered = useMemo(() => {
+    let list = CAFES;
+    if (barrio) list = list.filter(c => c.zona.toLowerCase() === barrio.toLowerCase());
+    if (search.trim()) {
+      const q = search.trim().toLowerCase();
+      list = list.filter(c =>
+        c.name.toLowerCase().includes(q) ||
+        c.direccion.toLowerCase().includes(q)
+      );
+    }
+    return list;
+  }, [barrio, search]);
+
   const visible = showAll ? filtered : filtered.slice(0, MAX_VISIBLE);
   const hasMore = !showAll && filtered.length > MAX_VISIBLE;
+
+  const handleBarrio = (label: string) => {
+    setBarrio(prev => prev === label ? null : label);
+    setShowAll(false);
+  };
 
   return (
     <View style={styles.wrapper}>
@@ -80,13 +89,13 @@ export default function Explore() {
               placeholder="Buscar cafeterías"
               placeholderTextColor={Colors.textLight}
               value={search}
-              onChangeText={setSearch}
+              onChangeText={t => { setSearch(t); setShowAll(false); }}
             />
             <Ionicons name="search-outline" size={18} color={Colors.textLight} />
           </View>
         </View>
 
-        {/* Filtros */}
+        {/* Filtros de servicios */}
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ flexGrow: 0 }} contentContainerStyle={styles.filtrosContainer}>
           <TouchableOpacity
             style={[styles.filtrarBtn, filterCount > 0 && styles.filtrarBtnActive]}
@@ -108,53 +117,59 @@ export default function Explore() {
           ))}
         </ScrollView>
 
-        {/* Toggle — solo en web (mapa solo disponible en web) */}
-        {Platform.OS === "web" && (
-          <View style={styles.toggleContainer}>
+        {/* Filtro por barrio */}
+        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ flexGrow: 0 }} contentContainerStyle={styles.barrioContainer}>
+          <TouchableOpacity
+            style={[styles.barrioChip, barrio === null && styles.barrioChipActive]}
+            onPress={() => { setBarrio(null); setShowAll(false); }}
+          >
+            <Text style={[styles.barrioText, barrio === null && styles.barrioTextActive]}>Todos</Text>
+          </TouchableOpacity>
+          {ZONAS_MONTEVIDEO.map(z => (
             <TouchableOpacity
-              style={[styles.toggleBtn, view === "listado" && styles.toggleActive]}
-              onPress={() => setView("listado")}
+              key={z.id}
+              style={[styles.barrioChip, barrio === z.label && styles.barrioChipActive]}
+              onPress={() => handleBarrio(z.label)}
             >
-              <Text style={[styles.toggleText, view === "listado" && styles.toggleTextActive]}>Listado</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[styles.toggleBtn, view === "mapa" && styles.toggleActive]}
-              onPress={() => setView("mapa")}
-            >
-              <Text style={[styles.toggleText, view === "mapa" && styles.toggleTextActive]}>Mapa</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-
-        {/* Contenido — flex:1 para que ocupe el espacio restante */}
-        <View style={styles.content}>
-          {view === "listado" ? (
-            visible.length === 0 ? (
-              <View style={styles.emptyState}>
-                <View style={styles.emptyIcon}>
-                  <Ionicons name="binoculars-outline" size={44} color={Colors.primary} />
-                </View>
-                <Text style={styles.emptyTitle}>Sin resultados</Text>
-                <Text style={styles.emptySub}>Probá con otro nombre o ajustá los filtros.</Text>
-              </View>
-            ) : (
-              <FlatList
-                data={visible}
-                keyExtractor={i => i.id}
-                renderItem={({ item }) => <CafeListItem item={item} />}
-                contentContainerStyle={styles.listContainer}
-                showsVerticalScrollIndicator={false}
-                ListFooterComponent={
-                  hasMore ? (
-                    <TouchableOpacity style={styles.moreBtn} onPress={() => setShowAll(true)}>
-                      <Text style={styles.moreText}>Más cafeterías</Text>
-                    </TouchableOpacity>
-                  ) : null
-                }
+              <Ionicons
+                name="location-outline"
+                size={12}
+                color={barrio === z.label ? Colors.white : Colors.textLight}
               />
-            )
+              <Text style={[styles.barrioText, barrio === z.label && styles.barrioTextActive]}>{z.label}</Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+
+        {/* Lista */}
+        <View style={styles.content}>
+          {visible.length === 0 ? (
+            <View style={styles.emptyState}>
+              <View style={styles.emptyIcon}>
+                <Ionicons name="cafe-outline" size={44} color={Colors.primary} />
+              </View>
+              <Text style={styles.emptyTitle}>Sin resultados</Text>
+              <Text style={styles.emptySub}>
+                {barrio
+                  ? `No hay cafeterías en ${barrio} aún.`
+                  : "Probá con otro nombre o ajustá los filtros."}
+              </Text>
+            </View>
           ) : (
-            <MapboxMap cafes={CAFES} height={windowHeight - 220} />
+            <FlatList
+              data={visible}
+              keyExtractor={i => i.id}
+              renderItem={({ item }) => <CafeListItem item={item} />}
+              contentContainerStyle={styles.listContainer}
+              showsVerticalScrollIndicator={false}
+              ListFooterComponent={
+                hasMore ? (
+                  <TouchableOpacity style={styles.moreBtn} onPress={() => setShowAll(true)}>
+                    <Text style={styles.moreText}>Más cafeterías ({filtered.length - MAX_VISIBLE} más)</Text>
+                  </TouchableOpacity>
+                ) : null
+              }
+            />
           )}
         </View>
       </View>
@@ -165,7 +180,7 @@ export default function Explore() {
 const styles = StyleSheet.create({
   wrapper: { flex: 1, backgroundColor: Platform.OS === "web" ? "#E8E0D5" : Colors.background, alignItems: "center" },
   container: { flex: 1, width: "100%", maxWidth: 430, backgroundColor: Colors.background },
-  searchContainer: { paddingHorizontal: 16, paddingTop: 16, paddingBottom: 8 },
+  searchContainer: { paddingHorizontal: 16, paddingBottom: 8 },
   searchBar: {
     flexDirection: "row",
     alignItems: "center",
@@ -177,7 +192,7 @@ const styles = StyleSheet.create({
     paddingVertical: 11,
   },
   searchInput: { flex: 1, fontSize: 15, color: Colors.text },
-  filtrosContainer: { paddingHorizontal: 16, gap: 8, paddingBottom: 12 },
+  filtrosContainer: { paddingHorizontal: 16, gap: 8, paddingBottom: 8 },
   filtrarBtn: {
     height: 36,
     borderWidth: 1.5,
@@ -206,20 +221,24 @@ const styles = StyleSheet.create({
   filtroChipActive: { backgroundColor: Colors.primary, borderColor: Colors.primary },
   filtroText: { fontSize: 13, color: Colors.text },
   filtroTextActive: { color: Colors.white },
-  toggleContainer: {
+  // Barrio chips
+  barrioContainer: { paddingHorizontal: 16, gap: 8, paddingBottom: 12 },
+  barrioChip: {
     flexDirection: "row",
-    marginHorizontal: 16,
-    marginBottom: 12,
-    backgroundColor: Colors.background,
-    borderRadius: 10,
+    alignItems: "center",
+    gap: 4,
+    height: 32,
     borderWidth: 1,
     borderColor: Colors.border,
-    overflow: "hidden",
+    borderRadius: 16,
+    paddingHorizontal: 12,
+    backgroundColor: Colors.white,
+    justifyContent: "center",
   },
-  toggleBtn: { flex: 1, paddingVertical: 10, alignItems: "center" },
-  toggleActive: { backgroundColor: Colors.primary },
-  toggleText: { fontSize: 14, fontWeight: "600", color: Colors.textLight },
-  toggleTextActive: { color: Colors.white },
+  barrioChipActive: { backgroundColor: Colors.primary, borderColor: Colors.primary },
+  barrioText: { fontSize: 12, color: Colors.textLight },
+  barrioTextActive: { fontSize: 12, color: Colors.white, fontWeight: "600" },
+  // Lista
   listContainer: { paddingHorizontal: 16, gap: 10, paddingBottom: 24 },
   listItem: {
     flexDirection: "row",
@@ -256,5 +275,4 @@ const styles = StyleSheet.create({
   emptyTitle: { fontSize: 20, fontWeight: "700", color: Colors.primary, textAlign: "center", lineHeight: 28 },
   emptySub: { fontSize: 16, color: Colors.textLight, textAlign: "center", lineHeight: 24 },
   content: { flex: 1 },
-  mapContainer: { overflow: "hidden" },
 });
