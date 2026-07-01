@@ -269,7 +269,7 @@ export default function CafeDetail() {
 
             {/* Footer */}
             <View style={styles.footer}>
-              <TouchableOpacity style={styles.shareBtn} onPress={() => router.push({ pathname: "/cafe-share", params: { id } })}>
+              <TouchableOpacity style={styles.shareBtn} onPress={() => router.push({ pathname: "/cafe-share", params: { id, name: CAFE.name } })}>
                 <Text style={styles.shareBtnText}>Compartir cafetería</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => router.back()}>

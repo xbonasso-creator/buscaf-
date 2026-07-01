@@ -4,19 +4,12 @@ import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "../constants/colors";
 import { useState } from "react";
 
-const CAFE_NAMES: Record<string, string> = {
-  "1": "Café Marqués",
-  "2": "La Canela",
-  "3": "Brúlée Coffee",
-  "4": "El origen Café",
-  "5": "Amor Perfecto",
-  "6": "Ritual Coffee",
-};
+const BASE_URL = "https://buscafe-mvp.netlify.app";
 
 export default function CafeShare() {
-  const { id } = useLocalSearchParams<{ id: string }>();
-  const cafeName = CAFE_NAMES[id ?? "1"] ?? "Cafetería";
-  const cafeUrl = `https://buscafe.app/cafe/${id}`;
+  const { id, name } = useLocalSearchParams<{ id: string; name?: string }>();
+  const cafeName = name ?? "Cafetería";
+  const cafeUrl = `${BASE_URL}/cafe/${id}`;
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
