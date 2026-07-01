@@ -1,5 +1,6 @@
 import { useState, useMemo, useEffect } from "react";
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, FlatList, ImageBackground, Platform } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useFavoritesStore } from "../../store/favoritesStore";
@@ -151,6 +152,7 @@ function SearchResultItem({ item }: { item: Cafe }) {
 }
 
 export default function Home() {
+  const insets = useSafeAreaInsets();
   const [search, setSearch] = useState("");
   const [showLocationPicker, setShowLocationPicker] = useState(false);
   const [showLocationModal, setShowLocationModal] = useState(false);
@@ -208,7 +210,7 @@ export default function Home() {
     <View style={styles.container}>
       <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
         {/* Header */}
-        <View style={styles.header}>
+        <View style={[styles.header, { paddingTop: insets.top + 8 }]}>
           <TouchableOpacity
             style={[styles.location, !hasLocation && styles.locationEmpty]}
             onPress={() => setShowLocationPicker(true)}
@@ -426,7 +428,7 @@ const styles = StyleSheet.create({
   cardDestacado: { width: 260, backgroundColor: Colors.white, borderRadius: 16, overflow: "hidden" },
   cardImage: { width: "100%", height: 160, justifyContent: "space-between", padding: 10, flexDirection: "column" },
   cardActionsRow: { flexDirection: "row", gap: 6, alignSelf: "flex-end" },
-  actionBtn: { backgroundColor: Colors.white, borderRadius: 16, padding: 5 },
+  actionBtn: { backgroundColor: Colors.white, borderRadius: 20, padding: 8, shadowColor: "#000", shadowOpacity: 0.08, shadowRadius: 4, shadowOffset: { width: 0, height: 1 } },
   discountBadge: { backgroundColor: Colors.promo, borderRadius: 8, paddingHorizontal: 8, paddingVertical: 4, alignSelf: "flex-start" },
   discountText: { color: Colors.white, fontSize: 12 },
   cardInfo: { padding: 12 },

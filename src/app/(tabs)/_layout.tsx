@@ -1,6 +1,7 @@
 import { Tabs } from "expo-router";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, Platform } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Colors } from "../../constants/colors";
 
 type IoniconName = React.ComponentProps<typeof Ionicons>["name"];
@@ -13,17 +14,23 @@ function TabIcon({ focused, icon, iconFilled, label }: { focused: boolean; icon:
         size={24}
         color={focused ? Colors.primary : Colors.textLight}
       />
-      <Text style={[styles.tabLabel, focused && styles.tabLabelActive]}>{label}</Text>
+      <Text style={[styles.tabLabel, focused && styles.tabLabelActive]} numberOfLines={1}>{label}</Text>
     </View>
   );
 }
 
 export default function TabsLayout() {
+  const insets = useSafeAreaInsets();
   return (
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarStyle: styles.tabBar,
+        tabBarStyle: {
+          ...styles.tabBar,
+          height: 60 + insets.bottom,
+          paddingBottom: insets.bottom + 4,
+          ...(Platform.OS !== "web" ? { maxWidth: undefined, alignSelf: undefined } : {}),
+        },
         tabBarShowLabel: false,
       }}
     >
@@ -79,7 +86,7 @@ const styles = StyleSheet.create({
     alignSelf: "center" as const,
     width: "100%",
   },
-  tabItem: { alignItems: "center", gap: 1 },
-  tabLabel: { fontSize: 10, color: Colors.textLight },
+  tabItem: { alignItems: "center", gap: 1, width: 72 },
+  tabLabel: { fontSize: 10, color: Colors.textLight, textAlign: "center" },
   tabLabelActive: { color: Colors.primary, fontWeight: "600" },
 });

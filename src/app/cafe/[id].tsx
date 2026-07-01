@@ -1,4 +1,5 @@
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ImageBackground, Image, Platform } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router, useLocalSearchParams } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useFavoritesStore } from "../../store/favoritesStore";
@@ -21,6 +22,7 @@ function Stars({ count }: { count: number }) {
 }
 
 export default function CafeDetail() {
+  const insets = useSafeAreaInsets();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { toggle: toggleFav, isFavorite } = useFavoritesStore();
   const { toggle: toggleGuardar, isGuardado } = useQuieroIrStore();
@@ -47,7 +49,7 @@ export default function CafeDetail() {
           {/* Hero */}
           <View style={styles.heroContainer}>
             <ImageBackground source={{ uri: CAFE.image }} style={styles.hero}>
-              <View style={styles.heroNav}>
+              <View style={[styles.heroNav, { paddingTop: insets.top + 4 }]}>
                 <TouchableOpacity style={styles.heroBtn} onPress={() => router.back()}>
                   <Text style={styles.backIcon}>‹</Text>
                 </TouchableOpacity>

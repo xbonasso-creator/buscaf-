@@ -5,6 +5,7 @@
  */
 import { useState } from "react";
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Platform } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 
@@ -62,6 +63,7 @@ const FILTER_SECTIONS = [
 ];
 
 export default function Filters() {
+  const insets = useSafeAreaInsets();
   const { active, price, setFilters } = useFiltersStore();
 
   // Draft — copia local del estado al abrir la pantalla
@@ -93,7 +95,7 @@ export default function Filters() {
       <View style={s.container}>
 
         {/* Header */}
-        <View style={s.header}>
+        <View style={[s.header, { paddingTop: insets.top + 8 }]}>
           <TouchableOpacity style={s.backBtn} onPress={() => router.back()}>
             <Ionicons name="arrow-back" size={20} color={Colors.text} />
           </TouchableOpacity>

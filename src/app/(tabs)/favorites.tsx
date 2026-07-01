@@ -1,4 +1,5 @@
 import { View, Text, StyleSheet, FlatList, TouchableOpacity, Platform } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router, useNavigation } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useFavoritesStore } from "../../store/favoritesStore";
@@ -20,6 +21,7 @@ function EmptyState() {
 }
 
 export default function Favorites() {
+  const insets = useSafeAreaInsets();
   const { favorites, toggle } = useFavoritesStore();
   const { toggle: toggleGuardar, isGuardado } = useQuieroIrStore();
   const navigation = useNavigation();
@@ -28,7 +30,7 @@ export default function Favorites() {
   return (
     <View style={styles.wrapper}>
       <View style={styles.container}>
-        <View style={[styles.header, canGoBack && styles.headerWithBack]}>
+        <View style={[styles.header, canGoBack && styles.headerWithBack, { paddingTop: insets.top + 8 }]}>
           {canGoBack && (
             <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
               <Ionicons name="chevron-back" size={22} color={Colors.primary} />

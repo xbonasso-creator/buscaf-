@@ -7,6 +7,7 @@
  */
 import { useEffect, useRef } from "react";
 import { View, Text, StyleSheet, Animated, Image, Platform } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 
 const P = "#4A2C2A"; // primary
@@ -28,15 +29,8 @@ function PinSVG() {
   if (Platform.OS === "web") {
     return <Image source={{ uri }} style={pinStyle} resizeMode="contain" />;
   }
-  // Native fallback: pin en dos partes
-  return (
-    <View style={{ alignItems: "center" }}>
-      <View style={{ width: 24, height: 24, borderRadius: 12, backgroundColor: S, alignItems: "center", justifyContent: "center" }}>
-        <View style={{ width: 9, height: 9, borderRadius: 5, backgroundColor: P }} />
-      </View>
-      <View style={{ width: 0, height: 0, borderLeftWidth: 6, borderRightWidth: 6, borderTopWidth: 10, borderColor: "transparent", borderTopColor: S, marginTop: -1 }} />
-    </View>
-  );
+  // Native: usar Ionicons location — renderizado limpio sin fragmentación
+  return <Ionicons name="location" size={34} color={S} />;
 }
 const pinStyle = { width: 26, height: 37 } as const;
 

@@ -1,4 +1,5 @@
 import { View, Text, StyleSheet, TouchableOpacity, Image, Platform, Alert, ActivityIndicator } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
@@ -28,6 +29,7 @@ function SettingRow({ icon, label, onPress }: SettingRowProps) {
 }
 
 export default function Profile() {
+  const insets = useSafeAreaInsets();
   const { favorites } = useFavoritesStore();
   const { cuponeras } = useCuponerasStore();
   const { items: quieroIr } = useQuieroIrStore();
@@ -59,7 +61,7 @@ export default function Profile() {
     <View style={styles.wrapper}>
       <View style={styles.container}>
         {/* Header */}
-        <View style={styles.header}>
+        <View style={[styles.header, { paddingTop: insets.top + 8 }]}>
           <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
             <Text style={styles.backIcon}>‹</Text>
           </TouchableOpacity>

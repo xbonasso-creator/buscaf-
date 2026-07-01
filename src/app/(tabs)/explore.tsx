@@ -1,5 +1,6 @@
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, FlatList, Platform, useWindowDimensions } from "react-native";
 import { useState, useMemo } from "react";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useFavoritesStore } from "../../store/favoritesStore";
@@ -47,6 +48,7 @@ function CafeListItem({ item }: { item: Cafe }) {
 
 
 export default function Explore() {
+  const insets = useSafeAreaInsets();
   const { height: windowHeight } = useWindowDimensions();
   const [view, setView] = useState<"listado" | "mapa">("listado");
   const [search, setSearch] = useState("");
@@ -70,7 +72,7 @@ export default function Explore() {
     <View style={styles.wrapper}>
       <View style={styles.container}>
         {/* Search */}
-        <View style={styles.searchContainer}>
+        <View style={[styles.searchContainer, { paddingTop: insets.top + 12 }]}>
           <View style={styles.searchBar}>
             <TextInput
               style={styles.searchInput}
@@ -105,21 +107,23 @@ export default function Explore() {
           ))}
         </ScrollView>
 
-        {/* Toggle — siempre visible */}
-        <View style={styles.toggleContainer}>
-          <TouchableOpacity
-            style={[styles.toggleBtn, view === "listado" && styles.toggleActive]}
-            onPress={() => setView("listado")}
-          >
-            <Text style={[styles.toggleText, view === "listado" && styles.toggleTextActive]}>Listado</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={[styles.toggleBtn, view === "mapa" && styles.toggleActive]}
-            onPress={() => setView("mapa")}
-          >
-            <Text style={[styles.toggleText, view === "mapa" && styles.toggleTextActive]}>Mapa</Text>
-          </TouchableOpacity>
-        </View>
+        {/* Toggle — solo en web (mapa solo disponible en web) */}
+        {Platform.OS === "web" && (
+          <View style={styles.toggleContainer}>
+            <TouchableOpacity
+              style={[styles.toggleBtn, view === "listado" && styles.toggleActive]}
+              onPress={() => setView("listado")}
+            >
+              <Text style={[styles.toggleText, view === "listado" && styles.toggleTextActive]}>Listado</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={[styles.toggleBtn, view === "mapa" && styles.toggleActive]}
+              onPress={() => setView("mapa")}
+            >
+              <Text style={[styles.toggleText, view === "mapa" && styles.toggleTextActive]}>Mapa</Text>
+            </TouchableOpacity>
+          </View>
+        )}
 
         {/* Contenido — flex:1 para que ocupe el espacio restante */}
         <View style={styles.content}>

@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { Stack, useRouter, useSegments } from "expo-router";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 import { Colors } from "../constants/colors";
 import { useAuthStore } from "../store/authStore";
 
@@ -33,7 +34,7 @@ export default function RootLayout() {
   }, []);
 
   return (
-    <>
+    <SafeAreaProvider>
       <AuthGuard />
       <Stack
         screenOptions={{
@@ -60,6 +61,6 @@ export default function RootLayout() {
         <Stack.Screen name="settings/privacy" options={{ animation: "slide_from_right" }} />
         <Stack.Screen name="settings/config" options={{ animation: "slide_from_right" }} />
       </Stack>
-    </>
+    </SafeAreaProvider>
   );
 }
