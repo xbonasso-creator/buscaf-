@@ -451,7 +451,7 @@ const styles = StyleSheet.create({
   discountText: { color: Colors.white, fontSize: 12, fontWeight: "600" },
   cardInfo: { paddingHorizontal: 12, paddingVertical: 10, gap: 3 },
   cardInfoRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
-  cardName: { fontSize: 14, fontWeight: "700", color: Colors.text, flex: 1, marginRight: 8 },
+  cardName: { fontSize: 14, fontWeight: "700", color: Colors.primary, flex: 1, marginRight: 8 },
   cardAddress: { fontSize: 12, color: Colors.textLight },
   promoTagRow: { flexDirection: "row", marginTop: 4 },
   promoTag: { backgroundColor: "#FFF0E5", borderRadius: 6, paddingHorizontal: 7, paddingVertical: 3 },
@@ -462,7 +462,7 @@ const styles = StyleSheet.create({
   // ── Card M ──────────────────────────────────────────────────
   cardCalificado: { width: 180, backgroundColor: Colors.white, borderRadius: 16, overflow: "hidden" },
   cardCalificadoHeader: { paddingHorizontal: 12, paddingTop: 10, paddingBottom: 6, gap: 3 },
-  cardMName: { fontSize: 14, fontWeight: "700", color: Colors.text },
+  cardMName: { fontSize: 14, fontWeight: "700", color: Colors.primary },
   logoCircle: { width: 36, height: 36, borderRadius: 18, backgroundColor: "#F0E4D7", alignItems: "center", justifyContent: "center" },
   logoInitial: { fontSize: 15, fontWeight: "700", color: Colors.primary },
   cardThumb: { width: "100%", height: 118, padding: 6 },

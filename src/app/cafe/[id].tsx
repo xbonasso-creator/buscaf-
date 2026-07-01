@@ -68,7 +68,7 @@ export default function CafeDetail() {
             <View style={styles.infoCard}>
               <View style={styles.infoCardHeader}>
                 <Text style={styles.cafeName}>{CAFE.name}</Text>
-                <View style={[styles.badge, { backgroundColor: CAFE.open ? Colors.success : Colors.error }]}>
+                <View style={[styles.badge, { backgroundColor: CAFE.open ? Colors.success : "rgba(0,0,0,0.82)" }]}>
                   <Text style={styles.badgeText}>{CAFE.open ? "Abierto" : "Cerrado"}</Text>
                 </View>
               </View>
@@ -192,7 +192,7 @@ export default function CafeDetail() {
                     <View key={item.id} style={styles.menuCard}>
                       <ImageBackground source={{ uri: item.image }} style={styles.menuImage} imageStyle={{ borderRadius: 10 }}>
                         <View style={styles.menuOverlay}>
-                          <Text style={styles.menuName}>{item.name}</Text>
+                          <Text style={styles.menuName} numberOfLines={2}>{item.name}</Text>
                           <Text style={styles.menuPrice}>{item.price}</Text>
                         </View>
                       </ImageBackground>
@@ -228,15 +228,17 @@ export default function CafeDetail() {
                       style={styles.eventoCard}
                       onPress={() => router.push({ pathname: "/evento/[id]" as any, params: { id: e.id, cafeId: CAFE.id, cafeName: CAFE.name, instagram: CAFE.instagram ?? "" } })}
                     >
-                      <ImageBackground source={{ uri: e.imagen }} style={styles.eventoImg} imageStyle={{ borderRadius: 12 }}>
+                      <ImageBackground source={{ uri: e.imagen }} style={styles.eventoImg}>
                         <View style={styles.eventoOverlay} />
                         <View style={styles.eventoFechaBadge}>
                           <Ionicons name="calendar-outline" size={11} color="#fff" />
                           <Text style={styles.eventoFechaText}>{e.fecha}</Text>
                         </View>
                       </ImageBackground>
-                      <Text style={styles.eventoTitulo}>{e.titulo}</Text>
-                      <Text style={styles.eventoDesc}>{e.descripcion}</Text>
+                      <View style={styles.eventoContent}>
+                        <Text style={styles.eventoTitulo}>{e.titulo}</Text>
+                        <Text style={styles.eventoDesc}>{e.descripcion}</Text>
+                      </View>
                     </TouchableOpacity>
                   ))}
                 </View>
@@ -345,17 +347,20 @@ const styles = StyleSheet.create({
   serviciosGrid: { flexDirection: "row", gap: 10 },
   servicioItem: { fontSize: 14, color: Colors.text, lineHeight: 24 },
   menuCard: { width: 160 },
-  menuImage: { width: 160, height: 130, justifyContent: "flex-end" },
+  menuImage: { width: 160, height: 148, justifyContent: "flex-end" },
   menuOverlay: {
-    backgroundColor: "rgba(0,0,0,0.50)",
+    backgroundColor: "rgba(0,0,0,0.62)",
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
-    padding: 10,
+    paddingHorizontal: 10,
+    paddingVertical: 10,
+    minHeight: 62,         // espacio para 2 líneas siempre
     flexDirection: "row",
-    justifyContent: "space-between",
+    alignItems: "flex-end",
+    gap: 6,
   },
-  menuName: { color: Colors.white, fontSize: 14, fontWeight: "600", flex: 1 },
-  menuPrice: { color: Colors.white, fontSize: 14, fontWeight: "700" },
+  menuName: { color: Colors.white, fontSize: 13, fontWeight: "600", flex: 1, lineHeight: 18 },
+  menuPrice: { color: Colors.white, fontSize: 14, fontWeight: "700", flexShrink: 0 },
   fotosGrid: { flexDirection: "row", gap: 8 },
   fotoThumb: { flex: 1, height: 100, borderRadius: 12 },
   resenaCard: {
@@ -396,7 +401,7 @@ const styles = StyleSheet.create({
   },
   scanBtnText: { color: Colors.primary, fontSize: 14, fontWeight: "600" },
 
-  resenaEmpty: { gap: 4, paddingVertical: 8 },
+  resenaEmpty: { gap: 2, paddingVertical: 4 },
   resenaEmptyIcon: {},
   resenaEmptyTitle: { fontSize: 14, fontWeight: "600", color: Colors.text },
   resenaEmptyText: { fontSize: 13, color: Colors.textLight, lineHeight: 20 },
@@ -454,13 +459,20 @@ const styles = StyleSheet.create({
   promoVigenciaText: { fontSize: 12, color: Colors.textLight },
 
   // ── Sección opcional: eventos ──
-  eventoCard: { width: "100%", gap: 8 },
+  eventoCard: {
+    width: "100%",
+    backgroundColor: Colors.white,
+    borderRadius: 16,
+    overflow: "hidden",
+    borderWidth: 1,
+    borderColor: Colors.border,
+  },
   eventoImg: { width: "100%", height: 180, justifyContent: "flex-end" },
   eventoOverlay: {
     position: "absolute", top: 0, left: 0, right: 0, bottom: 0,
-    backgroundColor: "rgba(0,0,0,0.25)",
-    borderRadius: 12,
+    backgroundColor: "rgba(0,0,0,0.22)",
   },
+  eventoContent: { padding: 12, gap: 3 },
   eventoFechaBadge: {
     flexDirection: "row", alignItems: "center", gap: 4,
     margin: 10, alignSelf: "flex-start",
@@ -469,5 +481,5 @@ const styles = StyleSheet.create({
   },
   eventoFechaText: { fontSize: 11, color: "#fff", fontWeight: "600" },
   eventoTitulo: { fontSize: 14, fontWeight: "700", color: Colors.primary },
-  eventoDesc: { fontSize: 13, color: Colors.textLight, lineHeight: 20 },
+  eventoDesc: { fontSize: 13, color: Colors.textLight, lineHeight: 19 },
 });

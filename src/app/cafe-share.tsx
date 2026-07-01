@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity, Platform } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Platform, Share, Linking } from "react-native";
 import { router, useLocalSearchParams } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -15,23 +15,44 @@ export default function CafeShare() {
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
-    if (Platform.OS === "web" && typeof navigator !== "undefined") {
-      await navigator.clipboard.writeText(cafeUrl);
-      setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+    if (Platform.OS === "web") {
+      if (typeof navigator !== "undefined") {
+        await navigator.clipboard.writeText(cafeUrl);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+      }
+    } else {
+      // En nativo: abre el share sheet nativo de iOS/Android
+      await Share.share({ message: cafeUrl, title: cafeName });
     }
   };
 
-  const handleWhatsApp = () => {
+  const handleWhatsApp = async () => {
     const text = encodeURIComponent(`¡Mirá esta cafetería en Buscafé! ${cafeName} — ${cafeUrl}`);
     if (Platform.OS === "web") {
       window.open(`https://wa.me/?text=${text}`, "_blank");
+    } else {
+      const waUrl = `whatsapp://send?text=${text}`;
+      const supported = await Linking.canOpenURL(waUrl);
+      if (supported) {
+        Linking.openURL(waUrl);
+      } else {
+        Linking.openURL(`https://wa.me/?text=${text}`);
+      }
     }
   };
 
-  const handleInstagram = () => {
+  const handleInstagram = async () => {
     if (Platform.OS === "web") {
       window.open("https://www.instagram.com/", "_blank");
+    } else {
+      const igUrl = "instagram://";
+      const supported = await Linking.canOpenURL(igUrl);
+      if (supported) {
+        Linking.openURL(igUrl);
+      } else {
+        Linking.openURL("https://www.instagram.com/");
+      }
     }
   };
 
@@ -47,7 +68,7 @@ export default function CafeShare() {
           <View style={{ width: 40 }} />
         </View>
 
-        {/* Preview — sin URL */}
+        {/* Preview */}
         <View style={styles.preview}>
           <View style={styles.previewIcon}>
             <Ionicons name="cafe" size={26} color={Colors.primary} />
@@ -57,7 +78,6 @@ export default function CafeShare() {
 
         {/* Opciones */}
         <View style={styles.options}>
-          {/* Copiar enlace — text link */}
           <TouchableOpacity style={styles.optionRowLink} onPress={handleCopy}>
             <View style={[styles.optionIcon, { backgroundColor: "#F0F0F0" }]}>
               <Ionicons name={copied ? "checkmark" : "link-outline"} size={22} color={copied ? Colors.success : Colors.text} />
@@ -69,7 +89,6 @@ export default function CafeShare() {
 
           <View style={styles.separator} />
 
-          {/* WhatsApp */}
           <TouchableOpacity style={styles.optionRow} onPress={handleWhatsApp}>
             <View style={[styles.optionIcon, { backgroundColor: "#E8F5E9" }]}>
               <Ionicons name="logo-whatsapp" size={22} color="#25D366" />
@@ -79,7 +98,6 @@ export default function CafeShare() {
 
           <View style={styles.separator} />
 
-          {/* Instagram */}
           <TouchableOpacity style={styles.optionRow} onPress={handleInstagram}>
             <View style={[styles.optionIcon, { backgroundColor: "#FDE8F0" }]}>
               <Ionicons name="logo-instagram" size={22} color="#E1306C" />
@@ -88,7 +106,6 @@ export default function CafeShare() {
           </TouchableOpacity>
         </View>
 
-        {/* Cancelar — terciario */}
         <TouchableOpacity style={styles.cancelBtn} onPress={() => router.back()}>
           <Text style={styles.cancelText}>Cancelar</Text>
         </TouchableOpacity>
@@ -127,7 +144,6 @@ const styles = StyleSheet.create({
   optionLabel: { fontSize: 16, fontWeight: "600", color: Colors.text },
   optionLabelLink: { fontSize: 16, fontWeight: "600", color: Colors.primary, textDecorationLine: "underline" },
   separator: { height: 1, backgroundColor: Colors.border, marginHorizontal: 18 },
-  // Cancelar — terciario consistente con otras pantallas
   cancelBtn: { marginTop: 24, alignItems: "center", paddingVertical: 12 },
   cancelText: { fontSize: 15, color: Colors.primary, fontWeight: "600", textDecorationLine: "underline" },
 });
