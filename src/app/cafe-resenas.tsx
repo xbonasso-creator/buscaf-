@@ -150,7 +150,6 @@ export default function CafeResenas() {
               )}
               ListFooterComponent={
                 <TouchableOpacity style={styles.writeBtn} onPress={() => setShowForm(true)}>
-                  <Ionicons name="create-outline" size={18} color={Colors.primary} />
                   <Text style={styles.writeBtnText}>Escribir reseña</Text>
                 </TouchableOpacity>
               }
@@ -294,13 +293,13 @@ const styles = StyleSheet.create({
   text: { fontSize: 14, color: Colors.text, lineHeight: 22 },
 
   writeBtn: {
-    flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 8,
+    alignItems: "center", justifyContent: "center",
     marginTop: 8, paddingVertical: 16,
     borderRadius: 14,
     backgroundColor: Colors.primary,
     width: "100%",
   },
-  writeBtnText: { fontSize: 15, fontWeight: "700", color: Colors.white },
+  writeBtnText: { fontSize: 15, fontWeight: "700", color: Colors.white, textAlign: "center" },
 
   // Empty state
   emptyWrapper: {

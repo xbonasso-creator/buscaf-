@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ImageBackground, Image, Platform, Linking } from "react-native";
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ImageBackground, Image, Platform, Linking, Share, Modal } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router, useLocalSearchParams } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
@@ -7,6 +7,7 @@ import { useQuieroIrStore } from "../../store/quieroIrStore";
 import { useCuponerasStore } from "../../store/cuponerasStore";
 import { getCafeSync, CAFES, type Cafe } from "../../data/cafes";
 import { Colors } from "../../constants/colors";
+import { useState } from "react";
 
 // Fallback para cuando un id no existe en la DB aún
 const CAFE_FALLBACK = CAFES[0];
@@ -21,18 +22,41 @@ function Stars({ count }: { count: number }) {
   );
 }
 
+const BASE_URL = "https://buscafe-mvp.netlify.app";
+
 export default function CafeDetail() {
   const insets = useSafeAreaInsets();
   const { id } = useLocalSearchParams<{ id: string }>();
   const { toggle: toggleFav, isFavorite } = useFavoritesStore();
   const { toggle: toggleGuardar, isGuardado } = useQuieroIrStore();
   const { cuponeras, addCuponera } = useCuponerasStore();
+  const [showShareSheet, setShowShareSheet] = useState(false);
+  const [copied, setCopied] = useState(false);
 
   const CAFE: Cafe = getCafeSync(id ?? "1") ?? CAFE_FALLBACK;
   const cafeData = { id: id ?? "1", name: CAFE.name, address: CAFE.direccion, rating: CAFE.rating, image: CAFE.image };
   const fav = isFavorite(cafeData.id);
   const guardado = isGuardado(cafeData.id);
   const hasResenas = CAFE.resenas.length > 0;
+
+  const cafeUrl = `${BASE_URL}/cafe/${CAFE.id}`;
+
+  const handleCompartir = async () => {
+    if (Platform.OS !== "web") {
+      // Nativo: share sheet del sistema (incluye copiar, WhatsApp, Instagram, etc.)
+      await Share.share({ message: `${CAFE.name} — ${cafeUrl}`, title: CAFE.name });
+    } else {
+      setShowShareSheet(true);
+    }
+  };
+
+  const handleCopyLink = async () => {
+    if (typeof navigator !== "undefined" && navigator.clipboard) {
+      await navigator.clipboard.writeText(cafeUrl);
+      setCopied(true);
+      setTimeout(() => { setCopied(false); setShowShareSheet(false); }, 1500);
+    }
+  };
 
   // Secciones opcionales
   const hasMenu        = (CAFE.menu?.length ?? 0) > 0;
@@ -161,7 +185,7 @@ export default function CafeDetail() {
                     <Ionicons name="cafe" size={18} color={Colors.primary} />
                   </View>
                   <View style={{ flex: 1 }}>
-                    <Text style={styles.optSectionTitle}>Cuponera de cafecitos</Text>
+                    <Text style={styles.optSectionTitle}>Cuponera</Text>
                     <Text style={styles.optSectionSub}>
                       {cuponeraActiva
                         ? `${miCuponera!.sellos}/${miCuponera!.total} sellos`
@@ -283,7 +307,7 @@ export default function CafeDetail() {
 
             {/* Footer */}
             <View style={styles.footer}>
-              <TouchableOpacity style={styles.shareBtn} onPress={() => router.push({ pathname: "/cafe-share", params: { id, name: CAFE.name } })}>
+              <TouchableOpacity style={styles.shareBtn} onPress={handleCompartir}>
                 <Text style={styles.shareBtnText}>Compartir cafetería</Text>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => router.back()}>
@@ -293,6 +317,27 @@ export default function CafeDetail() {
           </View>
         </ScrollView>
       </View>
+
+      {/* Bottom sheet para compartir (solo web) */}
+      <Modal visible={showShareSheet} animationType="slide" transparent>
+        <TouchableOpacity style={styles.sheetBackdrop} activeOpacity={1} onPress={() => setShowShareSheet(false)} />
+        <View style={styles.shareSheet}>
+          <View style={styles.sheetHandle} />
+          <View style={styles.sheetPreview}>
+            <View style={styles.sheetIcon}>
+              <Ionicons name="cafe" size={24} color={Colors.primary} />
+            </View>
+            <Text style={styles.sheetCafeName}>{CAFE.name}</Text>
+          </View>
+          <TouchableOpacity style={styles.sheetCopyBtn} onPress={handleCopyLink}>
+            <Ionicons name={copied ? "checkmark" : "link-outline"} size={18} color={Colors.white} />
+            <Text style={styles.sheetCopyText}>{copied ? "¡Copiado!" : "Copiar enlace"}</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.sheetCancelBtn} onPress={() => setShowShareSheet(false)}>
+            <Text style={styles.sheetCancelText}>Cancelar</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
     </View>
   );
 }
@@ -409,6 +454,23 @@ const styles = StyleSheet.create({
   resenaEmptyBtn: {},
   resenaEmptyBtnText: {},
   footer: { alignItems: "center", gap: 16, paddingTop: 8 },
+  // ── Share bottom sheet (web) ──
+  sheetBackdrop: { position: "absolute", top: 0, left: 0, right: 0, bottom: 0, backgroundColor: "rgba(0,0,0,0.4)" },
+  shareSheet: {
+    position: "absolute", bottom: 0, left: 0, right: 0,
+    backgroundColor: Colors.background,
+    borderTopLeftRadius: 24, borderTopRightRadius: 24,
+    padding: 24, paddingBottom: 40,
+    alignItems: "center", gap: 16,
+  },
+  sheetHandle: { width: 40, height: 4, borderRadius: 2, backgroundColor: Colors.border, marginBottom: 4 },
+  sheetPreview: { flexDirection: "row", alignItems: "center", gap: 12, alignSelf: "stretch", backgroundColor: Colors.white, borderRadius: 14, padding: 14, borderWidth: 1, borderColor: Colors.border },
+  sheetIcon: { width: 44, height: 44, borderRadius: 22, backgroundColor: "#F0E4D7", alignItems: "center", justifyContent: "center" },
+  sheetCafeName: { fontSize: 16, fontWeight: "700", color: Colors.primary },
+  sheetCopyBtn: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 8, backgroundColor: Colors.primary, borderRadius: 14, paddingVertical: 15, alignSelf: "stretch" },
+  sheetCopyText: { fontSize: 15, fontWeight: "700", color: Colors.white },
+  sheetCancelBtn: { paddingVertical: 8 },
+  sheetCancelText: { fontSize: 15, color: Colors.primary, fontWeight: "600", textDecorationLine: "underline" },
   shareBtn: {
     width: "100%", backgroundColor: Colors.secondary,
     borderRadius: 14, paddingVertical: 16, alignItems: "center",

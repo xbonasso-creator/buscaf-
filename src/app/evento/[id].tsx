@@ -80,7 +80,7 @@ export default function EventoDetail() {
 
           <TouchableOpacity style={[s.actionBtn, s.actionBtnOutline]} onPress={handleInstagram}>
             <Ionicons name="logo-instagram" size={18} color={Colors.primary} />
-            <Text style={[s.actionText, s.actionTextOutline]}>Ver en Instagram</Text>
+            <Text style={[s.actionText, s.actionTextOutline]}>Ir a Instagram</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>

@@ -148,10 +148,10 @@ export default function Explore() {
               <View style={styles.emptyIcon}>
                 <Ionicons name="cafe-outline" size={44} color={Colors.primary} />
               </View>
-              <Text style={styles.emptyTitle}>Sin resultados</Text>
+              <Text style={styles.emptyTitle}>No hay resultados</Text>
               <Text style={styles.emptySub}>
                 {barrio
-                  ? `No hay cafeterías en ${barrio} aún.`
+                  ? "Cambiá de barrio para descubrir cafeterías."
                   : "Probá con otro nombre o ajustá los filtros."}
               </Text>
             </View>

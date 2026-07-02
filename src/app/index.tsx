@@ -110,8 +110,12 @@ export default function SplashScreen() {
     // ── 5. Fade out y navegar a los 4s ───────────────────────────
     timers.push(setTimeout(() => {
       if (!mounted) return;
+      const hasSeenOnboarding =
+        typeof localStorage !== "undefined"
+          ? localStorage.getItem("buscafe:onboardingDone") === "true"
+          : false;
       Animated.timing(screenO, { toValue: 0, duration: 420, useNativeDriver: true }).start(() => {
-        router.replace("/onboarding");
+        router.replace(hasSeenOnboarding ? "/(auth)/login" : "/onboarding");
       });
     }, 4000));
 

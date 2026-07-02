@@ -162,21 +162,27 @@ export default function Onboarding() {
     ]).start();
   }, []);
 
+  const markDone = () => {
+    if (typeof localStorage !== "undefined") {
+      localStorage.setItem("buscafe:onboardingDone", "true");
+    }
+  };
+
   const goTo = (next: number) => {
-    if (next > 2) { router.replace("/(auth)/login"); return; }
+    if (next > 2) { markDone(); router.replace("/(auth)/login"); return; }
 
     Animated.spring(stepAnim, { toValue: next, friction: 9, tension: 55, useNativeDriver: false }).start();
 
     Animated.parallel([
-      Animated.timing(unitO,     { toValue: 0, duration: 160, easing: EASE_IN, useNativeDriver: true }),
-      Animated.timing(unitScale, { toValue: 0.96, duration: 160, easing: EASE_IN, useNativeDriver: true }),
-      Animated.timing(unitY,     { toValue: 8, duration: 160, easing: EASE_IN, useNativeDriver: true }),
+      Animated.timing(unitO,     { toValue: 0.2, duration: 180, easing: EASE_IN, useNativeDriver: true }),
+      Animated.timing(unitScale, { toValue: 0.97, duration: 180, easing: EASE_IN, useNativeDriver: true }),
+      Animated.timing(unitY,     { toValue: 6, duration: 180, easing: EASE_IN, useNativeDriver: true }),
     ]).start(() => {
       setStep(next);
-      unitY.setValue(-8);
+      unitY.setValue(-6);
       Animated.parallel([
-        Animated.timing(unitO,     { toValue: 1, duration: 340, easing: EASE_OUT, useNativeDriver: true }),
-        Animated.timing(unitY,     { toValue: 0, duration: 340, easing: EASE_OUT, useNativeDriver: true }),
+        Animated.timing(unitO,     { toValue: 1, duration: 300, easing: EASE_OUT, useNativeDriver: true }),
+        Animated.timing(unitY,     { toValue: 0, duration: 300, easing: EASE_OUT, useNativeDriver: true }),
         Animated.spring(unitScale, { toValue: 1, friction: 10, tension: 70, useNativeDriver: true }),
       ]).start();
     });
@@ -196,7 +202,7 @@ export default function Onboarding() {
             </TouchableOpacity>
           ) : <View style={s.navBtn} />}
           {step < 2 ? (
-            <TouchableOpacity onPress={() => router.replace("/(auth)/login")} style={s.navBtn}>
+            <TouchableOpacity onPress={() => { markDone(); router.replace("/(auth)/login"); }} style={s.navBtn}>
               <Text style={s.skipText}>Saltar</Text>
             </TouchableOpacity>
           ) : <View style={s.navBtn} />}
@@ -206,8 +212,9 @@ export default function Onboarding() {
         <Animated.View
           style={[s.unit, { opacity: unitO, transform: [{ scale: unitScale }, { translateY: unitY }] }]}
         >
-          {/* Ilustración */}
+          {/* Ilustración con halo decorativo */}
           <View style={s.illWrap}>
+            <View style={[s.illHalo, { width: CIRCLE * 1.85, height: CIRCLE * 1.85, borderRadius: CIRCLE * 0.925 }]} />
             <IllComp />
           </View>
 
@@ -295,6 +302,11 @@ const s = StyleSheet.create({
   illWrap: {
     alignItems: "center",
     justifyContent: "center",
+  },
+  illHalo: {
+    position: "absolute",
+    backgroundColor: S,
+    opacity: 0.18,
   },
 
   textBlock: {

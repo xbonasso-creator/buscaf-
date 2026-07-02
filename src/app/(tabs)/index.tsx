@@ -59,41 +59,33 @@ function CardActions({ item }: { item: Pick<Cafe, "id" | "name" | "rating" | "im
   );
 }
 
-// ── Card L — foto full-width, nombre + rating + dirección + tags opcionales ──
+// ── Card L — foto full-width, nombre + rating + dirección, acciones siempre top-right ──
 function CardDestacado({ item }: { item: Cafe }) {
-  const hasPromo = (item.promociones?.length ?? 0) > 0;
   return (
     <TouchableOpacity style={styles.cardDestacado} onPress={() => router.push(`/cafe/${item.id}`)}>
-      {/* Imagen sin imageStyle borderRadius — el overflow:hidden del card la recorta */}
+      {/* Imagen — overflow:hidden del card recorta. Acciones siempre top-right */}
       <ImageBackground source={{ uri: item.image }} style={styles.cardImage}>
-        {/* Actions top-right */}
         <View style={styles.cardImageTop}>
           <View style={{ flex: 1 }} />
           <CardActions item={item} />
         </View>
       </ImageBackground>
-      {/* Contenido alineado con la foto */}
+      {/* Contenido */}
       <View style={styles.cardInfo}>
         <View style={styles.cardInfoRow}>
           <Text style={styles.cardName} numberOfLines={1}>{item.name}</Text>
           <StarRating rating={item.rating} />
         </View>
         <Text style={styles.cardAddress} numberOfLines={1}>{item.direccion}</Text>
-        {/* Tag de promo opcional */}
-        {hasPromo && (
-          <View style={styles.promoTagRow}>
-            <View style={styles.promoTag}>
-              <Text style={styles.promoTagText}>{item.promociones![0].titulo}</Text>
-            </View>
-          </View>
-        )}
       </View>
     </TouchableOpacity>
   );
 }
 
-// ── Card M — solo nombre + stars + imagen con badge estado top-left ──
+// ── Card M — solo nombre + stars + imagen con badge estado top-left (solo con filtro Abierto ahora) ──
 function CardCalificado({ item }: { item: Cafe }) {
+  const { active } = useFiltersStore();
+  const showBadge = active.includes("Abierto ahora");
   return (
     <TouchableOpacity style={styles.cardCalificado} onPress={() => router.push(`/cafe/${item.id}`)}>
       {/* Header: solo nombre y stars, sin logo */}
@@ -101,15 +93,15 @@ function CardCalificado({ item }: { item: Cafe }) {
         <Text style={styles.cardMName} numberOfLines={1}>{item.name}</Text>
         <StarRating rating={item.rating} />
       </View>
-      {/* Imagen full-width con estado top-left */}
+      {/* Imagen full-width — badge solo cuando filtro Abierto ahora está activo */}
       <ImageBackground source={{ uri: item.image }} style={styles.cardThumb} imageStyle={{ borderBottomLeftRadius: 16, borderBottomRightRadius: 16 }}>
-        <View style={styles.cardThumbTags}>
-          {item.open !== undefined && (
+        {showBadge && item.open !== undefined && (
+          <View style={styles.cardThumbTags}>
             <View style={[styles.stateBadge, item.open ? styles.stateBadgeOpen : styles.stateBadgeClosed]}>
               <Text style={styles.stateBadgeText}>{item.open ? "Abierto" : "Cerrado"}</Text>
             </View>
-          )}
-        </View>
+          </View>
+        )}
       </ImageBackground>
     </TouchableOpacity>
   );
@@ -240,6 +232,10 @@ export default function Home() {
             </Text>
             <Ionicons name="chevron-down" size={13} color={hasLocation ? Colors.primary : Colors.textLight} />
           </TouchableOpacity>
+          {/* Isotipo / marca */}
+          <View style={styles.isotipo}>
+            <Ionicons name="cafe" size={22} color={Colors.primary} />
+          </View>
         </View>
 
         {/* Buscador */}
@@ -381,7 +377,8 @@ export default function Home() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Platform.OS === "web" ? "#E8E0D5" : Colors.background, alignItems: "center" },
   scroll: { flex: 1, width: "100%", maxWidth: 430, backgroundColor: Colors.background },
-  header: { paddingHorizontal: 16, paddingTop: 16, paddingBottom: 8 },
+  header: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: 16, paddingTop: 16, paddingBottom: 8 },
+  isotipo: { width: 38, height: 38, borderRadius: 19, backgroundColor: Colors.white, borderWidth: 1.5, borderColor: Colors.border, alignItems: "center", justifyContent: "center" },
   location: {
     flexDirection: "row", alignItems: "center", gap: 5,
     paddingHorizontal: 12, paddingVertical: 7,

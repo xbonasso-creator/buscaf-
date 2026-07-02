@@ -71,10 +71,10 @@ export default function MisCuponeras() {
         {cuponeras.length === 0 ? (
           <View style={styles.empty}>
             <View style={styles.emptyIcon}><Ionicons name="cafe-outline" size={48} color={Colors.secondary} /></View>
-            <Text style={styles.emptyTitle}>Sin cuponeras activas</Text>
-            <Text style={styles.emptyText}>Visitá los cafés afiliados y escaneá su QR para empezar a acumular tazas.</Text>
+            <Text style={styles.emptyTitle}>No tenés cuponeras activas</Text>
+            <Text style={styles.emptyText}>Empezá a sumar sellos en tus cafeterías preferidas.</Text>
             <TouchableOpacity style={styles.emptyBtn} onPress={() => router.push("/(tabs)/explore")}>
-              <Text style={styles.emptyBtnText}>Explorar cafés</Text>
+              <Text style={styles.emptyBtnText}>Ir a cafeterías</Text>
             </TouchableOpacity>
           </View>
         ) : (
