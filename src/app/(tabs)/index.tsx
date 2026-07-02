@@ -63,10 +63,9 @@ function CardActions({ item }: { item: Pick<Cafe, "id" | "name" | "rating" | "im
 function CardDestacado({ item }: { item: Cafe }) {
   return (
     <TouchableOpacity style={styles.cardDestacado} onPress={() => router.push(`/cafe/${item.id}`)}>
-      {/* Imagen — overflow:hidden del card recorta. Acciones siempre top-right */}
+      {/* Imagen — acciones absolutas, nunca se mueven */}
       <ImageBackground source={{ uri: item.image }} style={styles.cardImage}>
-        <View style={styles.cardImageTop}>
-          <View style={{ flex: 1 }} />
+        <View style={styles.cardActionsAbs}>
           <CardActions item={item} />
         </View>
       </ImageBackground>
@@ -107,18 +106,20 @@ function CardCalificado({ item }: { item: Cafe }) {
   );
 }
 
-// ── Card Descuento — igual que Card L pero con badge de promo en imagen ──
+// ── Card Descuento — badge promo top-left absoluto, acciones top-right absolutas ──
 function CardDescuento({ item }: { item: Cafe }) {
   const promo = item.promociones?.[0];
   return (
     <TouchableOpacity style={styles.cardDestacado} onPress={() => router.push(`/cafe/${item.id}`)}>
       <ImageBackground source={{ uri: item.image }} style={styles.cardImage}>
-        <View style={styles.cardImageTop}>
-          {/* Badge de promo top-left */}
+        {/* Badge de promo top-left — absoluto, independiente de las acciones */}
+        <View style={styles.cardBadgeAbs}>
           <View style={styles.discountBadge}>
             <Text style={styles.discountText}>{promo?.titulo ?? "Promoción especial"}</Text>
           </View>
-          {/* Actions top-right */}
+        </View>
+        {/* Acciones top-right — siempre en la misma posición */}
+        <View style={styles.cardActionsAbs}>
           <CardActions item={item} />
         </View>
       </ImageBackground>
@@ -443,6 +444,9 @@ const styles = StyleSheet.create({
   cardImage: { width: "100%", height: 164 },
   cardImageTop: { flexDirection: "row", alignItems: "flex-start", padding: 8 },
   cardActionsRow: { flexDirection: "row", gap: 6 },
+  // Posicionamiento absoluto — badge izquierda, acciones derecha, nunca se mueven
+  cardActionsAbs: { position: "absolute", top: 8, right: 8, flexDirection: "row", gap: 6 },
+  cardBadgeAbs: { position: "absolute", top: 8, left: 8 },
   actionBtn: { backgroundColor: Colors.white, borderRadius: 20, padding: 8, shadowColor: "#000", shadowOpacity: 0.1, shadowRadius: 4, shadowOffset: { width: 0, height: 1 } },
   discountBadge: { backgroundColor: Colors.promo, borderRadius: 8, paddingHorizontal: 8, paddingVertical: 4 },
   discountText: { color: Colors.white, fontSize: 12, fontWeight: "600" },

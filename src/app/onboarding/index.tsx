@@ -2,7 +2,7 @@
  * Onboarding — ilustración, texto, dots y CTA en un bloque unificado.
  * Todo anima junto como una unidad (fade + scale).
  */
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useMemo } from "react";
 import {
   View,
   Text,
@@ -12,6 +12,7 @@ import {
   TouchableOpacity,
   Dimensions,
   Platform,
+  Image,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router } from "expo-router";
@@ -27,6 +28,20 @@ const CIRCLE = Math.min(Math.round(SH * 0.22), 172); // tamaño del círculo ilu
 
 const EASE_OUT = Easing.out(Easing.cubic);
 const EASE_IN  = Easing.in(Easing.ease);
+
+// Mancha orgánica de fondo — renderizada como SVG data URI
+const BLOB_SVG = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 230">
+  <path d="M170,28 C202,12 242,20 264,48 C286,76 284,112 274,140 C264,168 244,188 218,200 C192,212 160,216 130,208 C100,200 72,184 54,162 C36,140 30,110 36,84 C42,58 62,36 88,26 C114,16 138,44 170,28Z" fill="#C8A882" opacity="0.26"/>
+  <path d="M66,172 C50,188 34,198 30,184 C26,170 42,154 60,148 C74,144 82,158 66,172Z" fill="#C8A882" opacity="0.18"/>
+  <circle cx="42" cy="66" r="9" fill="#C8A882" opacity="0.20"/>
+  <circle cx="278" cy="76" r="12" fill="#C8A882" opacity="0.16"/>
+  <circle cx="64" cy="208" r="5" fill="#C8A882" opacity="0.18"/>
+  <circle cx="260" cy="188" r="8.5" fill="#C8A882" opacity="0.14"/>
+  <circle cx="24" cy="132" r="4.5" fill="#C8A882" opacity="0.16"/>
+  <circle cx="308" cy="130" r="6" fill="#C8A882" opacity="0.12"/>
+</svg>`;
+
+const BLOB_URI = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(BLOB_SVG)}`;
 
 // ── Ilustraciones ──────────────────────────────────────────────────────
 
@@ -212,9 +227,13 @@ export default function Onboarding() {
         <Animated.View
           style={[s.unit, { opacity: unitO, transform: [{ scale: unitScale }, { translateY: unitY }] }]}
         >
-          {/* Ilustración con halo decorativo */}
+          {/* Ilustración con mancha orgánica de fondo */}
           <View style={s.illWrap}>
-            <View style={[s.illHalo, { width: CIRCLE * 1.85, height: CIRCLE * 1.85, borderRadius: CIRCLE * 0.925 }]} />
+            <Image
+              source={{ uri: BLOB_URI }}
+              style={[s.illBlob, { width: CIRCLE * 2.4, height: CIRCLE * 1.7 }]}
+              resizeMode="contain"
+            />
             <IllComp />
           </View>
 
@@ -303,10 +322,8 @@ const s = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
-  illHalo: {
+  illBlob: {
     position: "absolute",
-    backgroundColor: S,
-    opacity: 0.18,
   },
 
   textBlock: {
