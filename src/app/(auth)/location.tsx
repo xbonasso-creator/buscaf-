@@ -21,8 +21,7 @@ export default function Location() {
         <View style={styles.footer}>
           <PrimaryButton
             title="Compartir ubicación"
-            onPress={() => router.replace("/(tabs)/")}
-            fullWidth
+            onPress={() => router.replace("/(tabs)/" as any)}
           />
           <TouchableOpacity onPress={() => router.replace("/(tabs)/")}>
             <Text style={styles.skip}>Seleccionar manualmente</Text>

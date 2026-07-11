@@ -34,9 +34,9 @@ function PinSVG() {
 }
 const pinStyle = { width: 26, height: 37 } as const;
 
-// "Busca" en cream, "fé" en secondary
-const LETTERS_CREAM = ["B", "u", "s", "c", "a"];
-const LETTERS_SALMON = ["f", "é"];
+// "Bus" en cream, "café" en secondary
+const LETTERS_CREAM = ["B", "u", "s"];
+const LETTERS_SALMON = ["c", "a", "f", "é"];
 const ALL_LETTERS = [...LETTERS_CREAM, ...LETTERS_SALMON]; // 7 letras
 
 export default function SplashScreen() {

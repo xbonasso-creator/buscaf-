@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, ImageBackground, Platform } from "react-native";
+import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity, Platform } from "react-native";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -30,6 +30,9 @@ export default function QuieroIr() {
               <Ionicons name="bookmark-outline" size={13} color={Colors.textLight} />
               {" "}en la pantalla de cada cafetería para guardarla acá.
             </Text>
+            <TouchableOpacity style={styles.exploreBtn} onPress={() => router.replace("/(tabs)/explore" as any)}>
+              <Text style={styles.exploreBtnText}>Explorar cafeterías</Text>
+            </TouchableOpacity>
           </View>
         ) : (
           <FlatList
@@ -42,21 +45,17 @@ export default function QuieroIr() {
                 style={styles.card}
                 onPress={() => router.push(`/cafe/${item.id}`)}
               >
-                {item.image ? (
-                  <ImageBackground
-                    source={{ uri: item.image }}
-                    style={styles.cardImage}
-                    imageStyle={{ borderRadius: 12 }}
-                  />
-                ) : (
-                  <View style={[styles.cardImage, styles.cardImagePlaceholder]}>
+                <View style={styles.logoCircle}>
+                  {item.logo ? (
+                    <Image source={{ uri: item.logo }} style={styles.logoImg} resizeMode="cover" />
+                  ) : (
                     <Text style={styles.logoInitial}>{item.name.charAt(0)}</Text>
-                  </View>
-                )}
+                  )}
+                </View>
                 <View style={styles.cardInfo}>
                   <Text style={styles.cardName}>{item.name}</Text>
-                  {item.address && (
-                    <Text style={styles.cardAddress}>{item.address}</Text>
+                  {item.direccion && (
+                    <Text style={styles.cardAddress}>{item.direccion}</Text>
                   )}
                   {item.rating && (
                     <View style={styles.ratingRow}>
@@ -78,7 +77,7 @@ export default function QuieroIr() {
 }
 
 const styles = StyleSheet.create({
-  wrapper: { flex: 1, backgroundColor: Platform.OS === "web" ? "#E8E0D5" : Colors.background, alignItems: "center" },
+  wrapper: { flex: 1, backgroundColor: Platform.OS === "web" ? Colors.border : Colors.background, alignItems: "center" },
   container: { flex: 1, width: "100%", maxWidth: 430, backgroundColor: Colors.background },
   header: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: 20, paddingBottom: 12 },
   backBtn: { width: 40, height: 40, borderRadius: 20, borderWidth: 1.5, borderColor: Colors.border, alignItems: "center", justifyContent: "center" },
@@ -86,6 +85,8 @@ const styles = StyleSheet.create({
   empty: { flex: 1, alignItems: "center", justifyContent: "center", paddingHorizontal: 32, gap: 12 },
   emptyTitle: { fontSize: 16, fontWeight: "700", color: Colors.primary, textAlign: "center" },
   emptySub: { fontSize: 13, color: Colors.textLight, textAlign: "center", lineHeight: 20 },
+  exploreBtn: { marginTop: 8, paddingVertical: 10 },
+  exploreBtnText: { fontSize: 14, color: Colors.primary, fontWeight: "600", textDecorationLine: "underline" },
   list: { paddingHorizontal: 16, gap: 12, paddingBottom: 32 },
   card: {
     flexDirection: "row", alignItems: "center", gap: 12,
@@ -93,9 +94,16 @@ const styles = StyleSheet.create({
     borderRadius: 14, padding: 12,
     borderWidth: 1, borderColor: Colors.border,
   },
-  cardImage: { width: 64, height: 64, borderRadius: 12 },
-  cardImagePlaceholder: { backgroundColor: "#F0E4D7", alignItems: "center", justifyContent: "center" },
-  logoInitial: { fontSize: 28, fontWeight: "700", color: Colors.primary },
+  logoCircle: {
+    width: 48, height: 48, borderRadius: 24,
+    backgroundColor: Colors.surfaceCream,
+    alignItems: "center", justifyContent: "center",
+    borderWidth: 1, borderColor: Colors.border,
+    overflow: "hidden",
+    flexShrink: 0,
+  },
+  logoImg: { width: 48, height: 48 },
+  logoInitial: { fontSize: 20, fontWeight: "700", color: Colors.primary },
   cardInfo: { flex: 1, gap: 3 },
   cardName: { fontSize: 14, fontWeight: "600", color: Colors.text },
   cardAddress: { fontSize: 12, color: Colors.textLight },

@@ -3,9 +3,11 @@ import { create } from "zustand";
 type FiltersStore = {
   active: string[];
   price: string | null;
+  barrio: string | null;       // id del barrio, ej: "ciudad-vieja"
   toggle: (filter: string) => void;
   setPrice: (price: string | null) => void;
-  setFilters: (active: string[], price: string | null) => void; // commit atómico desde draft
+  setBarrio: (barrio: string | null) => void;
+  setFilters: (active: string[], price: string | null, barrio: string | null) => void;
   clear: () => void;
   hasFilters: () => boolean;
   count: () => number;
@@ -14,6 +16,7 @@ type FiltersStore = {
 export const useFiltersStore = create<FiltersStore>((set, get) => ({
   active: [],
   price: null,
+  barrio: null,
   toggle: (filter) => {
     const current = get().active;
     set({
@@ -22,9 +25,10 @@ export const useFiltersStore = create<FiltersStore>((set, get) => ({
         : [...current, filter],
     });
   },
-  setPrice: (price) => set({ price }),
-  setFilters: (active, price) => set({ active, price }),
-  clear: () => set({ active: [], price: null }),
+  setPrice:  (price)  => set({ price }),
+  setBarrio: (barrio) => set({ barrio }),
+  setFilters: (active, price, barrio) => set({ active, price, barrio }),
+  clear: () => set({ active: [], price: null, barrio: null }),
   hasFilters: () => get().active.length > 0 || !!get().price,
   count: () => get().active.length + (get().price ? 1 : 0),
 }));

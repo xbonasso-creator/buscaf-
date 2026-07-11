@@ -1,6 +1,6 @@
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Platform } from "react-native";
+import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity, Platform } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { router, useNavigation } from "expo-router";
+import { router, useNavigation, useLocalSearchParams } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useFavoritesStore } from "../../store/favoritesStore";
 import { useQuieroIrStore } from "../../store/quieroIrStore";
@@ -26,13 +26,22 @@ export default function Favorites() {
   const { toggle: toggleGuardar, isGuardado } = useQuieroIrStore();
   const navigation = useNavigation();
   const canGoBack = navigation.canGoBack();
+  const { from } = useLocalSearchParams<{ from?: string }>();
+
+  const handleBack = () => {
+    if (from === "profile") {
+      router.push("/(tabs)/profile");
+    } else {
+      router.back();
+    }
+  };
 
   return (
     <View style={styles.wrapper}>
       <View style={styles.container}>
         <View style={[styles.header, canGoBack && styles.headerWithBack, { paddingTop: insets.top + 8 }]}>
           {canGoBack ? (
-            <TouchableOpacity onPress={() => router.back()} style={styles.backBtn}>
+            <TouchableOpacity onPress={handleBack} style={styles.backBtn}>
               <Ionicons name="arrow-back" size={20} color={Colors.text} />
             </TouchableOpacity>
           ) : <View style={{ width: 40 }} />}
@@ -51,11 +60,15 @@ export default function Favorites() {
             renderItem={({ item }) => (
               <TouchableOpacity style={styles.card} onPress={() => router.push(`/cafe/${item.id}`)}>
                 <View style={styles.logoCircle}>
-                  <Text style={styles.logoInitial}>{item.name.charAt(0)}</Text>
+                  {item.logo ? (
+                    <Image source={{ uri: item.logo }} style={styles.logoImg} resizeMode="cover" />
+                  ) : (
+                    <Text style={styles.logoInitial}>{item.name.charAt(0)}</Text>
+                  )}
                 </View>
                 <View style={styles.info}>
                   <Text style={styles.name}>{item.name}</Text>
-                  <Text style={styles.address}>{item.address}</Text>
+                  <Text style={styles.address}>{item.direccion}</Text>
                 </View>
                 <View style={styles.right}>
                   <View style={styles.rating}>
@@ -81,7 +94,7 @@ export default function Favorites() {
 }
 
 const styles = StyleSheet.create({
-  wrapper: { flex: 1, backgroundColor: Platform.OS === "web" ? "#E8E0D5" : Colors.background, alignItems: "center" },
+  wrapper: { flex: 1, backgroundColor: Platform.OS === "web" ? Colors.border : Colors.background, alignItems: "center" },
   container: { flex: 1, width: "100%", maxWidth: 430, backgroundColor: Colors.background },
   header: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: 20, paddingBottom: 12 },
   headerWithBack: {},
@@ -91,7 +104,7 @@ const styles = StyleSheet.create({
   empty: { flex: 1, alignItems: "center", justifyContent: "center", gap: 14, paddingHorizontal: 32 },
   emptyIcon: {
     width: 100, height: 100, borderRadius: 50,
-    backgroundColor: "#F5E6E0",
+    backgroundColor: Colors.surfaceWarm,
     alignItems: "center", justifyContent: "center",
   },
   emptyHeart: { fontSize: 44, lineHeight: 52 },
@@ -106,10 +119,12 @@ const styles = StyleSheet.create({
   },
   logoCircle: {
     width: 52, height: 52, borderRadius: 26,
-    backgroundColor: "#F0E4D7",
+    backgroundColor: Colors.surfaceCream,
     alignItems: "center", justifyContent: "center",
     borderWidth: 1, borderColor: Colors.border,
+    overflow: "hidden",
   },
+  logoImg: { width: 52, height: 52 },
   logoInitial: { fontSize: 20, fontWeight: "700", color: Colors.primary },
   info: { flex: 1 },
   name: { fontSize: 14, fontWeight: "700", color: Colors.text },

@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Platform } from "react-native";
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Platform, Alert } from "react-native";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -7,6 +7,23 @@ import { Colors } from "../constants/colors";
 
 function CuponeraCard({ item }: { item: { id: string; cafeName: string; sellos: number; total: number } }) {
   const llena = item.sellos >= item.total;
+  const { removeCuponera } = useCuponerasStore();
+
+  const handleEliminar = () => {
+    Alert.alert(
+      "Eliminar cuponera",
+      `¿Querés eliminar la cuponera de ${item.cafeName}? Perderás los sellos acumulados.`,
+      [
+        { text: "Cancelar", style: "cancel" },
+        {
+          text: "Eliminar",
+          style: "destructive",
+          onPress: () => removeCuponera(item.id),
+        },
+      ]
+    );
+  };
+
   return (
     <View style={[styles.card, llena && styles.cardLlena]}>
       <View style={styles.cardHeader}>
@@ -20,6 +37,9 @@ function CuponeraCard({ item }: { item: { id: string; cafeName: string; sellos: 
           </Text>
         </View>
         {llena && <View style={styles.listaChip}><Text style={styles.listaChipText}>¡Lista!</Text></View>}
+        <TouchableOpacity onPress={handleEliminar} style={styles.trashBtn} hitSlop={{ top: 8, right: 8, bottom: 8, left: 8 }}>
+          <Ionicons name="trash-outline" size={18} color={Colors.textLight} />
+        </TouchableOpacity>
       </View>
 
       <View style={styles.tazasGrid}>
@@ -88,7 +108,7 @@ export default function MisCuponeras() {
 }
 
 const styles = StyleSheet.create({
-  wrapper: { flex: 1, backgroundColor: Platform.OS === "web" ? "#E8E0D5" : Colors.background, alignItems: "center" },
+  wrapper: { flex: 1, backgroundColor: Platform.OS === "web" ? Colors.border : Colors.background, alignItems: "center" },
   container: { flex: 1, width: "100%", maxWidth: 430, backgroundColor: Colors.background },
   header: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: 20, paddingTop: 20, paddingBottom: 16 },
   backBtn: { width: 40, height: 40, borderRadius: 20, borderWidth: 1.5, borderColor: Colors.border, alignItems: "center", justifyContent: "center" },
@@ -97,7 +117,8 @@ const styles = StyleSheet.create({
   card: { backgroundColor: Colors.white, borderRadius: 20, padding: 20, gap: 16, borderWidth: 1, borderColor: Colors.border },
   cardLlena: { borderColor: Colors.success, borderWidth: 1.5 },
   cardHeader: { flexDirection: "row", alignItems: "center", gap: 12 },
-  cafeLogoCircle: { width: 44, height: 44, borderRadius: 22, backgroundColor: "#F0E4D7", alignItems: "center", justifyContent: "center" },
+  trashBtn: { padding: 4 },
+  cafeLogoCircle: { width: 44, height: 44, borderRadius: 22, backgroundColor: Colors.surfaceCream, alignItems: "center", justifyContent: "center" },
   cafeLogoText: { fontSize: 18, fontWeight: "700", color: Colors.primary },
   cafeName: { fontSize: 15, fontWeight: "700", color: Colors.text },
   cafeProgress: { fontSize: 13, color: Colors.textLight, marginTop: 2 },
@@ -112,7 +133,7 @@ const styles = StyleSheet.create({
   scanBtn: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 8, borderWidth: 1.5, borderColor: Colors.primary, borderRadius: 14, paddingVertical: 12, backgroundColor: Colors.background },
   scanBtnText: { color: Colors.primary, fontSize: 14, fontWeight: "600" },
   empty: { flex: 1, alignItems: "center", justifyContent: "center", paddingHorizontal: 40, gap: 16, paddingBottom: 60 },
-  emptyIcon: { width: 88, height: 88, borderRadius: 44, backgroundColor: "#F5E6E0", alignItems: "center", justifyContent: "center" },
+  emptyIcon: { width: 88, height: 88, borderRadius: 44, backgroundColor: Colors.surfaceWarm, alignItems: "center", justifyContent: "center" },
   emptyTitle: { fontSize: 20, fontWeight: "700", color: Colors.primary },
   emptyText: { fontSize: 15, color: Colors.textLight, textAlign: "center", lineHeight: 24 },
   emptyBtn: { backgroundColor: Colors.primary, borderRadius: 14, paddingHorizontal: 24, paddingVertical: 14, marginTop: 8 },

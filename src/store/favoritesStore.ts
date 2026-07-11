@@ -69,16 +69,20 @@ export const useFavoritesStore = create<FavoritesStore>((set, get) => ({
 
     if (!userId) return; // sin sesión: solo local
 
-    if (exists) {
-      await supabase
-        .from("favorites")
-        .delete()
-        .eq("user_id", userId)
-        .eq("cafe_id", cafe.id);
-    } else {
-      await supabase
-        .from("favorites")
-        .insert({ user_id: userId, cafe_id: cafe.id });
+    try {
+      if (exists) {
+        await supabase
+          .from("favorites")
+          .delete()
+          .eq("user_id", userId)
+          .eq("cafe_id", cafe.id);
+      } else {
+        await supabase
+          .from("favorites")
+          .insert({ user_id: userId, cafe_id: cafe.id });
+      }
+    } catch {
+      // Error silencioso — el estado local ya refleja la acción del usuario
     }
   },
 

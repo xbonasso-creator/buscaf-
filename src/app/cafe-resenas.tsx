@@ -7,11 +7,8 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router, useLocalSearchParams } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "../constants/colors";
-
-type Resena = { id: string; name: string; rating: number; text: string; date: string };
-
-// TODO: reemplazar por fetch a DB real. Vacío por default — se construye desde la app.
-const RESENAS_INICIALES: Resena[] = [];
+import { useResenasStore } from "../store/resenasStore";
+import { type Resena } from "../data/cafes";
 
 function Stars({ rating, size = 14 }: { rating: number; size?: number }) {
   return (
@@ -57,8 +54,9 @@ export default function CafeResenas() {
   const insets = useSafeAreaInsets();
   const { id, cafeName, openForm } = useLocalSearchParams<{ id: string; cafeName: string; openForm?: string }>();
 
-  // TODO: cuando haya DB → useQuery('resenas', () => fetchResenas(id))
-  const [resenas, setResenas] = useState<Resena[]>(RESENAS_INICIALES);
+  const { getResenas, addResena } = useResenasStore();
+  const storeResenas = getResenas(id ?? "");
+  const [resenas, setResenas] = useState<Resena[]>(storeResenas);
   const [showForm, setShowForm] = useState(openForm === "1");
 
   // Form state
@@ -83,7 +81,6 @@ export default function CafeResenas() {
     if (formRating === 0) return setFormError("Elegí una calificación.");
     if (!formText.trim()) return setFormError("Escribí tu experiencia.");
 
-    // TODO: reemplazar por mutation a DB → postResena({ cafeId: id, ...nueva })
     const nueva: Resena = {
       id: Date.now().toString(),
       name: formName.trim(),
@@ -91,6 +88,7 @@ export default function CafeResenas() {
       text: formText.trim(),
       date: "Ahora mismo",
     };
+    addResena(id ?? "", nueva);
     setResenas(prev => [nueva, ...prev]);
     resetForm();
     setShowForm(false);
@@ -246,7 +244,7 @@ export default function CafeResenas() {
 }
 
 const styles = StyleSheet.create({
-  wrapper: { flex: 1, backgroundColor: Platform.OS === "web" ? "#E8E0D5" : Colors.background, alignItems: "center" },
+  wrapper: { flex: 1, backgroundColor: Platform.OS === "web" ? Colors.border : Colors.background, alignItems: "center" },
   container: { flex: 1, width: "100%", maxWidth: 430, backgroundColor: Colors.background },
 
   header: {
@@ -308,7 +306,7 @@ const styles = StyleSheet.create({
   },
   emptyIcon: {
     width: 88, height: 88, borderRadius: 44,
-    backgroundColor: "#F5E6E0",
+    backgroundColor: Colors.surfaceWarm,
     alignItems: "center", justifyContent: "center",
   },
   emptyTitle: { fontSize: 20, fontWeight: "700", color: Colors.primary },

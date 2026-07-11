@@ -29,9 +29,9 @@ export default function PrimaryButton({
 const styles = StyleSheet.create({
   button: {
     backgroundColor: "#4A2C2A",
-    paddingVertical: 13,
+    paddingVertical: 14,
     paddingHorizontal: 28,
-    borderRadius: 12,
+    borderRadius: 16,
     alignItems: "center",
     justifyContent: "center",
     minWidth: 108,
@@ -40,7 +40,8 @@ const styles = StyleSheet.create({
   disabled: { opacity: 0.5 },
   text: {
     color: "#FFFFFF",
-    fontSize: 15,
-    fontWeight: "500",
+    fontSize: 16,
+    fontWeight: "600",
+    letterSpacing: 0.1,
   },
 });

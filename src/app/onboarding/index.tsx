@@ -25,38 +25,35 @@ import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { Colors } from "../../constants/colors";
 
-const P  = Colors.primary;    // #4A2C2A
-const S  = Colors.secondary;  // #C8A882
-const C  = Colors.background; // #FAF7F2
+const P  = Colors.primary;
+const S  = Colors.secondary;
+const C  = Colors.background;
 
 const { width: SW, height: SH } = Dimensions.get("window");
-const CW     = Math.min(SW, 430);              // container width
+const CW     = Math.min(SW, 430);
 const CIRCLE = Math.min(Math.round(SH * 0.22), 172);
 
 const EO  = Easing.out(Easing.cubic);
 const EI  = Easing.in(Easing.cubic);
 const EIO = Easing.inOut(Easing.cubic);
 
-// ── 3 tonos beige — progresivos ──────────────────────────────────────────
 const BG_COLORS = ["#FAF7F2", "#F3EAE0", "#EDE1D2"];
 
-// ── Blobs SVG — 3 formas distintas, misma familia orgánica ───────────────
 function makeBlobURI(path: string) {
-  const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 360"><path d="${path}" fill="#C8A882" opacity="0.24"/></svg>`;
-  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+  return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(
+    `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 360"><path d="${path}" fill="#C8A882" opacity="0.24"/></svg>`
+  )}`;
 }
-
 const BLOB_URIS = [
   makeBlobURI("M180,45 C230,15 295,35 320,85 C345,135 335,200 295,242 C255,284 195,298 148,282 C101,266 65,228 48,180 C31,132 45,78 85,52 C115,32 132,74 180,45Z"),
   makeBlobURI("M192,50 C244,18 308,50 330,104 C352,158 330,226 287,259 C244,292 180,302 135,273 C90,244 68,190 74,140 C80,90 116,56 168,44 C188,38 168,74 192,50Z"),
   makeBlobURI("M165,52 C218,22 280,46 310,100 C340,154 323,220 278,256 C233,292 167,302 120,273 C73,244 49,189 53,137 C57,85 94,54 148,44 C163,39 152,68 165,52Z"),
 ];
 
-// ── Partículas flotantes ──────────────────────────────────────────────────
 const PARTICLE_CFG = [
-  { x: CW * 0.10, y: SH * 0.30, r: 5  },
-  { x: CW * 0.82, y: SH * 0.20, r: 4  },
-  { x: CW * 0.74, y: SH * 0.62, r: 6  },
+  { x: CW * 0.10, y: SH * 0.30, r: 5   },
+  { x: CW * 0.82, y: SH * 0.20, r: 4   },
+  { x: CW * 0.74, y: SH * 0.62, r: 6   },
   { x: CW * 0.16, y: SH * 0.68, r: 3.5 },
 ];
 
@@ -92,8 +89,7 @@ function FloatingParticles() {
           pointerEvents="none"
           style={{
             position: "absolute",
-            left: p.x - p.r,
-            top:  p.y - p.r,
+            left: p.x - p.r, top: p.y - p.r,
             width: p.r * 2, height: p.r * 2, borderRadius: p.r,
             backgroundColor: S,
             opacity: 0.22,
@@ -105,7 +101,6 @@ function FloatingParticles() {
   );
 }
 
-// ── Ilustraciones — siempre montadas ────────────────────────────────────
 function IllStep1() {
   return (
     <View style={[ill.circle, { width: CIRCLE, height: CIRCLE, borderRadius: CIRCLE / 2 }]}>
@@ -138,13 +133,10 @@ function IllStep2() {
   return (
     <View style={[ill.circle, { width: CIRCLE, height: CIRCLE, borderRadius: CIRCLE / 2 }]}>
       {rs.map((r, i) => (
-        <Animated.View
-          key={i}
-          style={[ill.ripple, {
-            width: CIRCLE, height: CIRCLE, borderRadius: CIRCLE / 2,
-            transform: [{ scale: r }], opacity: ro[i],
-          }]}
-        />
+        <Animated.View key={i} style={[ill.ripple, {
+          width: CIRCLE, height: CIRCLE, borderRadius: CIRCLE / 2,
+          transform: [{ scale: r }], opacity: ro[i],
+        }]} />
       ))}
       <Ionicons name="location-sharp" size={CIRCLE * 0.52} color={C} />
     </View>
@@ -175,67 +167,57 @@ const ILLS = [IllStep1, IllStep2, IllStep3];
 
 const STEPS = [
   {
-    title: "Descubrí café\nde especialidad",
-    sub:   "Encontrá el lugar perfecto para disfrutar de un buen café.",
+    title: "El mejor café\nde especialidad",
+    sub:   "Descubrí cafeterías únicas, con historia y mucho sabor. Todo en un solo lugar.",
     cta:   "Empezar",
   },
   {
-    title: "Cafeterías\ncerca de vos",
-    sub:   "Usamos tu ubicación para mostrarte las mejores opciones a tu alrededor.",
+    title: "Encontrá tu\ncafetería ideal",
+    sub:   "Filtrá por barrio, ambiente o método de preparación y encontrá exactamente lo que buscás.",
     cta:   "Continuar",
   },
   {
-    title: "Tu tour cafetero\nte espera",
-    sub:   "Guardá en favoritos, dejá reseñas y ganá descuentos.",
-    cta:   "Registrarme",
+    title: "Guardá tus\nfavoritas",
+    sub:   "Armá tu lista de cafeterías preferidas y tené siempre a mano tu próxima parada.",
+    cta:   "Crear mi cuenta",
   },
 ];
 
-// ── Dots elásticos ────────────────────────────────────────────────────────
 function Dots({ anim }: { anim: Animated.Value }) {
   return (
     <View style={{ flexDirection: "row", gap: 8, alignItems: "center" }}>
       {[0, 1, 2].map(i => {
         const width = anim.interpolate({
-          inputRange: [i - 1, i - 0.35, i, i + 0.35, i + 1],
+          inputRange:  [i - 1, i - 0.35, i, i + 0.35, i + 1],
           outputRange: [8, 8, 28, 8, 8],
           extrapolate: "clamp",
         });
         const opacity = anim.interpolate({
-          inputRange: [i - 0.6, i, i + 0.6],
+          inputRange:  [i - 0.6, i, i + 0.6],
           outputRange: [0.22, 1, 0.22],
           extrapolate: "clamp",
         });
         return (
-          <Animated.View
-            key={i}
-            style={{ height: 8, borderRadius: 4, backgroundColor: P, width, opacity }}
-          />
+          <Animated.View key={i} style={{ height: 8, borderRadius: 4, backgroundColor: P, width, opacity }} />
         );
       })}
     </View>
   );
 }
 
-// ── Pantalla principal ────────────────────────────────────────────────────
 export default function Onboarding() {
   const insets = useSafeAreaInsets();
   const [step, setStep] = useState(0);
 
-  // dotAnim  → spring elástico → solo dots
   const dotAnim   = useRef(new Animated.Value(0)).current;
-  // sceneAnim → timing suave → blobs + icons (useNativeDriver: false)
   const sceneAnim = useRef(new Animated.Value(0)).current;
-  // bgAnim   → timing lento → backgroundColor (useNativeDriver: false)
   const bgAnim    = useRef(new Animated.Value(0)).current;
 
-  // Texto — native driver
   const titleO = useRef(new Animated.Value(0)).current;
   const titleY = useRef(new Animated.Value(16)).current;
   const subO   = useRef(new Animated.Value(0)).current;
   const subY   = useRef(new Animated.Value(20)).current;
 
-  // Entrada inicial
   useEffect(() => {
     Animated.parallel([
       Animated.timing(titleO, { toValue: 1, duration: 450, delay: 280, easing: EO, useNativeDriver: true }),
@@ -253,36 +235,28 @@ export default function Onboarding() {
   const goTo = (next: number) => {
     if (next > 2) { markDone(); router.replace("/(auth)/login"); return; }
 
-    // Dots — spring elástico
-    Animated.spring(dotAnim, { toValue: next, friction: 7, tension: 45, useNativeDriver: false }).start();
-
-    // Blobs + icons — suave
+    Animated.spring(dotAnim,   { toValue: next, friction: 7,  tension: 45, useNativeDriver: false }).start();
     Animated.timing(sceneAnim, { toValue: next, duration: 500, easing: EIO, useNativeDriver: false }).start();
+    Animated.timing(bgAnim,    { toValue: next, duration: 660, easing: EIO, useNativeDriver: false }).start();
 
-    // Fondo — más lento, sensación de profundidad
-    Animated.timing(bgAnim, { toValue: next, duration: 660, easing: EIO, useNativeDriver: false }).start();
-
-    // Texto — sale (fade parcial + sube levemente)
     Animated.parallel([
-      Animated.timing(titleO, { toValue: 0.08, duration: 160,          easing: EI, useNativeDriver: true }),
-      Animated.timing(titleY, { toValue: -10,  duration: 160,          easing: EI, useNativeDriver: true }),
+      Animated.timing(titleO, { toValue: 0.08, duration: 160,           easing: EI, useNativeDriver: true }),
+      Animated.timing(titleY, { toValue: -10,  duration: 160,           easing: EI, useNativeDriver: true }),
       Animated.timing(subO,   { toValue: 0.08, duration: 160, delay: 40, easing: EI, useNativeDriver: true }),
       Animated.timing(subY,   { toValue: -7,   duration: 160, delay: 40, easing: EI, useNativeDriver: true }),
     ]).start(() => {
       setStep(next);
       titleY.setValue(14);
       subY.setValue(18);
-      // Texto — entra (stagger: título primero, subtítulo 60ms después)
       Animated.parallel([
-        Animated.timing(titleO, { toValue: 1, duration: 300,          easing: EO, useNativeDriver: true }),
-        Animated.timing(titleY, { toValue: 0, duration: 300,          easing: EO, useNativeDriver: true }),
+        Animated.timing(titleO, { toValue: 1, duration: 300,           easing: EO, useNativeDriver: true }),
+        Animated.timing(titleY, { toValue: 0, duration: 300,           easing: EO, useNativeDriver: true }),
         Animated.timing(subO,   { toValue: 1, duration: 300, delay: 60, easing: EO, useNativeDriver: true }),
         Animated.timing(subY,   { toValue: 0, duration: 300, delay: 60, easing: EO, useNativeDriver: true }),
       ]).start();
     });
   };
 
-  // Color fondo interpolado
   const bgColor = bgAnim.interpolate({
     inputRange:  [0, 1, 2],
     outputRange: BG_COLORS as any,
@@ -290,18 +264,15 @@ export default function Onboarding() {
   });
 
   return (
-    <Animated.View
-      style={[s.wrap, {
-        backgroundColor: bgColor as any,
-        paddingTop:    insets.top,
-        paddingBottom: insets.bottom + 24,
-      }]}
-    >
+    <Animated.View style={[s.wrap, {
+      backgroundColor: bgColor as any,
+      paddingTop:    insets.top,
+      paddingBottom: insets.bottom + 24,
+    }]}>
       <View style={s.container}>
 
-        {/* ── L2: Blobs orgánicos ── */}
+        {/* Blobs */}
         {BLOB_URIS.map((uri, i) => {
-          // Cada blob se desplaza ligeramente entre pasos
           const tx = sceneAnim.interpolate({
             inputRange:  [0, 1, 2],
             outputRange: [i===0?0:i===1?20:-20, i===0?-16:i===1?0:16, i===0?10:i===1?-10:0],
@@ -312,7 +283,6 @@ export default function Onboarding() {
             outputRange: [i===0?0:i===1?-18:20, i===0?16:i===1?0:-14, i===0?-10:i===1?20:0],
             extrapolate: "clamp",
           });
-          // Cross-fade: mínimo 0.10 para que nunca desaparezca del todo
           const opacity = sceneAnim.interpolate({
             inputRange:  [i-0.8, i-0.15, i, i+0.15, i+0.8],
             outputRange: [0.10, 0.85, 1, 0.85, 0.10],
@@ -328,20 +298,16 @@ export default function Onboarding() {
             <Animated.Image
               key={i}
               source={{ uri }}
-              style={[s.blob, {
-                width: BSZ, height: BSZ,
-                opacity,
-                transform: [{ translateX: tx }, { translateY: ty }, { scale }],
-              }]}
+              style={[s.blob, { width: BSZ, height: BSZ, opacity, transform: [{ translateX: tx }, { translateY: ty }, { scale }] }]}
               resizeMode="contain"
             />
           );
         })}
 
-        {/* ── L3: Partículas flotantes ── */}
+        {/* Partículas */}
         <FloatingParticles />
 
-        {/* ── L7: Nav ── */}
+        {/* Nav */}
         <View style={s.nav}>
           {step > 0 ? (
             <TouchableOpacity onPress={() => goTo(step - 1)} style={s.navBtn}>
@@ -349,16 +315,13 @@ export default function Onboarding() {
             </TouchableOpacity>
           ) : <View style={s.navBtn} />}
           {step < 2 ? (
-            <TouchableOpacity
-              onPress={() => { markDone(); router.replace("/(auth)/login"); }}
-              style={s.navBtn}
-            >
+            <TouchableOpacity onPress={() => { markDone(); router.replace("/(auth)/login"); }} style={s.navBtn}>
               <Text style={s.skipText}>Saltar</Text>
             </TouchableOpacity>
           ) : <View style={s.navBtn} />}
         </View>
 
-        {/* ── L4: Ilustraciones — todas montadas, cross-fade in-place ── */}
+        {/* Ilustraciones */}
         <View style={s.illArea}>
           {ILLS.map((IllComp, i) => {
             const opacity = sceneAnim.interpolate({
@@ -372,46 +335,31 @@ export default function Onboarding() {
               extrapolate: "clamp",
             });
             return (
-              <Animated.View
-                key={i}
-                style={[StyleSheet.absoluteFill, s.illCenter, {
-                  opacity,
-                  transform: [{ scale }],
-                }]}
-              >
+              <Animated.View key={i} style={[StyleSheet.absoluteFill, s.illCenter, { opacity, transform: [{ scale }] }]}>
                 <IllComp />
               </Animated.View>
             );
           })}
         </View>
 
-        {/* ── L5: Texto — stagger entre título y subtítulo ── */}
+        {/* Texto */}
         <View style={s.textBlock}>
-          <Animated.Text
-            style={[s.title, { opacity: titleO, transform: [{ translateY: titleY }] }]}
-          >
+          <Animated.Text style={[s.title, { opacity: titleO, transform: [{ translateY: titleY }] }]}>
             {STEPS[step].title}
           </Animated.Text>
-          <Animated.Text
-            style={[s.sub, { opacity: subO, transform: [{ translateY: subY }] }]}
-          >
+          <Animated.Text style={[s.sub, { opacity: subO, transform: [{ translateY: subY }] }]}>
             {STEPS[step].sub}
           </Animated.Text>
         </View>
 
-        {/* ── L6: Dots elásticos ── */}
+        {/* Dots */}
         <View style={s.dotsWrap}>
           <Dots anim={dotAnim} />
         </View>
 
-        {/* ── CTA ── */}
-        <TouchableOpacity
-          style={[s.cta, step === 2 && s.ctaFinal]}
-          onPress={() => goTo(step + 1)}
-        >
-          <Text style={[s.ctaText, step === 2 && s.ctaFinalText]}>
-            {STEPS[step].cta}
-          </Text>
+        {/* CTA */}
+        <TouchableOpacity style={[s.cta, step === 2 && s.ctaFinal]} onPress={() => goTo(step + 1)}>
+          <Text style={[s.ctaText, step === 2 && s.ctaFinalText]}>{STEPS[step].cta}</Text>
         </TouchableOpacity>
 
       </View>
@@ -419,7 +367,6 @@ export default function Onboarding() {
   );
 }
 
-// ── Estilos ilustración ──────────────────────────────────────────────────
 const ill = StyleSheet.create({
   circle: {
     backgroundColor: P,
@@ -438,11 +385,11 @@ const ill = StyleSheet.create({
   },
 });
 
-// ── Estilos pantalla ─────────────────────────────────────────────────────
 const s = StyleSheet.create({
   wrap: {
     flex: 1,
     alignItems: "center",
+    overflow: "hidden",
   },
   container: {
     flex: 1,
@@ -451,15 +398,11 @@ const s = StyleSheet.create({
     paddingHorizontal: 28,
     overflow: "hidden",
   },
-
-  // Blob — posicionado en la mitad superior del contenedor
   blob: {
     position: "absolute",
     top: SH * 0.08,
     left: CW * 0.02,
   },
-
-  // Nav
   nav: {
     flexDirection: "row",
     justifyContent: "space-between",
@@ -470,8 +413,6 @@ const s = StyleSheet.create({
   },
   navBtn:   { width: 44, height: 44, alignItems: "center", justifyContent: "center" },
   skipText: { fontSize: 14, color: Colors.textLight },
-
-  // Ilustración
   illArea: {
     height: CIRCLE + 48,
     width: "100%",
@@ -479,8 +420,6 @@ const s = StyleSheet.create({
     marginBottom: 32,
   },
   illCenter: { alignItems: "center", justifyContent: "center" },
-
-  // Texto
   textBlock: { width: "100%", gap: 12, flex: 1 },
   title: {
     fontSize: 28,
@@ -493,11 +432,7 @@ const s = StyleSheet.create({
     color: Colors.textLight,
     lineHeight: 25,
   },
-
-  // Dots
   dotsWrap: { alignSelf: "flex-start", marginBottom: 16 },
-
-  // CTA
   cta: {
     width: "100%",
     backgroundColor: P,

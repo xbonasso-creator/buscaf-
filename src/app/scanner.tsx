@@ -303,7 +303,7 @@ const styles = StyleSheet.create({
   },
   fallbackIcon: {
     width: 96, height: 96, borderRadius: 48,
-    backgroundColor: "#F5E6E0",
+    backgroundColor: Colors.surfaceWarm,
     alignItems: "center", justifyContent: "center",
   },
   fallbackTitle: { fontSize: 20, fontWeight: "700", color: Colors.primary },

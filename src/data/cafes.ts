@@ -43,12 +43,25 @@ export type Cafe = {
   // ── Reseñas (se construyen desde la app) ──
   resenas: Resena[];
 
+  // ── Rango de precios ($ / $$ / $$$) — opcional ──
+  precio?: "$" | "$$" | "$$$";
+
   // ── Secciones opcionales ([] o false = sección oculta) ──
   tieneCuponera?: boolean;
   cuponeraMax?: number;
   menu?: MenuItem[];
   promociones?: Promo[];
   eventos?: Evento[];
+
+  // ── Redes sociales ──
+  instagram?: string;
+
+  // ── Branding ──
+  logo?: string;        // URL del logo circular de la cafetería
+
+  // ── Curaduría manual (editable desde Supabase dashboard) ──
+  destacado?: boolean;  // aparece en "Destacados de la semana"
+  es_nuevo?: boolean;   // aparece en "Agregados recientemente"
 };
 
 // ─────────────────────────────────────────────────────────────
@@ -60,6 +73,7 @@ const CAFES_DB: Cafe[] = [
     name: "Totem Coffee",
     rating: 4.8,
     open: true,
+    precio: "$$",
     description: "Tostadero de especialidad en el corazón de Pocitos. Granos de origen único, métodos alternativos y un espacio para quedarse horas.",
     image: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=600",
     horarios: [
@@ -99,6 +113,7 @@ const CAFES_DB: Cafe[] = [
     name: "Jacinto",
     rating: 4.7,
     open: true,
+    precio: "$$$",
     description: "Café y bistró de Ciudad Vieja con foco en producto local y estacional. Desde el desayuno hasta el vino de la tarde.",
     image: "https://images.unsplash.com/photo-1445116572660-236099ec97a0?w=600",
     horarios: [
@@ -127,6 +142,7 @@ const CAFES_DB: Cafe[] = [
     name: "Café Brasilero",
     rating: 4.5,
     open: true,
+    precio: "$",
     description: "El café más antiguo de Montevideo. Desde 1877 en la misma esquina de Ciudad Vieja, con historia y espresso cargado.",
     image: "https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=600",
     horarios: [
@@ -151,6 +167,7 @@ const CAFES_DB: Cafe[] = [
     name: "Belmondo Café",
     rating: 4.4,
     open: true,
+    precio: "$$",
     description: "Espacio cultural y café en el Centro. Ideal para trabajar, leer o perderse en buena música y buen café de filtro.",
     image: "https://images.unsplash.com/photo-1521017432531-fbd92d768814?w=600",
     horarios: [
@@ -182,6 +199,7 @@ const CAFES_DB: Cafe[] = [
     name: "Quínoa",
     rating: 4.6,
     open: false,
+    precio: "$$",
     description: "Café saludable y plant-based en Palermo. Desayunos elaborados, granola casera y el mejor matcha de la ciudad.",
     image: "https://images.unsplash.com/photo-1512621776951-a57141f2eefd?w=600",
     horarios: [
@@ -209,6 +227,7 @@ const CAFES_DB: Cafe[] = [
     name: "El Club del Pan",
     rating: 4.5,
     open: true,
+    precio: "$",
     description: "Panadería de fermentación natural y café de especialidad. El olor a pan recién horneado te recibe desde la esquina.",
     image: "https://images.unsplash.com/photo-1555507036-ab1f4038808a?w=600",
     horarios: [
@@ -232,6 +251,7 @@ const CAFES_DB: Cafe[] = [
     name: "Café Misterio",
     rating: 4.3,
     open: false,
+    precio: "$$",
     description: "Café íntimo y reservado en Pocitos. Canales de filtrado, blends de autor y una selección de tés de especialidad.",
     image: "https://images.unsplash.com/photo-1534778101976-62847782c213?w=600",
     horarios: [
@@ -254,6 +274,70 @@ const CAFES_DB: Cafe[] = [
 ];
 
 // ─────────────────────────────────────────────────────────────
+// HORARIO — determina si un café está abierto ahora mismo
+// ─────────────────────────────────────────────────────────────
+// Formato esperado de cada string en horarios[]:
+//   "Lunes a Viernes · De 08:00 a 19:00"
+//   "Sábados · De 09:00 a 20:00"
+//   "Domingos · De 10:00 a 17:00"
+//   "Martes a Sábado · De 10:00 a 20:00"
+//   "Sábados y Domingos · De 10:00 a 20:00"
+// En Supabase: campo horarios = array de strings con este patrón.
+
+const _DIA: Record<string, number> = {
+  lunes: 1, martes: 2, "miércoles": 3, miercoles: 3,
+  jueves: 4, viernes: 5,
+  "sábado": 6, sabado: 6, "sábados": 6, sabados: 6,
+  domingo: 0, domingos: 0,
+};
+
+const _RANGO: Record<string, number[]> = {
+  "lunes a viernes":     [1,2,3,4,5],
+  "lunes a sábado":      [1,2,3,4,5,6], "lunes a sabado": [1,2,3,4,5,6],
+  "lunes a domingo":     [0,1,2,3,4,5,6],
+  "martes a viernes":    [2,3,4,5],
+  "martes a sábado":     [2,3,4,5,6], "martes a sabado": [2,3,4,5,6],
+  "miércoles a viernes": [3,4,5], "miercoles a viernes": [3,4,5],
+  "jueves a sábado":     [4,5,6], "jueves a sabado": [4,5,6],
+  "sábados y domingos":  [6,0], "sabados y domingos": [6,0],
+  "todos los días":      [0,1,2,3,4,5,6], "todos los dias": [0,1,2,3,4,5,6],
+};
+
+export function isOpenNow(horarios: string[]): boolean {
+  const now   = new Date();
+  const day   = now.getDay();                              // 0=Dom … 6=Sáb
+  const cur   = now.getHours() * 60 + now.getMinutes();
+
+  for (const h of horarios) {
+    // Separamos día y hora por el punto medio · (también acepta "-" o "–")
+    const parts = h.split(/·|-{1,2}|–/);
+    if (parts.length < 2) continue;
+
+    const dayStr  = parts[0].trim().toLowerCase();
+    const timeStr = parts.slice(1).join(" ");              // todo lo que queda
+
+    // Determinar días
+    const days: number[] =
+      _RANGO[dayStr] ??
+      (_DIA[dayStr] !== undefined ? [_DIA[dayStr]] : null) ??
+      [0,1,2,3,4,5,6];
+
+    if (!days.includes(day)) continue;
+
+    // Extraer todos los HH:MM del segmento de hora
+    const times = [...timeStr.matchAll(/(\d{1,2}):(\d{2})/g)];
+    if (times.length < 2) continue;
+
+    const open  = parseInt(times[0][1]) * 60 + parseInt(times[0][2]);
+    const close = parseInt(times[1][1]) * 60 + parseInt(times[1][2]);
+
+    if (cur >= open && cur < close) return true;
+  }
+
+  return false;
+}
+
+// ─────────────────────────────────────────────────────────────
 // API — lee de Supabase, fallback al array local si falla
 // ─────────────────────────────────────────────────────────────
 
@@ -262,7 +346,7 @@ function dbRowToCafe(row: any): Cafe {
     id:            row.id,
     name:          row.name,
     rating:        row.rating,
-    open:          row.open,
+    open:          isOpenNow(row.horarios ?? []),   // tiempo real desde horarios
     description:   row.description,
     image:         row.image,
     horarios:      row.horarios ?? [],
@@ -274,11 +358,16 @@ function dbRowToCafe(row: any): Cafe {
     lat:           row.lat,
     lng:           row.lng,
     resenas:       [],
+    precio:        row.precio ?? undefined,
     tieneCuponera: row.tiene_cuponera ?? false,
     cuponeraMax:   row.cuponera_max ?? 10,
     menu:          row.menu ?? [],
     promociones:   row.promociones ?? [],
     eventos:       row.eventos ?? [],
+    instagram:     row.instagram ?? undefined,
+    logo:          row.logo ?? undefined,
+    destacado:     row.destacado ?? false,
+    es_nuevo:      row.es_nuevo ?? false,
   };
 }
 

@@ -1,16 +1,15 @@
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ImageBackground, Image, Platform, Linking, Share, Modal } from "react-native";
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ImageBackground, Image, Platform, Linking, Share, Modal, ActivityIndicator } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router, useLocalSearchParams } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useFavoritesStore } from "../../store/favoritesStore";
 import { useQuieroIrStore } from "../../store/quieroIrStore";
 import { useCuponerasStore } from "../../store/cuponerasStore";
-import { getCafeSync, CAFES, type Cafe } from "../../data/cafes";
+import { type Cafe, isOpenNow } from "../../data/cafes";
+import { useCafesStore } from "../../store/cafesStore";
+import { useResenasStore } from "../../store/resenasStore";
 import { Colors } from "../../constants/colors";
 import { useState } from "react";
-
-// Fallback para cuando un id no existe en la DB aún
-const CAFE_FALLBACK = CAFES[0];
 
 function Stars({ count }: { count: number }) {
   return (
@@ -33,11 +32,41 @@ export default function CafeDetail() {
   const [showShareSheet, setShowShareSheet] = useState(false);
   const [copied, setCopied] = useState(false);
 
-  const CAFE: Cafe = getCafeSync(id ?? "1") ?? CAFE_FALLBACK;
-  const cafeData = { id: id ?? "1", name: CAFE.name, address: CAFE.direccion, rating: CAFE.rating, image: CAFE.image };
+  const { getCafe, loaded } = useCafesStore();
+  // ?? [] fuera del selector para no crear una referencia nueva en cada render (evita loop infinito)
+  const resenas = useResenasStore(state => state.byId[id ?? ""]) ?? [];
+
+  // Esperar a que Supabase cargue antes de buscar el café por ID
+  const CAFE: Cafe | null = loaded ? (getCafe(id ?? "") ?? null) : null;
+
+  const cafeData = CAFE
+    ? { id: CAFE.id, name: CAFE.name, direccion: CAFE.direccion, rating: CAFE.rating, image: CAFE.image }
+    : { id: "", name: "", direccion: "", rating: 0, image: "" };
   const fav = isFavorite(cafeData.id);
   const guardado = isGuardado(cafeData.id);
-  const hasResenas = CAFE.resenas.length > 0;
+  const hasResenas = resenas.length > 0;
+
+  // Pantalla de carga mientras Supabase responde
+  if (!loaded) {
+    return (
+      <View style={[styles.wrapper, { justifyContent: "center", alignItems: "center" }]}>
+        <ActivityIndicator size="large" color={Colors.primary} />
+      </View>
+    );
+  }
+
+  // Café no encontrado en Supabase
+  if (!CAFE) {
+    return (
+      <View style={[styles.wrapper, { justifyContent: "center", alignItems: "center", gap: 16 }]}>
+        <Ionicons name="cafe-outline" size={48} color={Colors.border} />
+        <Text style={{ fontSize: 16, color: Colors.textLight }}>Cafetería no encontrada</Text>
+        <TouchableOpacity onPress={() => router.replace("/(tabs)")}>
+          <Text style={{ color: Colors.primary, fontWeight: "600" }}>Volver al inicio</Text>
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   const cafeUrl = `${BASE_URL}/cafe/${CAFE.id}`;
 
@@ -92,8 +121,8 @@ export default function CafeDetail() {
             <View style={styles.infoCard}>
               <View style={styles.infoCardHeader}>
                 <Text style={styles.cafeName}>{CAFE.name}</Text>
-                <View style={[styles.badge, { backgroundColor: CAFE.open ? Colors.success : "rgba(0,0,0,0.82)" }]}>
-                  <Text style={styles.badgeText}>{CAFE.open ? "Abierto" : "Cerrado"}</Text>
+                <View style={[styles.badge, { backgroundColor: isOpenNow(CAFE.horarios) ? Colors.success : "rgba(0,0,0,0.82)" }]}>
+                  <Text style={styles.badgeText}>{isOpenNow(CAFE.horarios) ? "Abierto" : "Cerrado"}</Text>
                 </View>
               </View>
               <View style={styles.ratingRow}>
@@ -207,7 +236,7 @@ export default function CafeDetail() {
               </View>
             )}
 
-            {/* ── MENÚ DESTACADO (opcional) ── */}
+            {/* V1: Menú destacado — oculto en MVP (feature premium)
             {hasMenu && (
               <View style={styles.section}>
                 <Text style={styles.sectionTitle}>Menú destacado</Text>
@@ -225,21 +254,63 @@ export default function CafeDetail() {
                 </ScrollView>
               </View>
             )}
+            */}
 
-            {/* Fotos — oculto temporalmente, descomentar para habilitar */}
-            {/* <View style={styles.section}>
+            {/* ── FOTOS ── */}
+            <View style={styles.section}>
               <View style={styles.sectionRow}>
                 <Text style={styles.sectionTitle}>Fotos</Text>
-                <TouchableOpacity onPress={() => router.push({ pathname: "/cafe-fotos", params: { id, cafeName: CAFE.name } })}>
-                  <Text style={styles.linkText}>Más fotos</Text>
+                {/* V1: upload de fotos por usuarios
+                <TouchableOpacity
+                  style={styles.uploadFotoBtn}
+                  onPress={() => router.push({ pathname: "/cafe-fotos", params: { id, cafeName: CAFE.name, openUpload: "1" } })}
+                  hitSlop={{ top: 8, right: 8, bottom: 8, left: 8 }}
+                >
+                  <Ionicons name="camera" size={20} color={Colors.primary} />
+                </TouchableOpacity>
+                */}
+              </View>
+              <TouchableOpacity
+                activeOpacity={0.9}
+                onPress={() => router.push({ pathname: "/cafe-fotos", params: { id, cafeName: CAFE.name } })}
+              >
+                {CAFE.fotos.length > 0 ? (
+                  <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }} scrollEnabled={false}>
+                    {CAFE.fotos.slice(0, 4).map((uri, i) => (
+                      <Image key={i} source={{ uri }} style={styles.fotoThumb} />
+                    ))}
+                    {CAFE.fotos.length > 4 && (
+                      <View style={[styles.fotoThumb, styles.fotoMas]}>
+                        <Text style={styles.fotoMasText}>+{CAFE.fotos.length - 4}</Text>
+                      </View>
+                    )}
+                  </ScrollView>
+                ) : (
+                  <View style={styles.fotosEmpty}>
+                    <Ionicons name="camera-outline" size={28} color={Colors.border} />
+                    <Text style={styles.fotosEmptyText}>Sé el primero en subir una foto</Text>
+                  </View>
+                )}
+              </TouchableOpacity>
+            </View>
+
+            {/* ── CONTACTO — INSTAGRAM (opcional) ── */}
+            {!!CAFE.instagram && (
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>Contacto</Text>
+                <TouchableOpacity
+                  style={styles.infoBox}
+                  onPress={() => Linking.openURL(
+                    CAFE.instagram!.startsWith("http")
+                      ? CAFE.instagram!
+                      : `https://instagram.com/${CAFE.instagram!.replace("@", "")}`
+                  )}
+                >
+                  <Ionicons name="logo-instagram" size={20} color="#E1306C" style={{ marginTop: 1 }} />
+                  <Text style={[styles.infoSubText, { textDecorationLine: "underline" }]}>Ir al Instagram →</Text>
                 </TouchableOpacity>
               </View>
-              <View style={styles.fotosGrid}>
-                {CAFE.fotos.map((uri, i) => (
-                  <Image key={i} source={{ uri }} style={styles.fotoThumb} />
-                ))}
-              </View>
-            </View> */}
+            )}
 
             {/* ── EVENTOS (opcional) ── */}
             {hasEventos && (
@@ -269,41 +340,57 @@ export default function CafeDetail() {
               </View>
             )}
 
-            {/* Reseñas */}
+            {/* V1: sección Reseñas — oculta en MVP, activar para v1
             <View style={styles.section}>
               <View style={styles.sectionRow}>
                 <Text style={styles.sectionTitle}>Reseñas</Text>
-                {hasResenas && (
-                  <TouchableOpacity onPress={() => router.push({ pathname: "/cafe-resenas", params: { id, cafeName: CAFE.name } })}>
-                    <Text style={styles.linkText}>Mostrar todas</Text>
+                {hasResenas ? (
+                  <TouchableOpacity
+                    hitSlop={{ top: 8, right: 8, bottom: 8, left: 8 }}
+                    onPress={() => router.push({ pathname: "/cafe-resenas", params: { id, cafeName: CAFE.name } })}
+                  >
+                    <Text style={styles.linkText}>Leer más</Text>
+                  </TouchableOpacity>
+                ) : (
+                  <TouchableOpacity
+                    style={styles.uploadFotoBtn}
+                    hitSlop={{ top: 8, right: 8, bottom: 8, left: 8 }}
+                    onPress={() => router.push({ pathname: "/cafe-resenas", params: { id, cafeName: CAFE.name, openForm: "1" } })}
+                  >
+                    <Ionicons name="pencil-outline" size={20} color={Colors.primary} />
                   </TouchableOpacity>
                 )}
               </View>
-
               {hasResenas ? (
                 <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 10 }}>
-                  {CAFE.resenas.map(r => (
-                    <View key={r.id} style={styles.resenaCard}>
-                      <Text style={styles.resenaName}>{r.name}</Text>
-                      <Stars count={r.rating} />
-                      <Text style={styles.resenaText}>"{r.text}"</Text>
+                  {resenas.slice(0, 5).map(r => (
+                    <TouchableOpacity
+                      key={r.id}
+                      style={styles.resenaCard}
+                      activeOpacity={0.85}
+                      onPress={() => router.push({ pathname: "/cafe-resenas", params: { id, cafeName: CAFE.name } })}
+                    >
+                      <View style={styles.resenaCardHeader}>
+                        <View style={styles.resenaAvatar}>
+                          <Text style={styles.resenaAvatarLetter}>{r.name[0].toUpperCase()}</Text>
+                        </View>
+                        <View style={{ flex: 1 }}>
+                          <Text style={styles.resenaName}>{r.name}</Text>
+                          <Stars count={r.rating} />
+                        </View>
+                      </View>
+                      <Text style={styles.resenaText} numberOfLines={3}>"{r.text}"</Text>
                       <Text style={styles.resenaDate}>{r.date}</Text>
-                    </View>
+                    </TouchableOpacity>
                   ))}
                 </ScrollView>
               ) : (
                 <View style={styles.resenaEmpty}>
                   <Text style={styles.resenaEmptyText}>Sé el primero en compartir tu experiencia.</Text>
-                  <TouchableOpacity
-                    style={{ flexDirection: "row", alignItems: "center", gap: 4 }}
-                    onPress={() => router.push({ pathname: "/cafe-resenas", params: { id, cafeName: CAFE.name, openForm: "1" } })}
-                  >
-                    <Ionicons name="pencil-outline" size={13} color={Colors.primary} />
-                    <Text style={styles.resenaEmptyLink}>Escribir reseña</Text>
-                  </TouchableOpacity>
                 </View>
               )}
             </View>
+            */}
 
             {/* Footer */}
             <View style={styles.footer}>
@@ -343,7 +430,7 @@ export default function CafeDetail() {
 }
 
 const styles = StyleSheet.create({
-  wrapper: { flex: 1, backgroundColor: Platform.OS === "web" ? "#E8E0D5" : Colors.background, alignItems: "center" },
+  wrapper: { flex: 1, backgroundColor: Platform.OS === "web" ? Colors.border : Colors.background, alignItems: "center" },
   container: { flex: 1, width: "100%", maxWidth: 430, backgroundColor: Colors.background },
   heroContainer: { position: "relative", marginBottom: 20 },
   hero: { height: 280, justifyContent: "flex-start", padding: 16 },
@@ -407,15 +494,28 @@ const styles = StyleSheet.create({
   menuName: { color: Colors.white, fontSize: 13, fontWeight: "600", flex: 1, lineHeight: 18 },
   menuPrice: { color: Colors.white, fontSize: 14, fontWeight: "700", flexShrink: 0 },
   fotosGrid: { flexDirection: "row", gap: 8 },
-  fotoThumb: { flex: 1, height: 100, borderRadius: 12 },
+  fotoThumb: { width: 110, height: 110, borderRadius: 12, backgroundColor: Colors.border },
+  fotoMas: { backgroundColor: Colors.background, borderWidth: 1, borderColor: Colors.border, alignItems: "center", justifyContent: "center" },
+  fotoMasText: { fontSize: 16, fontWeight: "700", color: Colors.textLight },
+  fotosEmpty: { height: 90, borderRadius: 14, borderWidth: 1.5, borderColor: Colors.border, borderStyle: "dashed", alignItems: "center", justifyContent: "center", gap: 6, flexDirection: "row" },
+  fotosEmptyText: { fontSize: 14, color: Colors.textLight },
+  uploadFotoBtn: { padding: 4 },
   resenaCard: {
-    width: 240, backgroundColor: Colors.background,
-    borderRadius: 14, padding: 16, gap: 8,
+    width: 240, backgroundColor: Colors.white,
+    borderRadius: 16, padding: 16, gap: 10,
     borderWidth: 1, borderColor: Colors.border,
   },
-  resenaName: { fontSize: 16, fontWeight: "700", color: Colors.text },
-  resenaText: { fontSize: 14, color: Colors.textLight, lineHeight: 22 },
-  resenaDate: { fontSize: 14, color: Colors.textLight },
+  resenaCardHeader: { flexDirection: "row", alignItems: "center", gap: 10 },
+  resenaAvatar: {
+    width: 36, height: 36, borderRadius: 18,
+    backgroundColor: Colors.primary,
+    alignItems: "center", justifyContent: "center",
+    flexShrink: 0,
+  },
+  resenaAvatarLetter: { fontSize: 16, fontWeight: "700", color: Colors.white },
+  resenaName: { fontSize: 14, fontWeight: "700", color: Colors.text },
+  resenaText: { fontSize: 13, color: Colors.textLight, lineHeight: 20 },
+  resenaDate: { fontSize: 12, color: Colors.textLight },
   // Cuponera
   cuponeraCard: {
     backgroundColor: Colors.white,
@@ -465,7 +565,7 @@ const styles = StyleSheet.create({
   },
   sheetHandle: { width: 40, height: 4, borderRadius: 2, backgroundColor: Colors.border, marginBottom: 4 },
   sheetPreview: { flexDirection: "row", alignItems: "center", gap: 12, alignSelf: "stretch", backgroundColor: Colors.white, borderRadius: 14, padding: 14, borderWidth: 1, borderColor: Colors.border },
-  sheetIcon: { width: 44, height: 44, borderRadius: 22, backgroundColor: "#F0E4D7", alignItems: "center", justifyContent: "center" },
+  sheetIcon: { width: 44, height: 44, borderRadius: 22, backgroundColor: Colors.surfaceCream, alignItems: "center", justifyContent: "center" },
   sheetCafeName: { fontSize: 16, fontWeight: "700", color: Colors.primary },
   sheetCopyBtn: { flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 8, backgroundColor: Colors.primary, borderRadius: 14, paddingVertical: 15, alignSelf: "stretch" },
   sheetCopyText: { fontSize: 15, fontWeight: "700", color: Colors.white },
@@ -486,7 +586,7 @@ const styles = StyleSheet.create({
   optSectionHeader: { flexDirection: "row", alignItems: "center", gap: 12 },
   optSectionIcon: {
     width: 40, height: 40, borderRadius: 12,
-    backgroundColor: "#F0E4D7",
+    backgroundColor: Colors.surfaceCream,
     alignItems: "center", justifyContent: "center",
   },
   optSectionTitle: { fontSize: 15, fontWeight: "700", color: Colors.primary },
@@ -511,7 +611,7 @@ const styles = StyleSheet.create({
   },
   promoIconBox: {
     width: 40, height: 40, borderRadius: 10,
-    backgroundColor: "#F0E4D7",
+    backgroundColor: Colors.surfaceCream,
     alignItems: "center", justifyContent: "center",
     flexShrink: 0,
   },

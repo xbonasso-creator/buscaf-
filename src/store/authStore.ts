@@ -3,6 +3,7 @@ import { supabase, type User, type Session } from "../lib/supabase";
 import { useFavoritesStore } from "./favoritesStore";
 import { useCuponerasStore } from "./cuponerasStore";
 import { useProfileStore } from "./profileStore";
+import { useQuieroIrStore } from "./quieroIrStore";
 
 type AuthStore = {
   user: User | null;
@@ -33,23 +34,37 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       useFavoritesStore.getState().load(userId);
       useCuponerasStore.getState().load(userId);
       useProfileStore.getState().load(userId);
+      useQuieroIrStore.getState().load(userId);
     }
 
     // 2. Escuchar cambios futuros (login, logout, refresh de token)
-    supabase.auth.onAuthStateChange((_event, session) => {
+    // INITIAL_SESSION ya fue manejado arriba — saltarlo evita double-load y
+    // que un load() con data vacía pise el estado optimista de toggle().
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === "INITIAL_SESSION") return;
+
       const userId = session?.user?.id;
       set({ session, user: session?.user ?? null });
 
       if (userId) {
-        useFavoritesStore.getState().load(userId);
-        useCuponerasStore.getState().load(userId);
-        useProfileStore.getState().load(userId);
+        // Solo recargamos en eventos que implican cambio real de usuario
+        if (event === "SIGNED_IN" || event === "USER_UPDATED") {
+          useFavoritesStore.getState().load(userId);
+          useCuponerasStore.getState().load(userId);
+          useProfileStore.getState().load(userId);
+          useQuieroIrStore.getState().load(userId);
+        }
       } else {
         useFavoritesStore.getState().clear();
         useCuponerasStore.getState().clear();
         useProfileStore.getState().clear();
+        useQuieroIrStore.getState().clear();
       }
     });
+
+    // Guardamos el unsubscribe para evitar listeners acumulados en hot-reload
+    (get() as any)._authSubscription?.unsubscribe?.();
+    (set as any)({ _authSubscription: subscription });
   },
 
   signIn: async (email, password) => {

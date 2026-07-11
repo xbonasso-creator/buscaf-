@@ -170,13 +170,13 @@ const styles = StyleSheet.create({
   },
   successIcon: {
     width: 72, height: 72, borderRadius: 36,
-    backgroundColor: "#4A7C59",
+    backgroundColor: Colors.success,
     alignItems: "center", justifyContent: "center",
     marginBottom: 4,
   },
   errorIcon: {
     width: 72, height: 72, borderRadius: 36,
-    backgroundColor: "#C0392B",
+    backgroundColor: Colors.error,
     alignItems: "center", justifyContent: "center",
     marginBottom: 4,
   },

@@ -8,56 +8,55 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Platform } from "
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-
-const OPTION_ICONS: Record<string, React.ComponentProps<typeof Ionicons>["name"]> = {
-  "Abierto ahora":    "time-outline",
-  "Mejor calificados":"star-outline",
-  "Más cercanos":     "location-outline",
-  "Cafetería":        "cafe-outline",
-  "Pastelería":       "storefront-outline",
-  "Bistró":           "wine-outline",
-  "Con terraza":      "sunny-outline",
-  "Pet friendly":     "paw-outline",
-  "Descuentos":       "pricetag-outline",
-  "Wi-Fi":            "wifi-outline",
-  "Cowork":           "laptop-outline",
-  "Veggie":           "leaf-outline",
-  "Sin TACC":         "medical-outline",
-  "Leche vegetal":    "cafe-outline",
-  "Brunch":           "restaurant-outline",
-  "Desayunos":        "sunny-outline",
-  "Almuerzos":        "restaurant-outline",
-  "Latte art":        "color-palette-outline",
-  "Espresso":         "cafe-outline",
-  "V60":              "funnel-outline",
-  "Chemex":           "flask-outline",
-  "Aeropress":        "flask-outline",
-  "French press":     "cafe-outline",
-  "Moka":             "flame-outline",
-  "Cold brew":        "snow-outline",
-  "Filtrado":         "funnel-outline",
-  "$ Económico":      "cash-outline",
-  "$$ Moderado":      "card-outline",
-  "$$$ Premium":      "diamond-outline",
-};
 import PrimaryButton from "../components/ui/PrimaryButton";
 import { useFiltersStore } from "../store/filtersStore";
 import { Colors } from "../constants/colors";
 
-const SORT_OPTIONS = ["Abierto ahora", "Mejor calificados", "Más cercanos"];
+const OPTION_ICONS: Record<string, React.ComponentProps<typeof Ionicons>["name"]> = {
+  "Abierto ahora":        "time-outline",
+  "Mejor calificados":    "star-outline",
+  "Con terraza":          "sunny-outline",
+  "Pet friendly":         "paw-outline",
+  "Sin TACC":             "medical-outline",
+  "Leche vegetal":        "cafe-outline",
+  "Veggie":               "leaf-outline",
+  "Brunch":               "restaurant-outline",
+  "Almuerzos":            "restaurant-outline",
+  "Tostaduria":           "flame-outline",
+  "Panadería artesanal":  "storefront-outline",
+  "Librería":             "book-outline",
+  "Eventos":              "calendar-outline",
+  "Tienda":               "bag-outline",
+  "100% Gluten Free":     "shield-checkmark-outline",
+  "Buen WiFi":            "wifi-outline",
+  "Enchufes":             "flash-outline",
+  "Sillas cómodas":       "easel-outline",
+  "Mesas amplias":        "grid-outline",
+  "Silencioso":           "volume-mute-outline",
+  "Espresso":             "cafe-outline",
+  "V60":                  "funnel-outline",
+  "Chemex":               "flask-outline",
+  "Aeropress":            "flask-outline",
+  "Cold brew":            "snow-outline",
+  "$ Económico":          "cash-outline",
+  "$$ Moderado":          "card-outline",
+  "$$$ Premium":          "diamond-outline",
+};
+
+const SORT_OPTIONS = ["Abierto ahora", "Mejor calificados"];
 
 const FILTER_SECTIONS = [
   {
-    title: "Tipo de local",
-    options: ["Cafetería", "Pastelería", "Bistró", "Con terraza", "Pet friendly", "Descuentos"],
+    title: "Teletrabajo",
+    options: ["Silencioso", "Enchufes", "Sillas cómodas", "Buen WiFi", "Mesas amplias"],
   },
   {
     title: "Servicios",
-    options: ["Wi-Fi", "Cowork", "Veggie", "Sin TACC", "Leche vegetal", "Brunch", "Desayunos", "Almuerzos", "Latte art"],
+    options: ["Pet friendly", "Con terraza", "Sin TACC", "Leche vegetal", "Veggie", "Brunch", "Almuerzos", "Tostaduria", "Panadería artesanal", "Librería", "Eventos", "Tienda", "100% Gluten Free"],
   },
   {
     title: "Métodos",
-    options: ["Espresso", "V60", "Chemex", "Aeropress", "French press", "Moka", "Cold brew", "Filtrado"],
+    options: ["Espresso", "V60", "Chemex", "Aeropress", "Cold brew"],
   },
   { title: "Precios", options: ["$ Económico", "$$ Moderado", "$$$ Premium"] },
 ];
@@ -66,7 +65,6 @@ export default function Filters() {
   const insets = useSafeAreaInsets();
   const { active, price, setFilters } = useFiltersStore();
 
-  // Draft — copia local del estado al abrir la pantalla
   const [draftActive, setDraftActive] = useState<string[]>(active);
   const [draftPrice, setDraftPrice]   = useState<string | null>(price);
 
@@ -84,7 +82,7 @@ export default function Filters() {
   };
 
   const apply = () => {
-    setFilters(draftActive, draftPrice);
+    setFilters(draftActive, draftPrice, null);
     router.back();
   };
 
@@ -105,19 +103,20 @@ export default function Filters() {
           </TouchableOpacity>
         </View>
 
+        {/* Scroll — sin CTA adentro */}
         <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={s.content}>
 
-          {/* Ordenar por */}
+          {/* Ordenar por — ancho natural (solo 2 opciones) */}
           <View style={s.section}>
             <Text style={s.sectionTitle}>Ordenar por</Text>
-            <View style={s.chipRow}>
+            <View style={s.chipRowAuto}>
               {SORT_OPTIONS.map(opt => {
                 const isActive = draftActive.includes(opt);
                 const icon = OPTION_ICONS[opt];
                 return (
                   <TouchableOpacity
                     key={opt}
-                    style={[s.chip, isActive && s.chipActive]}
+                    style={[s.chipAuto, isActive && s.chipActive]}
                     onPress={() => toggleDraft(opt)}
                   >
                     {icon && <Ionicons name={icon} size={14} color={isActive ? "#fff" : Colors.primary} />}
@@ -128,11 +127,11 @@ export default function Filters() {
             </View>
           </View>
 
-          {/* Secciones */}
+          {/* Secciones — grilla de 3 chips por fila */}
           {FILTER_SECTIONS.map(section => (
             <View key={section.title} style={s.section}>
               <Text style={s.sectionTitle}>{section.title}</Text>
-              <View style={s.chipRow}>
+              <View style={s.chipGrid}>
                 {section.options.map(opt => {
                   const isPrecios = section.title === "Precios";
                   const isActive  = isPrecios ? draftPrice === opt : draftActive.includes(opt);
@@ -140,11 +139,11 @@ export default function Filters() {
                   return (
                     <TouchableOpacity
                       key={opt}
-                      style={[s.chip, isActive && s.chipActive]}
+                      style={[s.chipCell, isActive && s.chipActive]}
                       onPress={() => isPrecios ? toggleDraftPrice(opt) : toggleDraft(opt)}
                     >
-                      {icon && <Ionicons name={icon} size={14} color={isActive ? "#fff" : Colors.primary} />}
-                      <Text style={[s.chipText, isActive && s.chipTextActive]}>{opt}</Text>
+                      {icon && <Ionicons name={icon} size={13} color={isActive ? "#fff" : Colors.primary} />}
+                      <Text style={[s.chipText, isActive && s.chipTextActive]} numberOfLines={1}>{opt}</Text>
                     </TouchableOpacity>
                   );
                 })}
@@ -152,14 +151,16 @@ export default function Filters() {
             </View>
           ))}
 
-          <View style={s.footer}>
-            <PrimaryButton
-              title={draftCount > 0 ? `Aplicar ${draftCount} filtro${draftCount > 1 ? "s" : ""}` : "Aplicar filtros"}
-              onPress={apply}
-              fullWidth
-            />
-          </View>
         </ScrollView>
+
+        {/* CTA fijo — siempre visible, no requiere scroll */}
+        <View style={[s.ctaBar, { paddingBottom: insets.bottom + 16 }]}>
+          <PrimaryButton
+            title={draftCount > 0 ? `Aplicar ${draftCount} filtro${draftCount > 1 ? "s" : ""}` : "Aplicar filtros"}
+            onPress={apply}
+          />
+        </View>
+
       </View>
     </View>
   );
@@ -168,7 +169,7 @@ export default function Filters() {
 const s = StyleSheet.create({
   wrapper: {
     flex: 1,
-    backgroundColor: Platform.OS === "web" ? "#E8E0D5" : Colors.background,
+    backgroundColor: Platform.OS === "web" ? Colors.border : Colors.background,
     alignItems: "center",
   },
   container: { flex: 1, width: "100%", maxWidth: 430, backgroundColor: Colors.background },
@@ -189,18 +190,41 @@ const s = StyleSheet.create({
   },
   headerTitle: { fontSize: 17, fontWeight: "700", color: Colors.primary },
   clearText: { fontSize: 14, color: Colors.textLight, textDecorationLine: "underline" },
-  content: { paddingHorizontal: 20, paddingTop: 24, paddingBottom: 40, gap: 28 },
+  content: { paddingHorizontal: 20, paddingTop: 24, paddingBottom: 24, gap: 28 },
   section: { gap: 12 },
   sectionTitle: { fontSize: 16, fontWeight: "700", color: Colors.primary },
-  chipRow: { flexDirection: "row", flexWrap: "wrap", gap: 10 },
-  chip: {
+
+  // Sort: ancho natural
+  chipRowAuto: { flexDirection: "row", flexWrap: "wrap", gap: 10 },
+  chipAuto: {
     height: 38, paddingHorizontal: 14, borderRadius: 19,
     borderWidth: 1.5, borderColor: Colors.border,
     backgroundColor: Colors.white,
     flexDirection: "row", alignItems: "center", gap: 6,
   },
+
+  // Grid: 3 por fila
+  chipGrid: { flexDirection: "row", flexWrap: "wrap", gap: 8 },
+  chipCell: {
+    width: "31%",
+    height: 40,
+    paddingHorizontal: 8,
+    borderRadius: 12,
+    borderWidth: 1.5, borderColor: Colors.border,
+    backgroundColor: Colors.white,
+    flexDirection: "row", alignItems: "center", justifyContent: "center", gap: 5,
+  },
+
   chipActive: { backgroundColor: Colors.primary, borderColor: Colors.primary },
-  chipText: { fontSize: 14, color: Colors.text },
+  chipText: { fontSize: 12, color: Colors.text, flexShrink: 1 },
   chipTextActive: { color: Colors.white },
-  footer: { marginTop: 4 },
+
+  // CTA fijo en el bottom
+  ctaBar: {
+    paddingHorizontal: 20,
+    paddingTop: 16,
+    borderTopWidth: 1,
+    borderTopColor: Colors.border,
+    backgroundColor: Colors.background,
+  },
 });

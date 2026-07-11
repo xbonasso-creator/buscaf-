@@ -1,53 +1,26 @@
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, FlatList, Platform } from "react-native";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useRef } from "react";
+import type { FlatList as FlatListType } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { useFavoritesStore } from "../../store/favoritesStore";
-import { useQuieroIrStore } from "../../store/quieroIrStore";
 import { useFiltersStore } from "../../store/filtersStore";
+import CardS from "../../components/ui/CardS";
 import { ZONAS_MONTEVIDEO } from "../../store/locationStore";
 import { Colors } from "../../constants/colors";
-import { CAFES, type Cafe } from "../../data/cafes";
+import { type Cafe } from "../../data/cafes";
+import { useCafesStore } from "../../store/cafesStore";
+import { cafeMatchesAllFilters } from "../../utils/filters";
 
 const FILTROS = ["Wi-Fi", "Abierto ahora", "Pet friendly", "Cowork", "Vegano", "Brunch"];
-const MAX_VISIBLE = 5;
-
-function CafeListItem({ item }: { item: Cafe }) {
-  const { toggle: toggleFav, isFavorite } = useFavoritesStore();
-  const { toggle: toggleGuardar, isGuardado } = useQuieroIrStore();
-  return (
-    <TouchableOpacity style={styles.listItem} onPress={() => router.push(`/cafe/${item.id}`)}>
-      <View style={styles.listLogo}>
-        <Text style={styles.logoInitial}>{item.name.charAt(0)}</Text>
-      </View>
-      <View style={styles.listInfo}>
-        <Text style={styles.listName}>{item.name}</Text>
-        <Text style={styles.listAddress}>{item.direccion}</Text>
-      </View>
-      <View style={styles.listRight}>
-        <View style={styles.rating}>
-          <Ionicons name="star" size={14} color="#E8B84B" />
-          <Text style={styles.ratingText}>{item.rating}</Text>
-        </View>
-        <View style={styles.listActions}>
-          <TouchableOpacity onPress={(e) => { e.stopPropagation?.(); toggleFav(item); }}>
-            <Ionicons name={isFavorite(item.id) ? "heart" : "heart-outline"} size={20} color={Colors.primary} />
-          </TouchableOpacity>
-          <TouchableOpacity onPress={(e) => { e.stopPropagation?.(); toggleGuardar(item); }}>
-            <Ionicons name={isGuardado(item.id) ? "bookmark" : "bookmark-outline"} size={20} color={Colors.primary} />
-          </TouchableOpacity>
-        </View>
-      </View>
-    </TouchableOpacity>
-  );
-}
+const PAGE_SIZE = 3;
+const INITIAL_VISIBLE = 5;
 
 export default function Explore() {
   const insets = useSafeAreaInsets();
   const [search, setSearch] = useState("");
   const [barrio, setBarrio] = useState<string | null>(null);
-  const { active, toggle: toggleFilter, count } = useFiltersStore();
+  const { active, price, toggle: toggleFilter, count } = useFiltersStore();
   const extraActive = active.filter(f => !FILTROS.includes(f));
   const sortedFiltros = [
     ...extraActive,
@@ -55,27 +28,36 @@ export default function Explore() {
     ...FILTROS.filter(f => !active.includes(f)),
   ];
   const filterCount = count();
-  const [showAll, setShowAll] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(INITIAL_VISIBLE);
+  const listRef = useRef<FlatListType<Cafe>>(null);
+
+  const { cafes: CAFES } = useCafesStore();
+
+  // Normaliza zona para comparar sin importar guiones, espacios ni mayúsculas
+  const normZona = (s: string) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[\s-]+/g, "");
 
   const filtered = useMemo(() => {
     let list = CAFES;
-    if (barrio) list = list.filter(c => c.zona.toLowerCase() === barrio.toLowerCase());
+    if (barrio) list = list.filter(c => normZona(c.zona ?? "") === normZona(barrio));
     if (search.trim()) {
       const q = search.trim().toLowerCase();
       list = list.filter(c =>
-        c.name.toLowerCase().includes(q) ||
-        c.direccion.toLowerCase().includes(q)
+        (c.name ?? "").toLowerCase().includes(q) ||
+        (c.direccion ?? "").toLowerCase().includes(q)
       );
     }
+    // Aplicar filtros activos del store (servicios, abierto ahora, precio…)
+    list = list.filter(c => cafeMatchesAllFilters(c, active, price));
     return list;
-  }, [barrio, search]);
+  }, [barrio, search, active, price]);
 
-  const visible = showAll ? filtered : filtered.slice(0, MAX_VISIBLE);
-  const hasMore = !showAll && filtered.length > MAX_VISIBLE;
+  const visible = filtered.slice(0, visibleCount);
+  const hasMore = visibleCount < filtered.length;
+  const showingAll = visibleCount >= filtered.length && filtered.length > INITIAL_VISIBLE;
 
-  const handleBarrio = (label: string) => {
-    setBarrio(prev => prev === label ? null : label);
-    setShowAll(false);
+  const handleBarrio = (id: string) => {
+    setBarrio(prev => prev === id ? null : id);
+    setVisibleCount(INITIAL_VISIBLE);
   };
 
   return (
@@ -89,7 +71,7 @@ export default function Explore() {
               placeholder="Buscar cafeterías"
               placeholderTextColor={Colors.textLight}
               value={search}
-              onChangeText={t => { setSearch(t); setShowAll(false); }}
+              onChangeText={t => { setSearch(t); setVisibleCount(INITIAL_VISIBLE); }}
             />
             <Ionicons name="search-outline" size={18} color={Colors.textLight} />
           </View>
@@ -121,22 +103,22 @@ export default function Explore() {
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={{ flexGrow: 0 }} contentContainerStyle={styles.barrioContainer}>
           <TouchableOpacity
             style={[styles.barrioChip, barrio === null && styles.barrioChipActive]}
-            onPress={() => { setBarrio(null); setShowAll(false); }}
+            onPress={() => { setBarrio(null); setVisibleCount(INITIAL_VISIBLE); }}
           >
             <Text style={[styles.barrioText, barrio === null && styles.barrioTextActive]}>Todos</Text>
           </TouchableOpacity>
           {ZONAS_MONTEVIDEO.map(z => (
             <TouchableOpacity
               key={z.id}
-              style={[styles.barrioChip, barrio === z.label && styles.barrioChipActive]}
-              onPress={() => handleBarrio(z.label)}
+              style={[styles.barrioChip, barrio === z.id && styles.barrioChipActive]}
+              onPress={() => handleBarrio(z.id)}
             >
               <Ionicons
                 name="location-outline"
                 size={12}
-                color={barrio === z.label ? Colors.white : Colors.textLight}
+                color={barrio === z.id ? Colors.white : Colors.textLight}
               />
-              <Text style={[styles.barrioText, barrio === z.label && styles.barrioTextActive]}>{z.label}</Text>
+              <Text style={[styles.barrioText, barrio === z.id && styles.barrioTextActive]}>{z.label}</Text>
             </TouchableOpacity>
           ))}
         </ScrollView>
@@ -148,24 +130,36 @@ export default function Explore() {
               <View style={styles.emptyIcon}>
                 <Ionicons name="cafe-outline" size={44} color={Colors.primary} />
               </View>
-              <Text style={styles.emptyTitle}>No hay resultados</Text>
+              <Text style={styles.emptyTitle}>
+                {search.trim()
+                  ? "No encontramos cafeterías\ncon ese nombre"
+                  : "No encontramos cafeterías\nen este barrio"}
+              </Text>
               <Text style={styles.emptySub}>
-                {barrio
-                  ? "Cambiá de barrio para descubrir cafeterías."
-                  : "Probá con otro nombre o ajustá los filtros."}
+                {search.trim()
+                  ? "Probá con otro término o explorá por barrio."
+                  : "Explorá otro barrio para descubrir\nnuevas cafeterías."}
               </Text>
             </View>
           ) : (
             <FlatList
+              ref={listRef}
               data={visible}
               keyExtractor={i => i.id}
-              renderItem={({ item }) => <CafeListItem item={item} />}
+              renderItem={({ item }) => <CardS item={item} />}
               contentContainerStyle={styles.listContainer}
               showsVerticalScrollIndicator={false}
               ListFooterComponent={
                 hasMore ? (
-                  <TouchableOpacity style={styles.moreBtn} onPress={() => setShowAll(true)}>
-                    <Text style={styles.moreText}>Más cafeterías ({filtered.length - MAX_VISIBLE} más)</Text>
+                  <TouchableOpacity style={styles.moreBtn} onPress={() => setVisibleCount(v => v + PAGE_SIZE)}>
+                    <Text style={styles.moreText}>Más cafeterías</Text>
+                  </TouchableOpacity>
+                ) : showingAll ? (
+                  <TouchableOpacity style={styles.moreBtn} onPress={() => {
+                    setVisibleCount(INITIAL_VISIBLE);
+                    listRef.current?.scrollToOffset({ offset: 0, animated: true });
+                  }}>
+                    <Text style={styles.moreText}>Menos cafeterías</Text>
                   </TouchableOpacity>
                 ) : null
               }
@@ -178,7 +172,7 @@ export default function Explore() {
 }
 
 const styles = StyleSheet.create({
-  wrapper: { flex: 1, backgroundColor: Platform.OS === "web" ? "#E8E0D5" : Colors.background, alignItems: "center" },
+  wrapper: { flex: 1, backgroundColor: Platform.OS === "web" ? Colors.border : Colors.background, alignItems: "center" },
   container: { flex: 1, width: "100%", maxWidth: 430, backgroundColor: Colors.background },
   searchContainer: { paddingHorizontal: 16, paddingBottom: 8 },
   searchBar: {
@@ -240,38 +234,10 @@ const styles = StyleSheet.create({
   barrioTextActive: { fontSize: 12, color: Colors.white, fontWeight: "600" },
   // Lista
   listContainer: { paddingHorizontal: 16, gap: 10, paddingBottom: 24 },
-  listItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: Colors.white,
-    borderRadius: 14,
-    padding: 14,
-    gap: 14,
-    borderWidth: 1,
-    borderColor: Colors.border,
-  },
-  listLogo: {
-    width: 56,
-    height: 56,
-    borderRadius: 28,
-    backgroundColor: "#F0E4D7",
-    alignItems: "center",
-    justifyContent: "center",
-    borderWidth: 1,
-    borderColor: Colors.border,
-  },
-  logoInitial: { fontSize: 20, fontWeight: "700", color: Colors.primary },
-  listInfo: { flex: 1 },
-  listName: { fontSize: 14, fontWeight: "600", color: Colors.text },
-  listAddress: { fontSize: 14, color: Colors.textLight, marginTop: 3 },
-  listRight: { alignItems: "center", gap: 8 },
-  listActions: { flexDirection: "row", gap: 12 },
-  rating: { flexDirection: "row", alignItems: "center", gap: 3 },
-  ratingText: { fontSize: 12, fontWeight: "500", color: Colors.textLight },
   moreBtn: { alignItems: "center", paddingVertical: 16 },
   moreText: { fontSize: 14, color: Colors.primary, fontWeight: "600", textDecorationLine: "underline" },
   emptyState: { flex: 1, alignItems: "center", justifyContent: "center", gap: 16, paddingHorizontal: 32, paddingBottom: 60 },
-  emptyIcon: { width: 100, height: 100, borderRadius: 50, backgroundColor: "#F5E6E0", alignItems: "center", justifyContent: "center" },
+  emptyIcon: { width: 100, height: 100, borderRadius: 50, backgroundColor: Colors.surfaceWarm, alignItems: "center", justifyContent: "center" },
   emptyTitle: { fontSize: 20, fontWeight: "700", color: Colors.primary, textAlign: "center", lineHeight: 28 },
   emptySub: { fontSize: 16, color: Colors.textLight, textAlign: "center", lineHeight: 24 },
   content: { flex: 1 },

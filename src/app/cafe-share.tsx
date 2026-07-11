@@ -115,7 +115,7 @@ export default function CafeShare() {
 }
 
 const styles = StyleSheet.create({
-  wrapper: { flex: 1, backgroundColor: Platform.OS === "web" ? "#E8E0D5" : Colors.background, alignItems: "center" },
+  wrapper: { flex: 1, backgroundColor: Platform.OS === "web" ? Colors.border : Colors.background, alignItems: "center" },
   container: { flex: 1, width: "100%", maxWidth: 430, backgroundColor: Colors.background, paddingHorizontal: 20 },
   header: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingBottom: 20 },
   backBtn: { width: 40, height: 40, borderRadius: 20, borderWidth: 1.5, borderColor: Colors.border, alignItems: "center", justifyContent: "center" },
@@ -128,7 +128,7 @@ const styles = StyleSheet.create({
   },
   previewIcon: {
     width: 52, height: 52, borderRadius: 26,
-    backgroundColor: "#F0E4D7",
+    backgroundColor: Colors.surfaceCream,
     alignItems: "center", justifyContent: "center",
     borderWidth: 1, borderColor: Colors.border,
   },

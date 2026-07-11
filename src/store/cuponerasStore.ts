@@ -19,6 +19,7 @@ type CuponerasStore = {
   load: (userId: string) => Promise<void>;
   addCuponera: (cafeId: string, cafeName: string) => Promise<void>;
   addSello: (cafeId: string) => Promise<void>;
+  removeCuponera: (cafeId: string) => Promise<void>;
   clear: () => void;
 };
 
@@ -52,9 +53,11 @@ export const useCuponerasStore = create<CuponerasStore>((set, get) => ({
     set({ cuponeras: [...get().cuponeras, { id: cafeId, cafeName, sellos: 0, total: 10 }] });
 
     if (!userId) return;
-    await supabase.from("cuponeras").upsert({
-      user_id: userId, cafe_id: cafeId, sellos: 0, max_sellos: 10,
-    }, { onConflict: "user_id,cafe_id" });
+    try {
+      await supabase.from("cuponeras").upsert({
+        user_id: userId, cafe_id: cafeId, sellos: 0, max_sellos: 10,
+      }, { onConflict: "user_id,cafe_id" });
+    } catch {}
   },
 
   addSello: async (cafeId) => {
@@ -66,11 +69,26 @@ export const useCuponerasStore = create<CuponerasStore>((set, get) => ({
     set({ cuponeras: get().cuponeras.map(c => c.id === cafeId ? { ...c, sellos: newSellos } : c) });
 
     if (!userId) return;
-    await supabase
-      .from("cuponeras")
-      .update({ sellos: newSellos, updated_at: new Date().toISOString() })
-      .eq("user_id", userId)
-      .eq("cafe_id", cafeId);
+    try {
+      await supabase
+        .from("cuponeras")
+        .update({ sellos: newSellos, updated_at: new Date().toISOString() })
+        .eq("user_id", userId)
+        .eq("cafe_id", cafeId);
+    } catch {}
+  },
+
+  removeCuponera: async (cafeId) => {
+    set({ cuponeras: get().cuponeras.filter(c => c.id !== cafeId) });
+    const userId = getAuthUser()?.id;
+    if (!userId) return;
+    try {
+      await supabase
+        .from("cuponeras")
+        .delete()
+        .eq("user_id", userId)
+        .eq("cafe_id", cafeId);
+    } catch {}
   },
 
   clear: () => set({ cuponeras: [] }),

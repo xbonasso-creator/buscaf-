@@ -96,14 +96,17 @@ export default function Profile() {
 
         {/* Stats */}
         <View style={styles.statsRow}>
-          <TouchableOpacity style={styles.statChip} onPress={() => router.push("/(tabs)/favorites")}>
+          <TouchableOpacity style={styles.statChip} onPress={() => router.push({ pathname: "/(tabs)/favorites", params: { from: "profile" } })}>
             <Text style={styles.statLabel}>Favoritos</Text>
             <Text style={styles.statValue}>{favorites.length}</Text>
           </TouchableOpacity>
-          <TouchableOpacity style={styles.statChip} onPress={() => router.push("/mis-cuponeras")}>
-            <Text style={styles.statLabel}>Mis cuponeras</Text>
-            <Text style={styles.statValue}>{cuponeras.length}</Text>
-          </TouchableOpacity>
+          <View style={[styles.statChip, styles.statChipDisabled]}>
+            <Text style={[styles.statLabel, styles.statLabelDisabled]}>Mis cuponeras</Text>
+            <Text style={[styles.statValue, styles.statValueDisabled]}>—</Text>
+            <View style={styles.proximamenteBadge}>
+              <Text style={styles.proximamenteText}>Próximamente</Text>
+            </View>
+          </View>
           <TouchableOpacity style={styles.statChip} onPress={() => router.push("/quiero-ir")}>
             <Text style={styles.statLabel}>Quiero ir</Text>
             <Text style={styles.statValue}>{quieroIr.length}</Text>
@@ -139,7 +142,7 @@ export default function Profile() {
 }
 
 const styles = StyleSheet.create({
-  wrapper: { flex: 1, backgroundColor: Platform.OS === "web" ? "#E8E0D5" : Colors.background, alignItems: "center" },
+  wrapper: { flex: 1, backgroundColor: Platform.OS === "web" ? Colors.border : Colors.background, alignItems: "center" },
   container: { flex: 1, width: "100%", maxWidth: 430, backgroundColor: Colors.background, paddingHorizontal: 20, gap: 28 },
   header: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingTop: 20 },
   backBtn: { width: 40, height: 40, borderRadius: 20, borderWidth: 1.5, borderColor: Colors.border, alignItems: "center", justifyContent: "center" },
@@ -172,11 +175,19 @@ const styles = StyleSheet.create({
   userEmail: { fontSize: 14, color: Colors.textLight },
   statsRow: { flexDirection: "row", gap: 10 },
   statChip: {
-    flex: 1, backgroundColor: "#F5E6E0",
+    flex: 1, backgroundColor: Colors.surfaceWarm,
     borderRadius: 14, paddingVertical: 14, alignItems: "center", gap: 6,
   },
+  statChipDisabled: { backgroundColor: "#F0EEEC", opacity: 0.7, position: "relative" },
   statLabel: { fontSize: 14, color: Colors.primary, textAlign: "center" },
+  statLabelDisabled: { color: Colors.textLight },
   statValue: { fontSize: 20, fontWeight: "700", color: Colors.primary },
+  statValueDisabled: { color: Colors.textLight },
+  proximamenteBadge: {
+    backgroundColor: Colors.secondary,
+    borderRadius: 6, paddingHorizontal: 6, paddingVertical: 2,
+  },
+  proximamenteText: { fontSize: 9, fontWeight: "700", color: Colors.white, textTransform: "uppercase", letterSpacing: 0.4 },
   section: { gap: 8 },
   sectionTitle: { fontSize: 15, fontWeight: "600", color: Colors.primary },
   settingsCard: { backgroundColor: Colors.white, borderRadius: 16, borderWidth: 1, borderColor: Colors.border, overflow: "hidden" },

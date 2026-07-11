@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, TouchableOpacity, Switch, Platform } from "react-native";
 import { router } from "expo-router";
 import { useState } from "react";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Colors } from "../../constants/colors";
 
 type ToggleRowProps = { label: string; sub: string; value: boolean; onToggle: () => void };
@@ -23,6 +24,7 @@ function ToggleRow({ label, sub, value, onToggle }: ToggleRowProps) {
 }
 
 export default function Notifications() {
+  const insets = useSafeAreaInsets();
   const [push, setPush] = useState(true);
   const [email, setEmail] = useState(false);
   const [digest, setDigest] = useState(true);
@@ -31,7 +33,7 @@ export default function Notifications() {
   return (
     <View style={styles.wrapper}>
       <View style={styles.container}>
-        <View style={styles.header}>
+        <View style={[styles.header, { paddingTop: insets.top + 8 }]}>
           <TouchableOpacity style={styles.backBtn} onPress={() => router.back()}>
             <Text style={styles.backIcon}>‹</Text>
           </TouchableOpacity>
@@ -86,9 +88,9 @@ export default function Notifications() {
 }
 
 const styles = StyleSheet.create({
-  wrapper: { flex: 1, backgroundColor: Platform.OS === "web" ? "#E8E0D5" : Colors.background, alignItems: "center" },
+  wrapper: { flex: 1, backgroundColor: Platform.OS === "web" ? Colors.border : Colors.background, alignItems: "center" },
   container: { flex: 1, width: "100%", maxWidth: 430, backgroundColor: Colors.background, paddingHorizontal: 20, gap: 24 },
-  header: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingTop: 20 },
+  header: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingBottom: 8 },
   backBtn: { width: 40, height: 40, borderRadius: 20, borderWidth: 1.5, borderColor: Colors.border, alignItems: "center", justifyContent: "center" },
   backIcon: { fontSize: 24, color: Colors.text, marginTop: -2 },
   title: { fontSize: 20, fontWeight: "700", color: Colors.primary },

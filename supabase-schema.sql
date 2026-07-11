@@ -56,11 +56,13 @@ create table if not exists public.cafes (
   fotos           jsonb default '[]',
   lat             numeric(9,6),
   lng             numeric(9,6),
+  precio          text check (precio in ('$', '$$', '$$$')),
   tiene_cuponera  boolean default false,
   cuponera_max    int default 10,
   menu            jsonb default '[]',
   promociones     jsonb default '[]',
   eventos         jsonb default '[]',
+  instagram       text,
   created_at      timestamptz default now()
 );
 
@@ -136,6 +138,52 @@ create policy "Usuarios editan sus reseñas"
 
 create policy "Usuarios borran sus reseñas"
   on public.resenas for delete
+  using (auth.uid() = user_id);
+
+
+-- ── 6. QUIERO IR ───────────────────────────────────────────
+create table if not exists public.quiero_ir (
+  id         bigint generated always as identity primary key,
+  user_id    uuid references auth.users(id) on delete cascade not null,
+  cafe_id    text references public.cafes(id) on delete cascade not null,
+  created_at timestamptz default now(),
+  unique(user_id, cafe_id)
+);
+
+alter table public.quiero_ir enable row level security;
+
+create policy "Usuarios gestionan su quiero_ir"
+  on public.quiero_ir for all
+  using (auth.uid() = user_id);
+
+
+-- ── 7. CAFE_FOTOS ──────────────────────────────────────────
+-- Fotos subidas por usuarios (las del admin van en cafes.fotos[])
+create table if not exists public.cafe_fotos (
+  id         bigint generated always as identity primary key,
+  cafe_id    text references public.cafes(id) on delete cascade not null,
+  user_id    uuid references auth.users(id) on delete cascade not null,
+  url        text not null,
+  created_at timestamptz default now()
+);
+
+alter table public.cafe_fotos enable row level security;
+
+-- Todos pueden ver las fotos
+create policy "Fotos públicas para todos"
+  on public.cafe_fotos for select
+  to anon, authenticated
+  using (true);
+
+-- Usuarios autenticados pueden subir
+create policy "Usuarios suben sus fotos"
+  on public.cafe_fotos for insert
+  to authenticated
+  with check (auth.uid() = user_id);
+
+-- Usuarios borran solo sus fotos
+create policy "Usuarios borran sus fotos"
+  on public.cafe_fotos for delete
   using (auth.uid() = user_id);
 
 

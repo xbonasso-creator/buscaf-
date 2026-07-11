@@ -10,4 +10,6 @@ export const Colors = {
   error: "#D64045",
   success: "#4A7C59",   // verde salvia cálido, alineado a la paleta marrón-crema
   promo: "#C4622A",     // terracota para badges de descuento
+  surfaceWarm: "#F5E6E0",  // tint claro de primary — chips, empty states
+  surfaceCream: "#F0E4D7", // tint más suave — placeholders, logo circles
 };

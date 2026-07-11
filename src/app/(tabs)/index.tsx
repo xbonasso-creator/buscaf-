@@ -1,4 +1,4 @@
-import { useState, useMemo, useEffect } from "react";
+import { useState, useMemo } from "react";
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, FlatList, ImageBackground, Platform } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router } from "expo-router";
@@ -6,28 +6,14 @@ import { Ionicons } from "@expo/vector-icons";
 import { useFavoritesStore } from "../../store/favoritesStore";
 import { useQuieroIrStore } from "../../store/quieroIrStore";
 import { useFiltersStore } from "../../store/filtersStore";
-import { useLocationStore } from "../../store/locationStore";
-import LocationPicker from "../../components/ui/LocationPicker";
-import LocationPermissionModal from "../../components/ui/LocationPermissionModal";
-import { CAFES, type Cafe } from "../../data/cafes";
+import { type Cafe } from "../../data/cafes";
+import { useCafesStore } from "../../store/cafesStore";
 import { Colors } from "../../constants/colors";
+import Isotipo from "../../components/ui/Isotipo";
+import CardS from "../../components/ui/CardS";
+import { matchesFiltro, PRECIO_MAP } from "../../utils/filters";
 
 const FILTROS = ["Abierto ahora", "Cowork", "Con terraza", "Vegetariano", "Sin TACC"];
-
-// Mapa de chip → palabras clave en servicios
-const FILTRO_KEYS: Record<string, string[]> = {
-  "Abierto ahora":  [],   // se resuelve con cafe.open
-  "Cowork":         ["cowork", "espacio de cowork"],
-  "Con terraza":    ["terraza"],
-  "Vegetariano":    ["veggie", "vegetariano", "vegano", "plant-based"],
-  "Sin TACC":       ["sin tacc", "sin gluten"],
-};
-
-function matchesFiltro(cafe: Cafe, filtro: string): boolean {
-  if (filtro === "Abierto ahora") return cafe.open;
-  const keys = FILTRO_KEYS[filtro] ?? [filtro.toLowerCase()];
-  return keys.some(k => cafe.servicios.some(s => s.toLowerCase().includes(k)));
-}
 
 function StarRating({ rating }: { rating: number }) {
   return (
@@ -134,47 +120,12 @@ function CardDescuento({ item }: { item: Cafe }) {
   );
 }
 
-function SearchResultItem({ item }: { item: Cafe }) {
-  const { toggle: toggleFav, isFavorite } = useFavoritesStore();
-  return (
-    <TouchableOpacity style={styles.resultItem} onPress={() => router.push(`/cafe/${item.id}`)}>
-      <View style={styles.resultLogo}>
-        <Text style={styles.logoInitial}>{item.name.charAt(0)}</Text>
-      </View>
-      <View style={{ flex: 1 }}>
-        <Text style={styles.resultName}>{item.name}</Text>
-        <Text style={styles.resultAddress}>{item.direccion}</Text>
-        {!item.open && <Text style={[styles.resultAddress, { color: Colors.textLight }]}>Cerrado ahora</Text>}
-      </View>
-      <View style={{ flexDirection: "row", alignItems: "center", gap: 8 }}>
-        <View style={styles.rating}>
-          <Ionicons name="star" size={12} color="#E8B84B" />
-          <Text style={styles.ratingText}>{item.rating}</Text>
-        </View>
-        <TouchableOpacity onPress={(e) => { e.stopPropagation?.(); toggleFav(item); }}>
-          <Ionicons name={isFavorite(item.id) ? "heart" : "heart-outline"} size={18} color={Colors.primary} />
-        </TouchableOpacity>
-      </View>
-    </TouchableOpacity>
-  );
-}
 
 export default function Home() {
   const insets = useSafeAreaInsets();
   const [search, setSearch] = useState("");
-  const [showLocationPicker, setShowLocationPicker] = useState(false);
-  const [showLocationModal, setShowLocationModal] = useState(false);
   const { active, toggle: toggleFilter, count } = useFiltersStore();
-  const { zone, hasLocation, permissionAsked } = useLocationStore();
-
-  // Mostrar modal de permiso la primera vez que entra a la Home
-  useEffect(() => {
-    if (!permissionAsked) {
-      const t = setTimeout(() => setShowLocationModal(true), 800);
-      return () => clearTimeout(t);
-    }
-  }, []);
-
+  const { cafes: CAFES } = useCafesStore();
   const extraActive = active.filter(f => !FILTROS.includes(f));
   const sortedFiltros = [
     ...extraActive,
@@ -184,33 +135,47 @@ export default function Home() {
   const filterCount = count();
 
   // ── Cafés filtrados (base para carousels y búsqueda) ────────
-  const filteredCafes = useMemo(() =>
-    active.length === 0 ? CAFES : CAFES.filter(c => active.every(f => matchesFiltro(c, f))),
-  [active]);
+  const { price, barrio } = useFiltersStore();
+  const normZona = (s: string) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[\s-]+/g, "");
+
+  const filteredCafes = useMemo(() => {
+    let result = CAFES.filter(c => {
+      const pasaFiltros = active.every(f => matchesFiltro(c, f));
+      const precioTarget = price ? PRECIO_MAP[price] : null;
+      const pasaPrecio = !precioTarget || c.precio === precioTarget;
+      const pasaBarrio = !barrio || normZona(c.zona ?? "") === normZona(barrio);
+      return pasaFiltros && pasaPrecio && pasaBarrio;
+    });
+    if (active.includes("Mejor calificados")) {
+      result = [...result].sort((a, b) => b.rating - a.rating);
+    }
+    return result;
+  }, [active, price, barrio]);
 
   // ── Carousels derivados de la fuente filtrada ────────────────
+  // "Destacados de la semana" — manual en Supabase (destacado = true), máx 6
   const cafesDestacados = useMemo(() =>
-    [...filteredCafes].sort((a, b) => b.rating - a.rating).slice(0, 5), [filteredCafes]);
+    filteredCafes.filter(c => c.destacado).slice(0, 6), [filteredCafes]);
 
+  // "Los mejor calificados" — automático rating ≥ 4.8, máx 6
   const cafesCalificados = useMemo(() =>
-    [...filteredCafes].sort((a, b) => b.rating - a.rating), [filteredCafes]);
+    filteredCafes.filter(c => (c.rating ?? 0) >= 4.8).sort((a, b) => b.rating - a.rating).slice(0, 6), [filteredCafes]);
 
-  const cafesConPromo = useMemo(() =>
-    filteredCafes.filter(c => (c.promociones?.length ?? 0) > 0), [filteredCafes]);
-
+  // "Agregados recientemente" — manual en Supabase (es_nuevo = true), máx 6
   const cafesRecientes = useMemo(() =>
-    [...filteredCafes].reverse().slice(0, 5), [filteredCafes]);
+    filteredCafes.filter(c => c.es_nuevo).slice(0, 6), [filteredCafes]);
 
-  // ── Búsqueda por texto (filtros NO cambian el modo vista) ────
+  // ── Búsqueda por texto ────────────────────────────────────────
   const isSearching = search.trim().length > 0;
+  const isFiltering = filterCount > 0;
   const q = search.trim().toLowerCase();
 
   const searchResults = useMemo(() => {
     if (!isSearching) return [];
     return filteredCafes.filter(c =>
-      c.name.toLowerCase().includes(q) ||
-      c.direccion.toLowerCase().includes(q) ||
-      c.zona.toLowerCase().includes(q)
+      (c.name ?? "").toLowerCase().includes(q) ||
+      (c.direccion ?? "").toLowerCase().includes(q) ||
+      (c.zona ?? "").toLowerCase().includes(q)
     );
   }, [q, filteredCafes, isSearching]);
 
@@ -219,23 +184,9 @@ export default function Home() {
       <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
         {/* Header */}
         <View style={[styles.header, { paddingTop: insets.top + 8 }]}>
-          <TouchableOpacity
-            style={[styles.location, !hasLocation && styles.locationEmpty]}
-            onPress={() => setShowLocationPicker(true)}
-          >
-            <Ionicons
-              name={hasLocation ? "location" : "location-outline"}
-              size={14}
-              color={hasLocation ? Colors.primary : Colors.textLight}
-            />
-            <Text style={[styles.locationText, !hasLocation && styles.locationTextEmpty]}>
-              {zone ?? "¿Dónde estás?"}
-            </Text>
-            <Ionicons name="chevron-down" size={13} color={hasLocation ? Colors.primary : Colors.textLight} />
-          </TouchableOpacity>
-          {/* Isotipo / marca */}
-          <View style={styles.isotipo}>
-            <Ionicons name="cafe" size={22} color={Colors.primary} />
+          <View style={styles.headerLogo}>
+            <Text style={styles.headerTitle}>Buscafé</Text>
+            <Isotipo size={36} variant="mark" />
           </View>
         </View>
 
@@ -281,36 +232,49 @@ export default function Home() {
           ))}
         </ScrollView>
 
-        {/* Resultados de búsqueda / filtros */}
+        {/* Resultados de búsqueda */}
         {isSearching && (
           <View style={styles.resultsSection}>
-            {/* Label contextual */}
             <Text style={styles.resultsLabel}>
               {searchResults.length > 0
-                ? `${searchResults.length} cafetería${searchResults.length !== 1 ? "s" : ""}${q ? ` para "${search.trim()}"` : ""}`
+                ? `${searchResults.length} cafetería${searchResults.length !== 1 ? "s" : ""} para "${search.trim()}"`
                 : "Sin resultados"}
             </Text>
-
             {searchResults.length === 0 ? (
               <View style={styles.noResults}>
                 <Ionicons name="search-outline" size={40} color={Colors.border} />
-                <Text style={styles.noResultsText}>
-                  {q
-                    ? `No encontramos cafeterías\ncon "${search.trim()}"`
-                    : "Ninguna cafetería coincide\ncon los filtros activos"}
-                </Text>
+                <Text style={styles.noResultsText}>{`No encontramos cafeterías\ncon "${search.trim()}"`}</Text>
               </View>
             ) : (
-              searchResults.map(item => <SearchResultItem key={item.id} item={item} />)
+              searchResults.map(item => <CardS key={item.id} item={item} />)
             )}
           </View>
         )}
 
-        {/* Carousels — se ocultan al buscar o filtrar */}
-        {!isSearching && (
+        {/* Resultados de filtros activos */}
+        {!isSearching && isFiltering && (
+          <View style={styles.resultsSection}>
+            <Text style={styles.resultsLabel}>
+              {filteredCafes.length > 0
+                ? `${filteredCafes.length} cafetería${filteredCafes.length !== 1 ? "s" : ""} encontrada${filteredCafes.length !== 1 ? "s" : ""}`
+                : "Sin resultados para estos filtros"}
+            </Text>
+            {filteredCafes.length === 0 ? (
+              <View style={styles.noResults}>
+                <Ionicons name="options-outline" size={40} color={Colors.border} />
+                <Text style={styles.noResultsText}>{"Ninguna cafetería coincide\ncon los filtros activos"}</Text>
+              </View>
+            ) : (
+              filteredCafes.map(item => <CardS key={item.id} item={item} />)
+            )}
+          </View>
+        )}
+
+        {/* Carousels — solo cuando no hay filtros ni búsqueda */}
+        {!isSearching && !isFiltering && (
           <>
             <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Los destacados del barrio</Text>
+              <Text style={styles.sectionTitle}>Los destacados de la semana</Text>
               <FlatList
                 horizontal
                 data={cafesDestacados}
@@ -333,6 +297,7 @@ export default function Home() {
               />
             </View>
 
+            {/* V1: Promociones activas — oculto en MVP
             {cafesConPromo.length > 0 && (
               <View style={styles.descuentosSection}>
                 <Text style={styles.sectionTitleLight}>Promociones activas</Text>
@@ -346,6 +311,7 @@ export default function Home() {
                 />
               </View>
             )}
+            */}
 
             <View style={[styles.section, { marginBottom: 24 }]}>
               <Text style={styles.sectionTitle}>Agregados recientemente</Text>
@@ -362,24 +328,16 @@ export default function Home() {
         )}
       </ScrollView>
 
-      <LocationPicker
-        visible={showLocationPicker}
-        onClose={() => setShowLocationPicker(false)}
-      />
-
-      <LocationPermissionModal
-        visible={showLocationModal}
-        onClose={() => setShowLocationModal(false)}
-      />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: Platform.OS === "web" ? "#E8E0D5" : Colors.background, alignItems: "center" },
+  container: { flex: 1, backgroundColor: Platform.OS === "web" ? Colors.border : Colors.background, alignItems: "center" },
   scroll: { flex: 1, width: "100%", maxWidth: 430, backgroundColor: Colors.background },
-  header: { flexDirection: "row", alignItems: "center", justifyContent: "space-between", paddingHorizontal: 16, paddingTop: 16, paddingBottom: 8 },
-  isotipo: { width: 38, height: 38, borderRadius: 19, backgroundColor: Colors.white, borderWidth: 1.5, borderColor: Colors.border, alignItems: "center", justifyContent: "center" },
+  header: { flexDirection: "row", alignItems: "center", justifyContent: "flex-end", paddingHorizontal: 16, paddingTop: 16, paddingBottom: 8 },
+  headerLogo: { flexDirection: "row", alignItems: "center", gap: 8 },
+  headerTitle: { fontSize: 20, fontWeight: "800", color: Colors.primary },
   location: {
     flexDirection: "row", alignItems: "center", gap: 5,
     paddingHorizontal: 12, paddingVertical: 7,
@@ -464,7 +422,7 @@ const styles = StyleSheet.create({
   cardCalificado: { width: 180, backgroundColor: Colors.white, borderRadius: 16, overflow: "hidden" },
   cardCalificadoHeader: { paddingHorizontal: 12, paddingTop: 10, paddingBottom: 6, gap: 3 },
   cardMName: { fontSize: 14, fontWeight: "700", color: Colors.primary },
-  logoCircle: { width: 36, height: 36, borderRadius: 18, backgroundColor: "#F0E4D7", alignItems: "center", justifyContent: "center" },
+  logoCircle: { width: 36, height: 36, borderRadius: 18, backgroundColor: Colors.surfaceCream, alignItems: "center", justifyContent: "center" },
   logoInitial: { fontSize: 15, fontWeight: "700", color: Colors.primary },
   cardThumb: { width: "100%", height: 118, padding: 6 },
   cardThumbTags: { flexDirection: "row", gap: 6, flexWrap: "wrap" },
@@ -481,7 +439,7 @@ const styles = StyleSheet.create({
   },
   resultLogo: {
     width: 44, height: 44, borderRadius: 22,
-    backgroundColor: "#F0E4D7", alignItems: "center", justifyContent: "center",
+    backgroundColor: Colors.surfaceCream, alignItems: "center", justifyContent: "center",
   },
   resultName: { fontSize: 14, fontWeight: "600", color: Colors.text },
   resultAddress: { fontSize: 12, color: Colors.textLight, marginTop: 2 },

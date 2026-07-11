@@ -1,8 +1,41 @@
-import { useEffect } from "react";
+import { useEffect, Component, type ReactNode } from "react";
 import { Stack, useRouter, useSegments } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Colors } from "../constants/colors";
 import { useAuthStore } from "../store/authStore";
+import { useCafesStore } from "../store/cafesStore";
+
+// Error Boundary — captura crashes de render y muestra el error en pantalla
+// en vez de cerrar la app completamente.
+class ErrorBoundary extends Component<{ children: ReactNode }, { error: Error | null }> {
+  state = { error: null };
+  static getDerivedStateFromError(error: Error) { return { error }; }
+  render() {
+    if (this.state.error) {
+      const err = this.state.error as Error;
+      return (
+        <View style={eb.container}>
+          <Text style={eb.title}>⚠️ Error</Text>
+          <Text style={eb.msg}>{err.message}</Text>
+          <Text style={eb.stack} numberOfLines={10}>{err.stack}</Text>
+          <TouchableOpacity style={eb.btn} onPress={() => this.setState({ error: null })}>
+            <Text style={eb.btnText}>Reintentar</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    }
+    return this.props.children;
+  }
+}
+const eb = StyleSheet.create({
+  container: { flex: 1, padding: 24, paddingTop: 80, backgroundColor: "#fff" },
+  title: { fontSize: 20, fontWeight: "700", marginBottom: 12, color: "#c00" },
+  msg: { fontSize: 14, fontWeight: "600", color: "#333", marginBottom: 8 },
+  stack: { fontSize: 11, color: "#666", fontFamily: "monospace", marginBottom: 24 },
+  btn: { backgroundColor: Colors.primary, borderRadius: 12, padding: 14, alignItems: "center" },
+  btnText: { color: "#fff", fontWeight: "700" },
+});
 
 // Rutas que no requieren sesión
 const PUBLIC_ROUTES = new Set(["index", "(auth)", "onboarding"]);
@@ -28,13 +61,16 @@ function AuthGuard() {
 
 export default function RootLayout() {
   const { initialize } = useAuthStore();
+  const { load: loadCafes } = useCafesStore();
 
   useEffect(() => {
     initialize();
+    loadCafes();   // carga de Supabase en background; fallback al mock si falla
   }, []);
 
   return (
     <SafeAreaProvider>
+      <ErrorBoundary>
       <AuthGuard />
       <Stack
         screenOptions={{
@@ -62,6 +98,7 @@ export default function RootLayout() {
         <Stack.Screen name="settings/config" options={{ animation: "slide_from_right" }} />
         <Stack.Screen name="evento/[id]" options={{ animation: "slide_from_right" }} />
       </Stack>
+      </ErrorBoundary>
     </SafeAreaProvider>
   );
 }

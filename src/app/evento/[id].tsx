@@ -2,14 +2,15 @@ import { View, Text, StyleSheet, TouchableOpacity, ImageBackground, ScrollView, 
 import { router, useLocalSearchParams } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { CAFES } from "../../data/cafes";
+import { useCafesStore } from "../../store/cafesStore";
 import { Colors } from "../../constants/colors";
 
 export default function EventoDetail() {
   const insets = useSafeAreaInsets();
   const { id, cafeId, cafeName } = useLocalSearchParams<{ id: string; cafeId: string; cafeName: string }>();
 
-  const cafe = CAFES.find(c => c.id === cafeId);
+  const { getCafe } = useCafesStore();
+  const cafe = getCafe(cafeId ?? "");
   const evento = cafe?.eventos?.find(e => e.id === id);
 
   if (!evento || !cafe) {
