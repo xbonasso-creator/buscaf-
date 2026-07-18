@@ -137,17 +137,7 @@ export default function CafeFootos() {
             <Text style={s.backIcon}>‹</Text>
           </TouchableOpacity>
           <Text style={s.title}>{cafeName ?? "Fotos"}</Text>
-          <TouchableOpacity
-            style={s.uploadBtn}
-            onPress={handleUpload}
-            disabled={uploading}
-            hitSlop={{ top: 8, right: 8, bottom: 8, left: 8 }}
-          >
-            {uploading
-              ? <ActivityIndicator size="small" color={Colors.primary} />
-              : <Ionicons name="camera" size={22} color={Colors.primary} />
-            }
-          </TouchableOpacity>
+          <View style={{ width: 40 }} />
         </View>
 
         {/* Contador */}
@@ -166,15 +156,7 @@ export default function CafeFootos() {
           <View style={s.emptyBox}>
             <Ionicons name="camera-outline" size={52} color={Colors.border} />
             <Text style={s.emptyTitle}>Sin fotos aún</Text>
-            <Text style={s.emptySub}>Sé el primero en mostrar cómo es este lugar.</Text>
-            {Platform.OS !== "web" && (
-              <TouchableOpacity style={s.emptyBtn} onPress={handleUpload} disabled={uploading}>
-                {uploading
-                  ? <ActivityIndicator color={Colors.white} />
-                  : <Text style={s.emptyBtnText}>Subir foto</Text>
-                }
-              </TouchableOpacity>
-            )}
+            <Text style={s.emptySub}>Próximamente podrás ver las fotos de este lugar.</Text>
           </View>
         ) : (
           <FlatList

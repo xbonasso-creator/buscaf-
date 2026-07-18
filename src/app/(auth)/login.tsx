@@ -10,7 +10,27 @@ export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
-  const { signIn, loading } = useAuthStore();
+  const { signIn, resetPassword, loading } = useAuthStore();
+  const [resetLoading, setResetLoading] = useState(false);
+
+  const handleForgotPassword = async () => {
+    const trimmed = email.trim().toLowerCase();
+    if (!trimmed) {
+      Alert.alert("Ingresá tu email", "Escribí tu email en el campo de arriba y después tocá '¿Olvidaste tu contraseña?'.");
+      return;
+    }
+    setResetLoading(true);
+    const error = await resetPassword(trimmed);
+    setResetLoading(false);
+    if (error) {
+      Alert.alert("Error", "No pudimos enviar el email. Verificá que el email sea correcto.");
+    } else {
+      Alert.alert(
+        "Email enviado ✓",
+        `Te mandamos un link para restablecer tu contraseña a ${trimmed}. Revisá tu bandeja de entrada.`
+      );
+    }
+  };
 
   const handleLogin = async () => {
     if (!email.trim() || !password) {
@@ -66,8 +86,10 @@ export default function Login() {
             </View>
           </View>
 
-          <TouchableOpacity>
-            <Text style={styles.forgot}>¿Olvidaste tu contraseña?</Text>
+          <TouchableOpacity onPress={handleForgotPassword} disabled={resetLoading}>
+            <Text style={styles.forgot}>
+              {resetLoading ? "Enviando..." : "¿Olvidaste tu contraseña?"}
+            </Text>
           </TouchableOpacity>
         </View>
 

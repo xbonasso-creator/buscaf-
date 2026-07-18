@@ -5,7 +5,6 @@ import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
 import { useFavoritesStore } from "../../store/favoritesStore";
 import { useCuponerasStore } from "../../store/cuponerasStore";
-import { useQuieroIrStore } from "../../store/quieroIrStore";
 import { useAuthStore } from "../../store/authStore";
 import { useProfileStore } from "../../store/profileStore";
 import { Colors } from "../../constants/colors";
@@ -31,8 +30,6 @@ function SettingRow({ icon, label, onPress }: SettingRowProps) {
 export default function Profile() {
   const insets = useSafeAreaInsets();
   const { favorites } = useFavoritesStore();
-  const { cuponeras } = useCuponerasStore();
-  const { items: quieroIr } = useQuieroIrStore();
   const { user, signOut } = useAuthStore();
   const { avatarUrl, uploading, uploadAvatar } = useProfileStore();
 
@@ -107,10 +104,6 @@ export default function Profile() {
               <Text style={styles.proximamenteText}>Próximamente</Text>
             </View>
           </View>
-          <TouchableOpacity style={styles.statChip} onPress={() => router.push("/quiero-ir")}>
-            <Text style={styles.statLabel}>Quiero ir</Text>
-            <Text style={styles.statValue}>{quieroIr.length}</Text>
-          </TouchableOpacity>
         </View>
 
         {/* Ajustes */}
@@ -176,7 +169,7 @@ const styles = StyleSheet.create({
   statsRow: { flexDirection: "row", gap: 10 },
   statChip: {
     flex: 1, backgroundColor: Colors.surfaceWarm,
-    borderRadius: 14, paddingVertical: 14, alignItems: "center", gap: 6,
+    borderRadius: 14, paddingVertical: 14, alignItems: "center", justifyContent: "center", gap: 6,
   },
   statChipDisabled: { backgroundColor: "#F0EEEC", opacity: 0.7, position: "relative" },
   statLabel: { fontSize: 14, color: Colors.primary, textAlign: "center" },

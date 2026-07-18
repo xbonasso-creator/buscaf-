@@ -5,6 +5,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useFiltersStore } from "../../store/filtersStore";
+import { useFavoritesStore } from "../../store/favoritesStore";
 import CardS from "../../components/ui/CardS";
 import { ZONAS_MONTEVIDEO } from "../../store/locationStore";
 import { Colors } from "../../constants/colors";
@@ -12,7 +13,7 @@ import { type Cafe } from "../../data/cafes";
 import { useCafesStore } from "../../store/cafesStore";
 import { cafeMatchesAllFilters } from "../../utils/filters";
 
-const FILTROS = ["Wi-Fi", "Abierto ahora", "Pet friendly", "Cowork", "Vegano", "Brunch"];
+const FILTROS = ["Abierto ahora", "Buen WiFi", "Pet friendly", "Librería", "Gluten free"];
 const PAGE_SIZE = 3;
 const INITIAL_VISIBLE = 5;
 
@@ -20,7 +21,7 @@ export default function Explore() {
   const insets = useSafeAreaInsets();
   const [search, setSearch] = useState("");
   const [barrio, setBarrio] = useState<string | null>(null);
-  const { active, price, toggle: toggleFilter, count } = useFiltersStore();
+  const { active, price, toggle: toggleFilter, count, setFilters } = useFiltersStore();
   const extraActive = active.filter(f => !FILTROS.includes(f));
   const sortedFiltros = [
     ...extraActive,
@@ -32,6 +33,7 @@ export default function Explore() {
   const listRef = useRef<FlatListType<Cafe>>(null);
 
   const { cafes: CAFES } = useCafesStore();
+  const { favorites } = useFavoritesStore();
 
   // Normaliza zona para comparar sin importar guiones, espacios ni mayúsculas
   const normZona = (s: string) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[\s-]+/g, "");
@@ -59,6 +61,16 @@ export default function Explore() {
     setBarrio(prev => prev === id ? null : id);
     setVisibleCount(INITIAL_VISIBLE);
   };
+
+  const handleClearFilters = () => {
+    setFilters([], null, null);
+    setBarrio(null);
+    setVisibleCount(INITIAL_VISIBLE);
+  };
+
+  const sortedBarrios = [...ZONAS_MONTEVIDEO].sort((a, b) =>
+    a.label.localeCompare(b.label, "es")
+  );
 
   return (
     <View style={styles.wrapper}>
@@ -107,7 +119,7 @@ export default function Explore() {
           >
             <Text style={[styles.barrioText, barrio === null && styles.barrioTextActive]}>Todos</Text>
           </TouchableOpacity>
-          {ZONAS_MONTEVIDEO.map(z => (
+          {sortedBarrios.map(z => (
             <TouchableOpacity
               key={z.id}
               style={[styles.barrioChip, barrio === z.id && styles.barrioChipActive]}
@@ -125,27 +137,45 @@ export default function Explore() {
 
         {/* Lista */}
         <View style={styles.content}>
+          {visible.length > 0 && (
+            <Text style={styles.resultsCount}>
+              {filtered.length} cafetería{filtered.length !== 1 ? "s" : ""} encontrada{filtered.length !== 1 ? "s" : ""}
+            </Text>
+          )}
           {visible.length === 0 ? (
             <View style={styles.emptyState}>
               <View style={styles.emptyIcon}>
                 <Ionicons name="cafe-outline" size={44} color={Colors.primary} />
               </View>
-              <Text style={styles.emptyTitle}>
-                {search.trim()
-                  ? "No encontramos cafeterías\ncon ese nombre"
-                  : "No encontramos cafeterías\nen este barrio"}
-              </Text>
-              <Text style={styles.emptySub}>
-                {search.trim()
-                  ? "Probá con otro término o explorá por barrio."
-                  : "Explorá otro barrio para descubrir\nnuevas cafeterías."}
-              </Text>
+              {search.trim() ? (
+                <>
+                  <Text style={styles.emptyTitle}>No encontramos cafeterías{"\n"}con ese nombre</Text>
+                  <Text style={styles.emptySub}>Probá con otro término o explorá por barrio.</Text>
+                </>
+              ) : barrio ? (
+                <>
+                  <Text style={styles.emptyTitle}>No encontramos cafeterías{"\n"}en este barrio</Text>
+                  <Text style={styles.emptySub}>Explorá otro barrio para descubrir nuevas cafeterías.</Text>
+                  <TouchableOpacity style={styles.clearBtn} onPress={handleClearFilters}>
+                    <Text style={styles.clearBtnText}>Limpiar filtros</Text>
+                  </TouchableOpacity>
+                </>
+              ) : (
+                <>
+                  <Text style={styles.emptyTitle}>No encontramos cafeterías{"\n"}que coincidan</Text>
+                  <Text style={styles.emptySub}>Explorá con otros filtros para descubrir nuevas cafeterías.</Text>
+                  <TouchableOpacity style={styles.clearBtn} onPress={handleClearFilters}>
+                    <Text style={styles.clearBtnText}>Limpiar filtros</Text>
+                  </TouchableOpacity>
+                </>
+              )}
             </View>
           ) : (
             <FlatList
               ref={listRef}
               data={visible}
               keyExtractor={i => i.id}
+              extraData={favorites}
               renderItem={({ item }) => <CardS item={item} />}
               contentContainerStyle={styles.listContainer}
               showsVerticalScrollIndicator={false}
@@ -240,5 +270,16 @@ const styles = StyleSheet.create({
   emptyIcon: { width: 100, height: 100, borderRadius: 50, backgroundColor: Colors.surfaceWarm, alignItems: "center", justifyContent: "center" },
   emptyTitle: { fontSize: 20, fontWeight: "700", color: Colors.primary, textAlign: "center", lineHeight: 28 },
   emptySub: { fontSize: 16, color: Colors.textLight, textAlign: "center", lineHeight: 24 },
+  clearBtn: {
+    marginTop: 4,
+    paddingVertical: 10,
+    paddingHorizontal: 24,
+    borderRadius: 20,
+    borderWidth: 1.5,
+    borderColor: Colors.primary,
+    backgroundColor: Colors.white,
+  },
+  clearBtnText: { fontSize: 14, fontWeight: "600", color: Colors.primary },
   content: { flex: 1 },
+  resultsCount: { fontSize: 13, color: Colors.textLight, paddingHorizontal: 16, paddingTop: 4, paddingBottom: 4 },
 });

@@ -1,19 +1,20 @@
 import { useState, useMemo } from "react";
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, FlatList, ImageBackground, Platform } from "react-native";
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, FlatList, ImageBackground, Image, Platform, Modal } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useFavoritesStore } from "../../store/favoritesStore";
-import { useQuieroIrStore } from "../../store/quieroIrStore";
+import { useToastStore } from "../../store/toastStore";
 import { useFiltersStore } from "../../store/filtersStore";
 import { type Cafe } from "../../data/cafes";
 import { useCafesStore } from "../../store/cafesStore";
 import { Colors } from "../../constants/colors";
 import Isotipo from "../../components/ui/Isotipo";
+import { ZONAS_MONTEVIDEO } from "../../store/locationStore";
 import CardS from "../../components/ui/CardS";
 import { matchesFiltro, PRECIO_MAP } from "../../utils/filters";
 
-const FILTROS = ["Abierto ahora", "Cowork", "Con terraza", "Vegetariano", "Sin TACC"];
+const FILTROS = ["Abierto ahora", "Buen WiFi", "Pet friendly", "Librería", "Gluten free"];
 
 function StarRating({ rating }: { rating: number }) {
   return (
@@ -26,20 +27,20 @@ function StarRating({ rating }: { rating: number }) {
 
 function CardActions({ item }: { item: Pick<Cafe, "id" | "name" | "rating" | "image" | "direccion"> }) {
   const { toggle: toggleFav, isFavorite } = useFavoritesStore();
-  const { toggle: toggleGuardar, isGuardado } = useQuieroIrStore();
+  const { show: showToast } = useToastStore();
+  const fav = isFavorite(item.id);
   return (
     <View style={styles.cardActionsRow}>
       <TouchableOpacity
         style={styles.actionBtn}
-        onPress={(e) => { e.stopPropagation?.(); toggleFav(item); }}
+        onPress={(e) => {
+          e.stopPropagation?.();
+          const wasFav = isFavorite(item.id);
+          toggleFav(item);
+          if (!wasFav) showToast("Cafetería agregada a favoritos");
+        }}
       >
-        <Ionicons name={isFavorite(item.id) ? "heart" : "heart-outline"} size={16} color={Colors.primary} />
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.actionBtn}
-        onPress={(e) => { e.stopPropagation?.(); toggleGuardar(item); }}
-      >
-        <Ionicons name={isGuardado(item.id) ? "bookmark" : "bookmark-outline"} size={16} color={Colors.primary} />
+        <Ionicons name={fav ? "heart" : "heart-outline"} size={16} color={fav ? Colors.secondary : Colors.primary} />
       </TouchableOpacity>
     </View>
   );
@@ -67,18 +68,34 @@ function CardDestacado({ item }: { item: Cafe }) {
   );
 }
 
-// ── Card M — solo nombre + stars + imagen con badge estado top-left (solo con filtro Abierto ahora) ──
+// ── Card M — nombre + stars + heart top-right + imagen ──
 function CardCalificado({ item }: { item: Cafe }) {
   const { active } = useFiltersStore();
+  const { toggle: toggleFav, isFavorite } = useFavoritesStore();
+  const { show: showToast } = useToastStore();
   const showBadge = active.includes("Abierto ahora");
+  const fav = isFavorite(item.id);
+
+  const handleHeart = (e: any) => {
+    e.stopPropagation?.();
+    const wasFav = isFavorite(item.id);
+    toggleFav(item);
+    if (!wasFav) showToast("Cafetería agregada a favoritos");
+  };
+
   return (
     <TouchableOpacity style={styles.cardCalificado} onPress={() => router.push(`/cafe/${item.id}`)}>
-      {/* Header: solo nombre y stars, sin logo */}
+      {/* Header: nombre + stars + heart */}
       <View style={styles.cardCalificadoHeader}>
         <Text style={styles.cardMName} numberOfLines={1}>{item.name}</Text>
-        <StarRating rating={item.rating} />
+        <View style={styles.cardCalificadoRight}>
+          <StarRating rating={item.rating} />
+          <TouchableOpacity hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }} onPress={handleHeart}>
+            <Ionicons name={fav ? "heart" : "heart-outline"} size={16} color={fav ? Colors.secondary : Colors.primary} />
+          </TouchableOpacity>
+        </View>
       </View>
-      {/* Imagen full-width — badge solo cuando filtro Abierto ahora está activo */}
+      {/* Imagen full-width */}
       <ImageBackground source={{ uri: item.image }} style={styles.cardThumb} imageStyle={{ borderBottomLeftRadius: 16, borderBottomRightRadius: 16 }}>
         {showBadge && item.open !== undefined && (
           <View style={styles.cardThumbTags}>
@@ -88,6 +105,21 @@ function CardCalificado({ item }: { item: Cafe }) {
           </View>
         )}
       </ImageBackground>
+    </TouchableOpacity>
+  );
+}
+
+// ── Card Logo — solo logo, sin texto, para "Recién agregados" ──────────────────
+function CardLogo({ item }: { item: Cafe }) {
+  return (
+    <TouchableOpacity style={styles.cardLogo} onPress={() => router.push(`/cafe/${item.id}`)}>
+      {item.logo ? (
+        <Image source={{ uri: item.logo }} style={styles.cardLogoImg} resizeMode="contain" />
+      ) : (
+        <View style={styles.cardLogoFallback}>
+          <Text style={styles.cardLogoInitial}>{item.name[0]}</Text>
+        </View>
+      )}
     </TouchableOpacity>
   );
 }
@@ -121,9 +153,12 @@ function CardDescuento({ item }: { item: Cafe }) {
 }
 
 
+const SORTED_BARRIOS = [...ZONAS_MONTEVIDEO].sort((a, b) => a.label.localeCompare(b.label, "es"));
+
 export default function Home() {
   const insets = useSafeAreaInsets();
   const [search, setSearch] = useState("");
+  const [barrioPickerOpen, setBarrioPickerOpen] = useState(false);
   const { active, toggle: toggleFilter, count } = useFiltersStore();
   const { cafes: CAFES } = useCafesStore();
   const extraActive = active.filter(f => !FILTROS.includes(f));
@@ -135,7 +170,7 @@ export default function Home() {
   const filterCount = count();
 
   // ── Cafés filtrados (base para carousels y búsqueda) ────────
-  const { price, barrio } = useFiltersStore();
+  const { price, barrio, setBarrio } = useFiltersStore();
   const normZona = (s: string) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[\s-]+/g, "");
 
   const filteredCafes = useMemo(() => {
@@ -157,17 +192,21 @@ export default function Home() {
   const cafesDestacados = useMemo(() =>
     filteredCafes.filter(c => c.destacado).slice(0, 6), [filteredCafes]);
 
-  // "Los mejor calificados" — automático rating ≥ 4.8, máx 6
+  // "Mejor valorados" — automático rating ≥ 4.5, máx 6
   const cafesCalificados = useMemo(() =>
-    filteredCafes.filter(c => (c.rating ?? 0) >= 4.8).sort((a, b) => b.rating - a.rating).slice(0, 6), [filteredCafes]);
+    filteredCafes.filter(c => (c.rating ?? 0) >= 4.5).sort((a, b) => b.rating - a.rating).slice(0, 6), [filteredCafes]);
 
-  // "Agregados recientemente" — manual en Supabase (es_nuevo = true), máx 6
+  // "Para llevar" — manual en Supabase (para_llevar = true), máx 6
+  const cafesParaLlevar = useMemo(() =>
+    filteredCafes.filter(c => c.para_llevar).slice(0, 6), [filteredCafes]);
+
+  // "Recién agregados" — manual en Supabase (es_nuevo = true), máx 6
   const cafesRecientes = useMemo(() =>
     filteredCafes.filter(c => c.es_nuevo).slice(0, 6), [filteredCafes]);
 
   // ── Búsqueda por texto ────────────────────────────────────────
   const isSearching = search.trim().length > 0;
-  const isFiltering = filterCount > 0;
+  const isFiltering = filterCount > 0 || !!barrio;
   const q = search.trim().toLowerCase();
 
   const searchResults = useMemo(() => {
@@ -181,37 +220,66 @@ export default function Home() {
 
   return (
     <View style={styles.container}>
-      <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
-        {/* Header */}
-        <View style={[styles.header, { paddingTop: insets.top + 8 }]}>
-          <View style={styles.headerLogo}>
-            <Text style={styles.headerTitle}>Buscafé</Text>
-            <Isotipo size={36} variant="mark" />
-          </View>
+      {/* Header fixed — search + isotipo */}
+      <View style={[styles.header, { paddingTop: insets.top + 12 }]}>
+        <View style={[styles.searchBar, isSearching && styles.searchBarActive, { flex: 1 }]}>
+          <Ionicons name="search" size={17} color={isSearching ? Colors.primary : Colors.textLight} />
+          <TextInput
+            style={styles.searchInput}
+            placeholder="Buscar cafetería..."
+            placeholderTextColor={Colors.textLight}
+            value={search}
+            onChangeText={setSearch}
+            returnKeyType="search"
+          />
+          {isSearching && (
+            <TouchableOpacity onPress={() => setSearch("")}>
+              <Ionicons name="close-circle" size={18} color={Colors.textLight} />
+            </TouchableOpacity>
+          )}
         </View>
+        <Isotipo size={48} variant="light" />
+      </View>
 
-        {/* Buscador */}
-        <View style={styles.searchContainer}>
-          <View style={[styles.searchBar, isSearching && styles.searchBarActive]}>
-            <Ionicons name="search" size={17} color={isSearching ? Colors.primary : Colors.textLight} />
-            <TextInput
-              style={styles.searchInput}
-              placeholder="Buscar cafeterías"
-              placeholderTextColor={Colors.textLight}
-              value={search}
-              onChangeText={setSearch}
-              returnKeyType="search"
-            />
-            {isSearching && (
-              <TouchableOpacity onPress={() => setSearch("")}>
-                <Ionicons name="close-circle" size={18} color={Colors.textLight} />
-              </TouchableOpacity>
-            )}
-          </View>
+      {/* Barrio dropdown pill — fixed */}
+      <View style={styles.barrioRow}>
+        <TouchableOpacity style={[styles.barrioDropdown, barrio && styles.barrioDropdownActive]} onPress={() => setBarrioPickerOpen(true)}>
+          <Ionicons name="location-outline" size={14} color={barrio ? Colors.white : Colors.primary} />
+          <Text style={[styles.barrioDropdownText, barrio && styles.barrioDropdownTextActive]} numberOfLines={1}>
+            {barrio ? SORTED_BARRIOS.find(z => z.id === barrio)?.label ?? "Barrio" : "Todos los barrios"}
+          </Text>
+          <Ionicons name={barrioPickerOpen ? "chevron-up" : "chevron-down"} size={14} color={barrio ? Colors.white : Colors.primary} />
+        </TouchableOpacity>
+      </View>
+
+      {/* Modal barrio picker */}
+      <Modal visible={barrioPickerOpen} transparent animationType="slide" onRequestClose={() => setBarrioPickerOpen(false)}>
+        <TouchableOpacity style={styles.modalOverlay} activeOpacity={1} onPress={() => setBarrioPickerOpen(false)} />
+        <View style={[styles.barrioSheet, { paddingBottom: insets.bottom + 16 }]}>
+          <View style={styles.sheetHandle} />
+          <Text style={styles.sheetTitle}>Filtrar por barrio</Text>
+          <TouchableOpacity
+            style={[styles.barrioOption, !barrio && styles.barrioOptionActive]}
+            onPress={() => { setBarrio(null); setBarrioPickerOpen(false); }}
+          >
+            <Text style={[styles.barrioOptionText, !barrio && styles.barrioOptionTextActive]}>Todos los barrios</Text>
+            {!barrio && <Ionicons name="checkmark" size={18} color={Colors.primary} />}
+          </TouchableOpacity>
+          {SORTED_BARRIOS.map(z => (
+            <TouchableOpacity
+              key={z.id}
+              style={[styles.barrioOption, barrio === z.id && styles.barrioOptionActive]}
+              onPress={() => { setBarrio(z.id); setBarrioPickerOpen(false); }}
+            >
+              <Text style={[styles.barrioOptionText, barrio === z.id && styles.barrioOptionTextActive]}>{z.label}</Text>
+              {barrio === z.id && <Ionicons name="checkmark" size={18} color={Colors.primary} />}
+            </TouchableOpacity>
+          ))}
         </View>
+      </Modal>
 
-        {/* Filtros */}
-        <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filtrosScroll} contentContainerStyle={styles.filtrosContainer}>
+      {/* Filtros fixed */}
+      <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filtrosScroll} contentContainerStyle={styles.filtrosContainer}>
           <TouchableOpacity
             style={[styles.filtrarBtn, filterCount > 0 && styles.filtrarBtnActive]}
             onPress={() => router.push("/filters")}
@@ -230,8 +298,9 @@ export default function Home() {
               <Text style={[styles.filtroText, active.includes(f) && styles.filtroTextActive]}>{f}</Text>
             </TouchableOpacity>
           ))}
-        </ScrollView>
+      </ScrollView>
 
+      <ScrollView style={styles.scroll} showsVerticalScrollIndicator={false}>
         {/* Resultados de búsqueda */}
         {isSearching && (
           <View style={styles.resultsSection}>
@@ -273,57 +342,65 @@ export default function Home() {
         {/* Carousels — solo cuando no hay filtros ni búsqueda */}
         {!isSearching && !isFiltering && (
           <>
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Los destacados de la semana</Text>
-              <FlatList
-                horizontal
-                data={cafesDestacados}
-                keyExtractor={i => i.id}
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.carousel}
-                renderItem={({ item }) => <CardDestacado item={item} />}
-              />
-            </View>
-
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Los mejor calificados</Text>
-              <FlatList
-                horizontal
-                data={cafesCalificados}
-                keyExtractor={i => i.id}
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.carousel}
-                renderItem={({ item }) => <CardCalificado item={item} />}
-              />
-            </View>
-
-            {/* V1: Promociones activas — oculto en MVP
-            {cafesConPromo.length > 0 && (
-              <View style={styles.descuentosSection}>
-                <Text style={styles.sectionTitleLight}>Promociones activas</Text>
+            {/* 1 — Destacados de la semana */}
+            {cafesDestacados.length > 0 && (
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>Destacados de la semana</Text>
                 <FlatList
                   horizontal
-                  data={cafesConPromo}
+                  data={cafesDestacados}
                   keyExtractor={i => i.id}
                   showsHorizontalScrollIndicator={false}
                   contentContainerStyle={styles.carousel}
-                  renderItem={({ item }) => <CardDescuento item={item} />}
+                  renderItem={({ item }) => <CardDestacado item={item} />}
                 />
               </View>
             )}
-            */}
 
-            <View style={[styles.section, { marginBottom: 24 }]}>
-              <Text style={styles.sectionTitle}>Agregados recientemente</Text>
-              <FlatList
-                horizontal
-                data={cafesRecientes}
-                keyExtractor={i => i.id}
-                showsHorizontalScrollIndicator={false}
-                contentContainerStyle={styles.carousel}
-                renderItem={({ item }) => <CardCalificado item={item} />}
-              />
-            </View>
+            {/* 2 — Mejor valorados */}
+            {cafesCalificados.length > 0 && (
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>Mejor valorados</Text>
+                <FlatList
+                  horizontal
+                  data={cafesCalificados}
+                  keyExtractor={i => i.id}
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={styles.carousel}
+                  renderItem={({ item }) => <CardCalificado item={item} />}
+                />
+              </View>
+            )}
+
+            {/* 3 — Para llevar */}
+            {cafesParaLlevar.length > 0 && (
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>Para llevar</Text>
+                <FlatList
+                  horizontal
+                  data={cafesParaLlevar}
+                  keyExtractor={i => i.id}
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={styles.carousel}
+                  renderItem={({ item }) => <CardCalificado item={item} />}
+                />
+              </View>
+            )}
+
+            {/* 4 — Recién agregados */}
+            {cafesRecientes.length > 0 && (
+              <View style={[styles.section, { marginBottom: 24 }]}>
+                <Text style={styles.sectionTitle}>Recién agregados</Text>
+                <FlatList
+                  horizontal
+                  data={cafesRecientes}
+                  keyExtractor={i => i.id}
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={styles.carousel}
+                  renderItem={({ item }) => <CardLogo item={item} />}
+                />
+              </View>
+            )}
           </>
         )}
       </ScrollView>
@@ -335,9 +412,7 @@ export default function Home() {
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: Platform.OS === "web" ? Colors.border : Colors.background, alignItems: "center" },
   scroll: { flex: 1, width: "100%", maxWidth: 430, backgroundColor: Colors.background },
-  header: { flexDirection: "row", alignItems: "center", justifyContent: "flex-end", paddingHorizontal: 16, paddingTop: 16, paddingBottom: 8 },
-  headerLogo: { flexDirection: "row", alignItems: "center", gap: 8 },
-  headerTitle: { fontSize: 20, fontWeight: "800", color: Colors.primary },
+  header: { flexDirection: "row", alignItems: "center", gap: 10, paddingHorizontal: 16, paddingBottom: 12, width: "100%", maxWidth: 430, backgroundColor: Colors.background },
   location: {
     flexDirection: "row", alignItems: "center", gap: 5,
     paddingHorizontal: 12, paddingVertical: 7,
@@ -361,7 +436,7 @@ const styles = StyleSheet.create({
   },
 
   searchInput: { flex: 1, fontSize: 15, color: Colors.text },
-  filtrosScroll: { marginBottom: 8 },
+  filtrosScroll: { flexGrow: 0, flexShrink: 0, marginBottom: 8, width: "100%", maxWidth: 430, backgroundColor: Colors.background },
   filtrosContainer: { paddingHorizontal: 16, gap: 8, paddingBottom: 4 },
   filtrarBtn: {
     height: 36,
@@ -418,10 +493,40 @@ const styles = StyleSheet.create({
   rating: { flexDirection: "row", alignItems: "center", gap: 2 },
   ratingText: { fontSize: 12, fontWeight: "600", color: Colors.textLight },
 
+  // ── Card Logo ───────────────────────────────────────────────
+  cardLogo: {
+    width: 112,
+    height: 112,
+    borderRadius: 20,
+    backgroundColor: Colors.white,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    alignItems: "center",
+    justifyContent: "center",
+    overflow: "hidden",
+  },
+  cardLogoImg: {
+    width: "80%",
+    height: "80%",
+  },
+  cardLogoFallback: {
+    width: "100%",
+    height: "100%",
+    backgroundColor: Colors.surfaceCream,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  cardLogoInitial: {
+    fontSize: 32,
+    fontWeight: "700",
+    color: Colors.primary,
+  },
+
   // ── Card M ──────────────────────────────────────────────────
   cardCalificado: { width: 180, backgroundColor: Colors.white, borderRadius: 16, overflow: "hidden" },
-  cardCalificadoHeader: { paddingHorizontal: 12, paddingTop: 10, paddingBottom: 6, gap: 3 },
-  cardMName: { fontSize: 14, fontWeight: "700", color: Colors.primary },
+  cardCalificadoHeader: { paddingHorizontal: 14, paddingTop: 14, paddingBottom: 12, flexDirection: "row", alignItems: "center", justifyContent: "space-between" },
+  cardCalificadoRight: { flexDirection: "row", alignItems: "center", gap: 6 },
+  cardMName: { fontSize: 14, fontWeight: "700", color: Colors.primary, flex: 1, marginRight: 6 },
   logoCircle: { width: 36, height: 36, borderRadius: 18, backgroundColor: Colors.surfaceCream, alignItems: "center", justifyContent: "center" },
   logoInitial: { fontSize: 15, fontWeight: "700", color: Colors.primary },
   cardThumb: { width: "100%", height: 118, padding: 6 },
@@ -431,6 +536,46 @@ const styles = StyleSheet.create({
   stateBadgeClosed: { backgroundColor: "rgba(0,0,0,0.45)" },
   stateBadgeText: { fontSize: 11, fontWeight: "600", color: Colors.white },
   searchBarActive: { borderColor: Colors.primary },
+
+  // Barrio dropdown
+  barrioRow: { paddingHorizontal: 16, paddingBottom: 8, width: "100%", maxWidth: 430, backgroundColor: Colors.background },
+  barrioDropdown: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    height: 44,
+    paddingHorizontal: 14,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: Colors.border,
+    backgroundColor: Colors.white,
+  },
+  barrioDropdownActive: { backgroundColor: Colors.primary, borderColor: Colors.primary },
+  barrioDropdownText: { flex: 1, fontSize: 15, color: Colors.text },
+  barrioDropdownTextActive: { color: Colors.white, fontWeight: "600" },
+
+  // Modal barrio sheet
+  modalOverlay: { flex: 1, backgroundColor: "rgba(0,0,0,0.35)" },
+  barrioSheet: {
+    backgroundColor: Colors.background,
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    paddingHorizontal: 20,
+    paddingTop: 12,
+  },
+  sheetHandle: { width: 40, height: 4, borderRadius: 2, backgroundColor: Colors.border, alignSelf: "center", marginBottom: 16 },
+  sheetTitle: { fontSize: 16, fontWeight: "700", color: Colors.primary, marginBottom: 12 },
+  barrioOption: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingVertical: 14,
+    borderBottomWidth: 1,
+    borderBottomColor: Colors.border,
+  },
+  barrioOptionActive: {},
+  barrioOptionText: { fontSize: 15, color: Colors.text },
+  barrioOptionTextActive: { fontWeight: "700", color: Colors.primary },
   resultsSection: { paddingHorizontal: 16, paddingTop: 12, paddingBottom: 8 },
   resultsLabel: { fontSize: 13, color: Colors.textLight, marginBottom: 8 },
   resultItem: {

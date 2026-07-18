@@ -37,7 +37,7 @@ const EO  = Easing.out(Easing.cubic);
 const EI  = Easing.in(Easing.cubic);
 const EIO = Easing.inOut(Easing.cubic);
 
-const BG_COLORS = ["#FAF7F2", "#F3EAE0", "#EDE1D2"];
+const BG_COLORS = ["#FAF7F2", "#FAF7F2", "#FAF7F2"];
 
 function makeBlobURI(path: string) {
   return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(
@@ -101,63 +101,126 @@ function FloatingParticles() {
   );
 }
 
+// ── Paso 1: taza con vapor animado ───────────────────────────────────────────
 function IllStep1() {
+  const steamOffsets = [-CIRCLE * 0.13, 0, CIRCLE * 0.13];
+  const steams = useRef(
+    steamOffsets.map(() => ({ y: new Animated.Value(0), o: new Animated.Value(0) }))
+  ).current;
+
+  useEffect(() => {
+    const loops = steams.map(({ y, o }, i) => {
+      const loop = Animated.loop(
+        Animated.sequence([
+          Animated.delay(i * 380),
+          Animated.parallel([
+            Animated.timing(y, { toValue: -CIRCLE * 0.22, duration: 1500, easing: EIO, useNativeDriver: true }),
+            Animated.sequence([
+              Animated.timing(o, { toValue: 0.85, duration: 350, useNativeDriver: true }),
+              Animated.timing(o, { toValue: 0,    duration: 1150, useNativeDriver: true }),
+            ]),
+          ]),
+          Animated.timing(y, { toValue: 0, duration: 0, useNativeDriver: true }),
+          Animated.delay(i * 80),
+        ])
+      );
+      loop.start();
+      return loop;
+    });
+    return () => loops.forEach(l => l.stop());
+  }, []);
+
   return (
     <View style={[ill.circle, { width: CIRCLE, height: CIRCLE, borderRadius: CIRCLE / 2 }]}>
-      <Ionicons name="cafe" size={CIRCLE * 0.42} color={C} />
+      {steams.map(({ y, o }, i) => (
+        <Animated.View
+          key={i}
+          pointerEvents="none"
+          style={{
+            position: "absolute",
+            width: 4,
+            height: CIRCLE * 0.16,
+            borderRadius: 3,
+            backgroundColor: C,
+            left: CIRCLE / 2 + steamOffsets[i] - 2,
+            top: CIRCLE * 0.14,
+            opacity: o,
+            transform: [{ translateY: y }],
+          }}
+        />
+      ))}
+      <Ionicons name="cafe" size={CIRCLE * 0.44} color={C} />
     </View>
   );
 }
 
+// ── Paso 2: pin de ubicación con ripple ──────────────────────────────────────
 function IllStep2() {
-  const rs = useRef([0, 0, 0].map(() => new Animated.Value(0))).current;
-  const ro = useRef([0, 0, 0].map(() => new Animated.Value(0))).current;
+  const rs = useRef([0, 1, 2].map(() => new Animated.Value(1))).current;
+  const ro = useRef([0, 1, 2].map(() => new Animated.Value(0))).current;
+
   useEffect(() => {
     const make = (r: Animated.Value, o: Animated.Value) =>
       Animated.loop(Animated.parallel([
         Animated.sequence([
-          Animated.timing(r, { toValue: 3, duration: 2000, useNativeDriver: true }),
-          Animated.timing(r, { toValue: 0, duration: 0,    useNativeDriver: true }),
-          Animated.delay(200),
+          Animated.timing(r, { toValue: 2.4, duration: 2000, easing: EO, useNativeDriver: true }),
+          Animated.timing(r, { toValue: 1,   duration: 0,    useNativeDriver: true }),
+          Animated.delay(300),
         ]),
         Animated.sequence([
-          Animated.timing(o, { toValue: 0.28, duration: 120,  useNativeDriver: true }),
-          Animated.timing(o, { toValue: 0,    duration: 1880, useNativeDriver: true }),
-          Animated.delay(200),
+          Animated.timing(o, { toValue: 0.35, duration: 150,  useNativeDriver: true }),
+          Animated.timing(o, { toValue: 0,    duration: 1850, useNativeDriver: true }),
+          Animated.delay(300),
         ]),
       ]));
     const loops  = rs.map((r, i) => make(r, ro[i]));
-    const timers = loops.map((l, i) => setTimeout(() => l.start(), i * 660));
+    const timers = loops.map((l, i) => setTimeout(() => l.start(), i * 700));
     return () => { loops.forEach(l => l.stop()); timers.forEach(clearTimeout); };
   }, []);
+
+  const RING = CIRCLE * 0.48;
   return (
     <View style={[ill.circle, { width: CIRCLE, height: CIRCLE, borderRadius: CIRCLE / 2 }]}>
       {rs.map((r, i) => (
-        <Animated.View key={i} style={[ill.ripple, {
-          width: CIRCLE, height: CIRCLE, borderRadius: CIRCLE / 2,
-          transform: [{ scale: r }], opacity: ro[i],
-        }]} />
+        <Animated.View key={i} style={{
+          position: "absolute",
+          width: RING, height: RING, borderRadius: RING / 2,
+          borderWidth: 1.5, borderColor: C,
+          opacity: ro[i],
+          transform: [{ scale: r }],
+        }} />
       ))}
-      <Ionicons name="location-sharp" size={CIRCLE * 0.52} color={C} />
+      <Ionicons name="location-outline" size={CIRCLE * 0.50} color={C} />
     </View>
   );
 }
 
+// ── Paso 3: colección con corazón pulsante ───────────────────────────────────
 function IllStep3() {
-  const sc = useRef(new Animated.Value(1)).current;
+  const heartSc = useRef(new Animated.Value(1)).current;
+
   useEffect(() => {
     const pulse = Animated.loop(Animated.sequence([
-      Animated.timing(sc, { toValue: 1.15, duration: 650, useNativeDriver: true }),
-      Animated.timing(sc, { toValue: 1.0,  duration: 650, useNativeDriver: true }),
-      Animated.delay(300),
+      Animated.timing(heartSc, { toValue: 1.30, duration: 480, easing: EIO, useNativeDriver: true }),
+      Animated.timing(heartSc, { toValue: 1.0,  duration: 480, easing: EIO, useNativeDriver: true }),
+      Animated.delay(900),
     ]));
-    setTimeout(() => pulse.start(), 300);
+    setTimeout(() => pulse.start(), 400);
     return () => pulse.stop();
   }, []);
+
   return (
     <View style={[ill.circle, { width: CIRCLE, height: CIRCLE, borderRadius: CIRCLE / 2 }]}>
-      <Animated.View style={{ transform: [{ scale: sc }] }}>
-        <Ionicons name="heart" size={CIRCLE * 0.46} color={C} />
+      <Ionicons name="albums" size={CIRCLE * 0.46} color={C} />
+      <Animated.View style={{
+        position: "absolute",
+        bottom: CIRCLE * 0.18,
+        right:  CIRCLE * 0.18,
+        transform: [{ scale: heartSc }],
+      }}>
+        <View style={ill.heartBadge}>
+          <Ionicons name="heart" size={CIRCLE * 0.18} color={P} />
+        </View>
       </Animated.View>
     </View>
   );
@@ -167,19 +230,19 @@ const ILLS = [IllStep1, IllStep2, IllStep3];
 
 const STEPS = [
   {
-    title: "El mejor café\nde especialidad",
-    sub:   "Descubrí cafeterías únicas, con historia y mucho sabor. Todo en un solo lugar.",
+    title: "Descubrí tu\npróximo café",
+    sub:   "Encontrá cafeterías de especialidad según el barrio, tus intereses y el momento que estés buscando.",
     cta:   "Empezar",
   },
   {
-    title: "Encontrá tu\ncafetería ideal",
-    sub:   "Filtrá por barrio, ambiente o método de preparación y encontrá exactamente lo que buscás.",
+    title: "Elegí con\nconfianza",
+    sub:   "Explorá toda la información que necesitás tener para tomar la decisión.",
     cta:   "Continuar",
   },
   {
     title: "Guardá tus\nfavoritas",
-    sub:   "Armá tu lista de cafeterías preferidas y tené siempre a mano tu próxima parada.",
-    cta:   "Crear mi cuenta",
+    sub:   "Creá colecciones con las cafeterías que más te gusten y encontralas siempre que las necesites.",
+    cta:   "Registrarme",
   },
 ];
 
@@ -381,7 +444,16 @@ const ill = StyleSheet.create({
   ripple: {
     position: "absolute",
     borderWidth: 2,
-    borderColor: P,
+    borderColor: C,
+  },
+  heartBadge: {
+    backgroundColor: S,
+    borderRadius: 99,
+    padding: 5,
+    shadowColor: "#000",
+    shadowOpacity: 0.15,
+    shadowRadius: 4,
+    shadowOffset: { width: 0, height: 2 },
   },
 });
 

@@ -34,7 +34,7 @@ Buscafé no se hace responsable de inexactitudes en la información de cafeterí
 Podemos actualizar estos Términos en cualquier momento. Te notificaremos sobre cambios significativos a través de la app.
 
 9. Contacto
-Para consultas sobre estos Términos: hola@buscafe.app`;
+Para consultas sobre estos Términos: info@buscafe.app`;
 
 const APP_VERSION = "1.0.0 (beta)";
 

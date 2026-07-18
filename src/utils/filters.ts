@@ -28,18 +28,17 @@ export const FILTRO_KEYS: Record<string, string[]> = {
 
   // Servicios
   "Pet friendly":      ["pet friendly", "pet-friendly", "mascotas"],
-  "Con terraza":       ["terraza", "con terraza"],
-  "Sin TACC":          ["sin tacc", "sin gluten", "gluten free", "gluten-free"],
+  "Terraza":           ["terraza", "con terraza"],
+  "Gluten free":       ["sin tacc", "sin gluten", "gluten free", "gluten-free"],
   "Leche vegetal":     ["leche vegetal", "oat milk", "leche de avena", "leche de almendra", "leche de soja"],
   "Veggie":            ["veggie", "vegetariano", "vegano", "plant-based"],
   "Brunch":            ["brunch"],
   "Almuerzos":         ["almuerzo", "almuerzos"],
-  "Tostaduria":        ["tostaduria", "tostador", "tostaduría propia", "tostador propio"],
-  "Panadería artesanal": ["panadería artesanal", "panaderia artesanal", "masa madre", "panadería"],
+  "Take away":         ["take away", "take_away", "takeaway", "para llevar"],
+  "Pastelería":        ["pastelería", "pasteleria", "pasteles", "tortas"],
   "Librería":          ["librería", "libreria", "libros"],
   "Eventos":           ["eventos", "música en vivo", "musica en vivo"],
   "Tienda":            ["tienda"],
-  "100% Gluten Free":  ["100% gluten free", "sin tacc", "sin gluten", "gluten free"],
 
   // Métodos de café
   "Espresso":          ["espresso"],
@@ -47,11 +46,7 @@ export const FILTRO_KEYS: Record<string, string[]> = {
   "Chemex":            ["chemex"],
   "Aeropress":         ["aeropress"],
   "Cold brew":         ["cold brew"],
-
-  // Compat: chips rápidos en Explore
-  "Wi-Fi":             ["wifi", "wi-fi", "buen wifi", "buen wi-fi"],
-  "Cowork":            ["cowork", "espacio de cowork", "co-work"],
-  "Vegano":            ["vegano", "veggie", "plant-based"],
+  "Prensa francesa":   ["prensa francesa", "french press"],
 
   // Precios (se resuelven con cafe.precio, no con servicios)
   "$ Económico":       [],

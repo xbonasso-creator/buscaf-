@@ -28,7 +28,7 @@ Tenés derecho a acceder, corregir o eliminar tu información personal en cualqu
 Conservamos tu información mientras tu cuenta esté activa. Al eliminar tu cuenta, borramos tus datos personales en un plazo de 30 días, salvo obligación legal de conservarlos.
 
 7. Contacto
-Si tenés preguntas sobre esta política de privacidad, podés contactarnos en: hola@buscafe.app`;
+Si tenés preguntas sobre esta política de privacidad, podés contactarnos en: info@buscafe.app`;
 
 const TERMS_AND_CONDITIONS = `Términos y Condiciones de Buscafé
 
@@ -59,7 +59,7 @@ Buscafé no se hace responsable de inexactitudes en la información de cafeterí
 Podemos actualizar estos Términos en cualquier momento. Te notificaremos sobre cambios significativos a través de la app.
 
 9. Contacto
-Para consultas sobre estos Términos: hola@buscafe.app`;
+Para consultas sobre estos Términos: info@buscafe.app`;
 
 
 export default function Privacy() {

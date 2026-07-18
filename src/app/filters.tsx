@@ -15,19 +15,18 @@ import { Colors } from "../constants/colors";
 const OPTION_ICONS: Record<string, React.ComponentProps<typeof Ionicons>["name"]> = {
   "Abierto ahora":        "time-outline",
   "Mejor calificados":    "star-outline",
-  "Con terraza":          "sunny-outline",
+  "Terraza":              "sunny-outline",
   "Pet friendly":         "paw-outline",
-  "Sin TACC":             "medical-outline",
+  "Gluten free":          "medical-outline",
   "Leche vegetal":        "cafe-outline",
   "Veggie":               "leaf-outline",
   "Brunch":               "restaurant-outline",
   "Almuerzos":            "restaurant-outline",
-  "Tostaduria":           "flame-outline",
-  "Panadería artesanal":  "storefront-outline",
+  "Take away":            "bag-handle-outline",
+  "Pastelería":           "color-palette-outline",
   "Librería":             "book-outline",
   "Eventos":              "calendar-outline",
   "Tienda":               "bag-outline",
-  "100% Gluten Free":     "shield-checkmark-outline",
   "Buen WiFi":            "wifi-outline",
   "Enchufes":             "flash-outline",
   "Sillas cómodas":       "easel-outline",
@@ -38,9 +37,7 @@ const OPTION_ICONS: Record<string, React.ComponentProps<typeof Ionicons>["name"]
   "Chemex":               "flask-outline",
   "Aeropress":            "flask-outline",
   "Cold brew":            "snow-outline",
-  "$ Económico":          "cash-outline",
-  "$$ Moderado":          "card-outline",
-  "$$$ Premium":          "diamond-outline",
+  "Prensa francesa":      "cafe-outline",
 };
 
 const SORT_OPTIONS = ["Abierto ahora", "Mejor calificados"];
@@ -52,41 +49,35 @@ const FILTER_SECTIONS = [
   },
   {
     title: "Servicios",
-    options: ["Pet friendly", "Con terraza", "Sin TACC", "Leche vegetal", "Veggie", "Brunch", "Almuerzos", "Tostaduria", "Panadería artesanal", "Librería", "Eventos", "Tienda", "100% Gluten Free"],
+    options: ["Pet friendly", "Terraza", "Take away", "Gluten free", "Leche vegetal", "Veggie", "Brunch", "Almuerzos", "Pastelería", "Librería", "Eventos", "Tienda"],
   },
   {
     title: "Métodos",
-    options: ["Espresso", "V60", "Chemex", "Aeropress", "Cold brew"],
+    options: ["Espresso", "V60", "Chemex", "Aeropress", "Cold brew", "Prensa francesa"],
   },
-  { title: "Precios", options: ["$ Económico", "$$ Moderado", "$$$ Premium"] },
 ];
 
 export default function Filters() {
   const insets = useSafeAreaInsets();
-  const { active, price, setFilters } = useFiltersStore();
+  const { active, setFilters } = useFiltersStore();
 
   const [draftActive, setDraftActive] = useState<string[]>(active);
-  const [draftPrice, setDraftPrice]   = useState<string | null>(price);
 
   const toggleDraft = (opt: string) =>
     setDraftActive(prev =>
       prev.includes(opt) ? prev.filter(f => f !== opt) : [...prev, opt]
     );
 
-  const toggleDraftPrice = (opt: string) =>
-    setDraftPrice(prev => (prev === opt ? null : opt));
-
   const clearDraft = () => {
     setDraftActive([]);
-    setDraftPrice(null);
   };
 
   const apply = () => {
-    setFilters(draftActive, draftPrice, null);
+    setFilters(draftActive, null, null);
     router.back();
   };
 
-  const draftCount = draftActive.length + (draftPrice ? 1 : 0);
+  const draftCount = draftActive.length;
 
   return (
     <View style={s.wrapper}>
@@ -127,22 +118,21 @@ export default function Filters() {
             </View>
           </View>
 
-          {/* Secciones — grilla de 3 chips por fila */}
+          {/* Secciones — grid 3 columnas */}
           {FILTER_SECTIONS.map(section => (
             <View key={section.title} style={s.section}>
               <Text style={s.sectionTitle}>{section.title}</Text>
               <View style={s.chipGrid}>
                 {section.options.map(opt => {
-                  const isPrecios = section.title === "Precios";
-                  const isActive  = isPrecios ? draftPrice === opt : draftActive.includes(opt);
+                  const isActive = draftActive.includes(opt);
                   const icon = OPTION_ICONS[opt];
                   return (
                     <TouchableOpacity
                       key={opt}
                       style={[s.chipCell, isActive && s.chipActive]}
-                      onPress={() => isPrecios ? toggleDraftPrice(opt) : toggleDraft(opt)}
+                      onPress={() => toggleDraft(opt)}
                     >
-                      {icon && <Ionicons name={icon} size={13} color={isActive ? "#fff" : Colors.primary} />}
+                      {icon && <Ionicons name={icon} size={14} color={isActive ? "#fff" : Colors.primary} />}
                       <Text style={[s.chipText, isActive && s.chipTextActive]} numberOfLines={1}>{opt}</Text>
                     </TouchableOpacity>
                   );

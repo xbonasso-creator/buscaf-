@@ -16,6 +16,7 @@ type AuthStore = {
   signUp: (email: string, password: string, name: string) => Promise<string | null>;
   signOut: () => Promise<void>;
   initialize: () => Promise<void>;
+  resetPassword: (email: string) => Promise<string | null>;
 };
 
 export const useAuthStore = create<AuthStore>((set, get) => ({
@@ -92,5 +93,12 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
   signOut: async () => {
     await supabase.auth.signOut();
     set({ user: null, session: null });
+  },
+
+  resetPassword: async (email) => {
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: "buscafe://reset-password",
+    });
+    return error?.message ?? null;
   },
 }));

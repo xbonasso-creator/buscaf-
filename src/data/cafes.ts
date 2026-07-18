@@ -60,8 +60,9 @@ export type Cafe = {
   logo?: string;        // URL del logo circular de la cafetería
 
   // ── Curaduría manual (editable desde Supabase dashboard) ──
-  destacado?: boolean;  // aparece en "Destacados de la semana"
-  es_nuevo?: boolean;   // aparece en "Agregados recientemente"
+  destacado?: boolean;   // aparece en "Destacados de la semana"
+  es_nuevo?: boolean;    // aparece en "Recién agregados"
+  para_llevar?: boolean; // aparece en "Para llevar"
 };
 
 // ─────────────────────────────────────────────────────────────
@@ -284,44 +285,64 @@ const CAFES_DB: Cafe[] = [
 //   "Sábados y Domingos · De 10:00 a 20:00"
 // En Supabase: campo horarios = array de strings con este patrón.
 
+// Normaliza un string: minúsculas, sin tildes
+function _norm(s: string) {
+  return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").trim();
+}
+
 const _DIA: Record<string, number> = {
-  lunes: 1, martes: 2, "miércoles": 3, miercoles: 3,
-  jueves: 4, viernes: 5,
-  "sábado": 6, sabado: 6, "sábados": 6, sabados: 6,
-  domingo: 0, domingos: 0,
+  lunes: 1, lun: 1,
+  martes: 2, mar: 2,
+  miercoles: 3, mie: 3, mier: 3,
+  jueves: 4, jue: 4,
+  viernes: 5, vie: 5,
+  sabado: 6, sab: 6, sabados: 6,
+  domingo: 0, dom: 0, domingos: 0,
 };
 
 const _RANGO: Record<string, number[]> = {
   "lunes a viernes":     [1,2,3,4,5],
-  "lunes a sábado":      [1,2,3,4,5,6], "lunes a sabado": [1,2,3,4,5,6],
+  "lun a vie":           [1,2,3,4,5],
+  "lunes a sabado":      [1,2,3,4,5,6],
+  "lun a sab":           [1,2,3,4,5,6],
   "lunes a domingo":     [0,1,2,3,4,5,6],
   "martes a viernes":    [2,3,4,5],
-  "martes a sábado":     [2,3,4,5,6], "martes a sabado": [2,3,4,5,6],
-  "miércoles a viernes": [3,4,5], "miercoles a viernes": [3,4,5],
-  "jueves a sábado":     [4,5,6], "jueves a sabado": [4,5,6],
-  "sábados y domingos":  [6,0], "sabados y domingos": [6,0],
-  "todos los días":      [0,1,2,3,4,5,6], "todos los dias": [0,1,2,3,4,5,6],
+  "martes a sabado":     [2,3,4,5,6],
+  "miercoles a viernes": [3,4,5],
+  "jueves a sabado":     [4,5,6],
+  "sabados y domingos":  [6,0],
+  "sab y dom":           [6,0],
+  "todos los dias":      [0,1,2,3,4,5,6],
+  "todos los días":      [0,1,2,3,4,5,6],
+  "diario":              [0,1,2,3,4,5,6],
+  "lunes a viernes (feriados cerrado)": [1,2,3,4,5],
 };
 
 export function isOpenNow(horarios: string[]): boolean {
-  const now   = new Date();
-  const day   = now.getDay();                              // 0=Dom … 6=Sáb
-  const cur   = now.getHours() * 60 + now.getMinutes();
+  const now = new Date();
+  const day = now.getDay();                         // 0=Dom … 6=Sáb
+  const cur = now.getHours() * 60 + now.getMinutes();
 
   for (const h of horarios) {
-    // Separamos día y hora por el punto medio · (también acepta "-" o "–")
-    const parts = h.split(/·|-{1,2}|–/);
-    if (parts.length < 2) continue;
+    // Separar parte de día y parte de hora por · o — o "de"
+    // Ejemplos soportados:
+    //   "Lunes a Viernes · De 08:00 a 19:00"
+    //   "Lunes a Viernes - 08:00 a 19:00"
+    //   "Lunes a Viernes de 08:00 a 19:00"
+    //   "Sábados · 10:00 - 20:00"
+    const sepMatch = h.match(/^(.+?)(?:\s*[·\-–]\s*|\s+de\s+)(.+)$/i);
+    if (!sepMatch) continue;
 
-    const dayStr  = parts[0].trim().toLowerCase();
-    const timeStr = parts.slice(1).join(" ");              // todo lo que queda
+    const dayStr  = _norm(sepMatch[1]);
+    const timeStr = sepMatch[2];
 
-    // Determinar días
-    const days: number[] =
+    // Determinar días cubiertos
+    const days: number[] | null =
       _RANGO[dayStr] ??
-      (_DIA[dayStr] !== undefined ? [_DIA[dayStr]] : null) ??
-      [0,1,2,3,4,5,6];
+      (_DIA[dayStr] !== undefined ? [_DIA[dayStr]] : null);
 
+    // Si no reconocemos el día, salteamos (no asumimos "siempre abierto")
+    if (!days) continue;
     if (!days.includes(day)) continue;
 
     // Extraer todos los HH:MM del segmento de hora
@@ -331,7 +352,12 @@ export function isOpenNow(horarios: string[]): boolean {
     const open  = parseInt(times[0][1]) * 60 + parseInt(times[0][2]);
     const close = parseInt(times[1][1]) * 60 + parseInt(times[1][2]);
 
-    if (cur >= open && cur < close) return true;
+    // Soporte para horarios que cruzan medianoche (ej: 22:00 a 02:00)
+    if (close < open) {
+      if (cur >= open || cur < close) return true;
+    } else {
+      if (cur >= open && cur < close) return true;
+    }
   }
 
   return false;
@@ -368,6 +394,7 @@ function dbRowToCafe(row: any): Cafe {
     logo:          row.logo ?? undefined,
     destacado:     row.destacado ?? false,
     es_nuevo:      row.es_nuevo ?? false,
+    para_llevar:   row.para_llevar ?? false,
   };
 }
 

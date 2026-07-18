@@ -50,14 +50,13 @@ export const useProfileStore = create<ProfileStore>((set) => ({
       const { data } = supabase.storage.from("avatars").getPublicUrl(path);
       const publicUrl = `${data.publicUrl}?t=${Date.now()}`; // cache-bust
 
-      // Guardar en profiles
+      // Guardar en profiles (upsert por si no existe la fila)
       await supabase
         .from("profiles")
-        .update({ avatar_url: publicUrl })
-        .eq("id", user.id);
+        .upsert({ id: user.id, avatar_url: publicUrl }, { onConflict: "id" });
 
-      set({ avatarUrl: publicUrl });
-      return publicUrl;
+      set({ avatarUrl: publicUrl, uploading: false });
+      return null; // null = sin error
     } catch (e) {
       console.error("uploadAvatar error:", e);
       return null;

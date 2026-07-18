@@ -3,7 +3,6 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router, useLocalSearchParams } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useFavoritesStore } from "../../store/favoritesStore";
-import { useQuieroIrStore } from "../../store/quieroIrStore";
 import { useCuponerasStore } from "../../store/cuponerasStore";
 import { type Cafe, isOpenNow } from "../../data/cafes";
 import { useCafesStore } from "../../store/cafesStore";
@@ -26,8 +25,8 @@ const BASE_URL = "https://buscafe-mvp.netlify.app";
 export default function CafeDetail() {
   const insets = useSafeAreaInsets();
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { toggle: toggleFav, isFavorite } = useFavoritesStore();
-  const { toggle: toggleGuardar, isGuardado } = useQuieroIrStore();
+  const { toggle: toggleFav } = useFavoritesStore();
+  const fav = useFavoritesStore(state => state.favorites.some(f => f.id === (id ?? "")));
   const { cuponeras, addCuponera } = useCuponerasStore();
   const [showShareSheet, setShowShareSheet] = useState(false);
   const [copied, setCopied] = useState(false);
@@ -42,8 +41,6 @@ export default function CafeDetail() {
   const cafeData = CAFE
     ? { id: CAFE.id, name: CAFE.name, direccion: CAFE.direccion, rating: CAFE.rating, image: CAFE.image }
     : { id: "", name: "", direccion: "", rating: 0, image: "" };
-  const fav = isFavorite(cafeData.id);
-  const guardado = isGuardado(cafeData.id);
   const hasResenas = resenas.length > 0;
 
   // Pantalla de carga mientras Supabase responde
@@ -108,10 +105,7 @@ export default function CafeDetail() {
                 </TouchableOpacity>
                 <View style={styles.heroActions}>
                   <TouchableOpacity style={styles.heroBtn} onPress={() => toggleFav(cafeData)}>
-                    <Ionicons name={fav ? "heart" : "heart-outline"} size={20} color={Colors.primary} />
-                  </TouchableOpacity>
-                  <TouchableOpacity style={styles.heroBtn} onPress={() => toggleGuardar(cafeData)}>
-                    <Ionicons name={guardado ? "bookmark" : "bookmark-outline"} size={20} color={Colors.primary} />
+                    <Ionicons name={fav ? "heart" : "heart-outline"} size={20} color={fav ? Colors.secondary : Colors.primary} />
                   </TouchableOpacity>
                 </View>
               </View>
@@ -138,7 +132,7 @@ export default function CafeDetail() {
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Horarios</Text>
               <View style={styles.infoBox}>
-                <Text style={styles.infoIcon}>🕐</Text>
+                <Ionicons name="time-outline" size={20} color={Colors.primary} style={{ marginTop: 2 }} />
                 <View style={{ gap: 4 }}>
                   {CAFE.horarios.map((h, i) => (
                     <Text key={i} style={styles.infoText}>{h}</Text>
@@ -190,21 +184,32 @@ export default function CafeDetail() {
             )}
 
             {/* Servicios */}
-            <View style={styles.section}>
-              <Text style={styles.sectionTitle}>Servicios</Text>
-              <View style={styles.serviciosGrid}>
-                <View style={{ flex: 1, gap: 6 }}>
-                  {CAFE.servicios.slice(0, Math.ceil(CAFE.servicios.length / 2)).map((s, i) => (
-                    <Text key={i} style={styles.servicioItem}>· {s}</Text>
-                  ))}
-                </View>
-                <View style={{ flex: 1, gap: 6 }}>
-                  {CAFE.servicios.slice(Math.ceil(CAFE.servicios.length / 2)).map((s, i) => (
-                    <Text key={i} style={styles.servicioItem}>· {s}</Text>
-                  ))}
+            {CAFE.servicios.length > 0 && (
+              <View style={styles.section}>
+                <Text style={styles.sectionTitle}>Servicios</Text>
+                <View style={styles.serviciosBox}>
+                  {(() => {
+                    const items = CAFE.servicios.slice(0, 12);
+                    const cols = items.length <= 4 ? 1 : items.length <= 8 ? 2 : 3;
+                    const perCol = Math.ceil(items.length / cols);
+                    return (
+                      <View style={styles.serviciosGrid}>
+                        {Array.from({ length: cols }).map((_, col) => {
+                          const colItems = items.slice(col * perCol, (col + 1) * perCol);
+                          return (
+                            <View key={col} style={{ flex: 1, gap: 5 }}>
+                              {colItems.map((s, i) => (
+                                <Text key={i} style={styles.servicioItem}>· {s}</Text>
+                              ))}
+                            </View>
+                          );
+                        })}
+                      </View>
+                    );
+                  })()}
                 </View>
               </View>
-            </View>
+            )}
 
             {/* ── CUPONERA (opcional) ── */}
             {CAFE.tieneCuponera && (
@@ -257,42 +262,26 @@ export default function CafeDetail() {
             */}
 
             {/* ── FOTOS ── */}
-            <View style={styles.section}>
-              <View style={styles.sectionRow}>
-                <Text style={styles.sectionTitle}>Fotos</Text>
-                {/* V1: upload de fotos por usuarios
-                <TouchableOpacity
-                  style={styles.uploadFotoBtn}
-                  onPress={() => router.push({ pathname: "/cafe-fotos", params: { id, cafeName: CAFE.name, openUpload: "1" } })}
-                  hitSlop={{ top: 8, right: 8, bottom: 8, left: 8 }}
-                >
-                  <Ionicons name="camera" size={20} color={Colors.primary} />
-                </TouchableOpacity>
-                */}
+            {CAFE.fotos.length > 0 && (
+              <View style={styles.section}>
+                <View style={styles.sectionRow}>
+                  <Text style={styles.sectionTitle}>Fotos</Text>
+                  {CAFE.fotos.length > 6 && (
+                    <TouchableOpacity
+                      hitSlop={{ top: 8, right: 8, bottom: 8, left: 8 }}
+                      onPress={() => router.push({ pathname: "/cafe-fotos", params: { id, cafeName: CAFE.name } })}
+                    >
+                      <Text style={styles.linkText}>Más fotos</Text>
+                    </TouchableOpacity>
+                  )}
+                </View>
+                <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }}>
+                  {CAFE.fotos.slice(0, 6).map((uri, i) => (
+                    <Image key={i} source={{ uri }} style={styles.fotoThumb} />
+                  ))}
+                </ScrollView>
               </View>
-              <TouchableOpacity
-                activeOpacity={0.9}
-                onPress={() => router.push({ pathname: "/cafe-fotos", params: { id, cafeName: CAFE.name } })}
-              >
-                {CAFE.fotos.length > 0 ? (
-                  <ScrollView horizontal showsHorizontalScrollIndicator={false} contentContainerStyle={{ gap: 8 }} scrollEnabled={false}>
-                    {CAFE.fotos.slice(0, 4).map((uri, i) => (
-                      <Image key={i} source={{ uri }} style={styles.fotoThumb} />
-                    ))}
-                    {CAFE.fotos.length > 4 && (
-                      <View style={[styles.fotoThumb, styles.fotoMas]}>
-                        <Text style={styles.fotoMasText}>+{CAFE.fotos.length - 4}</Text>
-                      </View>
-                    )}
-                  </ScrollView>
-                ) : (
-                  <View style={styles.fotosEmpty}>
-                    <Ionicons name="camera-outline" size={28} color={Colors.border} />
-                    <Text style={styles.fotosEmptyText}>Sé el primero en subir una foto</Text>
-                  </View>
-                )}
-              </TouchableOpacity>
-            </View>
+            )}
 
             {/* ── CONTACTO — INSTAGRAM (opcional) ── */}
             {!!CAFE.instagram && (
@@ -476,8 +465,13 @@ const styles = StyleSheet.create({
   infoIcon: { fontSize: 20, marginTop: 1 },
   infoText: { fontSize: 14, color: Colors.text, lineHeight: 22 },
   infoSubText: { fontSize: 14, color: Colors.textLight, marginTop: 4 },
-  serviciosGrid: { flexDirection: "row", gap: 10 },
-  servicioItem: { fontSize: 14, color: Colors.text, lineHeight: 24 },
+  serviciosBox: {
+    backgroundColor: Colors.background,
+    borderRadius: 14, padding: 14,
+    borderWidth: 1, borderColor: Colors.border,
+  },
+  serviciosGrid: { flexDirection: "row", gap: 6 },
+  servicioItem: { fontSize: 13, color: Colors.text, lineHeight: 20 },
   menuCard: { width: 160 },
   menuImage: { width: 160, height: 148, justifyContent: "flex-end" },
   menuOverlay: {

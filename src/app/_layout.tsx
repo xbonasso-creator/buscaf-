@@ -5,6 +5,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Colors } from "../constants/colors";
 import { useAuthStore } from "../store/authStore";
 import { useCafesStore } from "../store/cafesStore";
+import Toast from "../components/ui/Toast";
 
 // Error Boundary — captura crashes de render y muestra el error en pantalla
 // en vez de cerrar la app completamente.
@@ -72,6 +73,7 @@ export default function RootLayout() {
     <SafeAreaProvider>
       <ErrorBoundary>
       <AuthGuard />
+      <Toast />
       <Stack
         screenOptions={{
           headerShown: false,
@@ -85,6 +87,7 @@ export default function RootLayout() {
         <Stack.Screen name="(tabs)" />
         <Stack.Screen name="filters" options={{ animation: "slide_from_bottom" }} />
         <Stack.Screen name="cafe/[id]" options={{ animation: "slide_from_right" }} />
+        <Stack.Screen name="collection/[id]" options={{ animation: "slide_from_right" }} />
         <Stack.Screen name="cuponeras/index" options={{ animation: "slide_from_right" }} />
         <Stack.Screen name="cuponeras/scanner" options={{ animation: "slide_from_right" }} />
         <Stack.Screen name="quiero-ir" options={{ animation: "slide_from_right" }} />

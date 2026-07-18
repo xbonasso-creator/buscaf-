@@ -1,24 +1,37 @@
 /**
  * CardS — card pequeña horizontal (tamaño S)
- * Usada en resultados de búsqueda, filtros y listados.
  *
- *  ┌─────────────────────────────────────────────┐
- *  │ [logo] Vera Café                    ★ 4.6 ♡ │
- *  │        Francisco Ros 2738, Punta Carretas    │
- *  └─────────────────────────────────────────────┘
+ *  ┌─────────────────────────────────────────────────┐
+ *  │ [logo] Vera Café                  ★ 4.6 ♥  📁  │
+ *  │        Francisco Ros 2738, Punta Carretas        │
+ *  └─────────────────────────────────────────────────┘
  */
 import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import { useFavoritesStore } from "../../store/favoritesStore";
+import { useToastStore } from "../../store/toastStore";
 import { Colors } from "../../constants/colors";
 import { type Cafe } from "../../data/cafes";
 
-type Props = { item: Cafe };
+type Props = {
+  item: Cafe;
+  showHeart?: boolean;
+  /** Cuando se pasa, muestra ícono de colección y llama a este callback */
+  onCollectionPress?: () => void;
+};
 
-export default function CardS({ item }: Props) {
+export default function CardS({ item, showHeart = true, onCollectionPress }: Props) {
   const { toggle: toggleFav, isFavorite } = useFavoritesStore();
+  const { show: showToast } = useToastStore();
   const fav = isFavorite(item.id);
+
+  const handleHeart = (e: any) => {
+    e.stopPropagation?.();
+    const wasFav = isFavorite(item.id);
+    toggleFav(item);
+    if (!wasFav) showToast("Cafetería agregada a favoritos");
+  };
 
   return (
     <TouchableOpacity
@@ -43,20 +56,27 @@ export default function CardS({ item }: Props) {
         <Text style={styles.address} numberOfLines={1}>{item.direccion}</Text>
       </View>
 
-      {/* Rating + Fav — misma fila, centrados verticalmente */}
+      {/* Rating + acciones */}
       <View style={styles.right}>
         <Ionicons name="star" size={13} color="#E8B84B" />
         <Text style={styles.ratingText}>{item.rating?.toFixed(1)}</Text>
-        <TouchableOpacity
-          hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-          onPress={(e) => { e.stopPropagation?.(); toggleFav(item); }}
-        >
-          <Ionicons
-            name={fav ? "heart" : "heart-outline"}
-            size={18}
-            color={fav ? Colors.error : Colors.primary}
-          />
-        </TouchableOpacity>
+        {showHeart && (
+          <TouchableOpacity hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }} onPress={handleHeart}>
+            <Ionicons
+              name={fav ? "heart" : "heart-outline"}
+              size={18}
+              color={fav ? Colors.secondary : Colors.primary}
+            />
+          </TouchableOpacity>
+        )}
+        {onCollectionPress && (
+          <TouchableOpacity
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+            onPress={(e) => { e.stopPropagation?.(); onCollectionPress(); }}
+          >
+            <Ionicons name="albums-outline" size={17} color={Colors.textLight} />
+          </TouchableOpacity>
+        )}
       </View>
     </TouchableOpacity>
   );
@@ -85,12 +105,7 @@ const styles = StyleSheet.create({
     flexShrink: 0,
   },
   logoImg: { width: 44, height: 44 },
-  logoFallback: {
-    width: 44,
-    height: 44,
-    alignItems: "center",
-    justifyContent: "center",
-  },
+  logoFallback: { width: 44, height: 44, alignItems: "center", justifyContent: "center" },
   logoInitial: { fontSize: 18, fontWeight: "700", color: Colors.primary },
   info: { flex: 1 },
   name: { fontSize: 14, fontWeight: "700", color: Colors.text },
