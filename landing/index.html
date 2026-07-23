@@ -19,14 +19,12 @@
     :root {
       --primary: #2C1A0E;
       --accent: #C17A3A;
-      --accent-light: #E8A96B;
       --bg: #FDFAF6;
       --bg-warm: #F5EFE6;
       --white: #FFFFFF;
       --text: #2C1A0E;
       --text-light: #7A6353;
       --border: #E8DDD3;
-      --radius: 20px;
     }
 
     html { scroll-behavior: smooth; }
@@ -147,21 +145,21 @@
     .btn-primary {
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 10px;
       background: var(--primary);
       color: var(--white);
       text-decoration: none;
       font-size: 16px;
       font-weight: 700;
-      padding: 16px 28px;
+      padding: 18px 32px;
       border-radius: 50px;
-      width: fit-content;
       transition: opacity 0.2s, transform 0.15s;
       box-shadow: 0 4px 20px rgba(44, 26, 14, 0.25);
     }
 
     .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
-    .btn-primary svg { width: 20px; height: 20px; }
+    .btn-primary svg { width: 20px; height: 20px; flex-shrink: 0; }
 
     .hero-android {
       font-size: 13px;
@@ -169,17 +167,28 @@
       font-weight: 500;
     }
 
-    .hero-phone {
+    .phone-wrap {
       display: flex;
       justify-content: center;
-      align-items: flex-end;
+      align-items: center;
     }
 
-    .hero-phone img {
+    .phone-frame {
+      position: relative;
       width: 100%;
-      max-width: 340px;
-      filter: drop-shadow(0 24px 60px rgba(44, 26, 14, 0.18));
+      max-width: 300px;
+    }
+
+    .phone-frame img {
+      width: 100%;
+      height: auto;
+      display: block;
       border-radius: 40px;
+      border: 6px solid #1a1a1a;
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.15) inset,
+        0 30px 80px rgba(44, 26, 14, 0.25);
+      object-fit: cover;
     }
 
     .about {
@@ -198,17 +207,10 @@
       gap: 80px;
     }
 
-    .about-phone img {
-      width: 100%;
-      max-width: 300px;
-      filter: drop-shadow(0 20px 50px rgba(44, 26, 14, 0.2));
-      border-radius: 36px;
-    }
-
     .about-text { display: flex; flex-direction: column; gap: 24px; }
 
     .about-text p {
-      font-size: clamp(18px, 2.2vw, 26px);
+      font-size: clamp(20px, 2.4vw, 28px);
       font-weight: 600;
       line-height: 1.5;
       color: var(--primary);
@@ -221,7 +223,7 @@
     }
 
     .download-inner {
-      max-width: 600px;
+      max-width: 900px;
       margin: 0 auto;
       display: flex;
       flex-direction: column;
@@ -230,55 +232,16 @@
     }
 
     .download h2 {
-      font-size: clamp(36px, 4.5vw, 56px);
+      font-size: clamp(38px, 5vw, 64px);
       font-weight: 900;
-      line-height: 1.1;
+      line-height: 1.05;
       letter-spacing: -1.5px;
       color: var(--primary);
     }
 
-    .download-actions {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 16px;
+    .download .btn-primary {
       width: 100%;
-    }
-
-    .appstore-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      background: var(--primary);
-      color: var(--white);
-      text-decoration: none;
-      padding: 14px 28px;
-      border-radius: 50px;
-      transition: opacity 0.2s, transform 0.15s;
-      box-shadow: 0 4px 20px rgba(44, 26, 14, 0.25);
-    }
-
-    .appstore-btn:hover { opacity: 0.85; transform: translateY(-1px); }
-    .appstore-btn svg { width: 22px; height: 22px; }
-    .appstore-btn-text { text-align: left; }
-
-    .appstore-btn-text small {
-      display: block;
-      font-size: 11px;
-      font-weight: 500;
-      opacity: 0.75;
-    }
-
-    .appstore-btn-text strong {
-      display: block;
-      font-size: 16px;
-      font-weight: 700;
-    }
-
-    .download-phone img {
-      max-width: 220px;
-      filter: drop-shadow(0 16px 40px rgba(44, 26, 14, 0.15));
-      border-radius: 32px;
+      max-width: 420px;
     }
 
     .cafe-register {
@@ -312,13 +275,14 @@
     .btn-outline {
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: 8px;
       background: transparent;
       color: var(--primary);
       text-decoration: none;
       font-size: 15px;
       font-weight: 700;
-      padding: 14px 28px;
+      padding: 16px 32px;
       border-radius: 50px;
       border: 2px solid var(--primary);
       transition: background 0.2s, color 0.2s;
@@ -342,7 +306,6 @@
     }
 
     .footer-copy { font-size: 13px; color: var(--text-light); }
-
     .footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
 
     .footer-links a {
@@ -364,12 +327,15 @@
       }
       .hero-text { align-items: center; }
       .hero-sub { text-align: center; }
-      .hero-actions { align-items: center; }
-      .hero-phone { order: -1; }
-      .hero-phone img { max-width: 260px; }
+      .hero-actions { align-items: stretch; }
+      .btn-primary { width: 100%; }
+      .phone-wrap { order: -1; }
+      .phone-frame { max-width: 220px; }
       .about-inner { grid-template-columns: 1fr; gap: 40px; text-align: center; }
-      .about-phone { display: flex; justify-content: center; }
-      .about-phone img { max-width: 240px; }
+      .phone-wrap.about-phone { order: -1; }
+      .phone-frame.about-frame { max-width: 220px; }
+      .download h2 { font-size: clamp(32px, 8vw, 48px); }
+      .download .btn-primary { max-width: 100%; }
       .footer-inner { flex-direction: column; align-items: flex-start; gap: 12px; }
     }
 
@@ -411,16 +377,20 @@
           <span class="hero-android">Android disponible próximamente</span>
         </div>
       </div>
-      <div class="hero-phone">
-        <img src="https://framerusercontent.com/images/02gYBiuvKAmBSWYPEU6g730rvT4.png" alt="Buscafé en iPhone" width="376" height="786" loading="eager" />
+      <div class="phone-wrap">
+        <div class="phone-frame">
+          <img src="/screenshots/home.png" alt="Buscafé — pantalla inicio" loading="eager" />
+        </div>
       </div>
     </div>
   </section>
 
   <section class="about">
     <div class="about-inner">
-      <div class="about-phone">
-        <img src="https://framerusercontent.com/images/RKofYpuEii5leHULlw2CGePg9E.png" alt="Buscafé dark mode" width="402" height="626" loading="lazy" />
+      <div class="phone-wrap about-phone">
+        <div class="phone-frame about-frame">
+          <img src="/screenshots/filtros.png" alt="Buscafé — pantalla filtros" loading="lazy" />
+        </div>
       </div>
       <div class="about-text">
         <p>Buscafé nació para que no pierdas tiempo buscando dónde tomar un buen café.</p>
@@ -432,20 +402,12 @@
   <section class="download">
     <div class="download-inner">
       <h2>Menos tiempo buscando.<br />Más tiempo disfrutando.</h2>
-      <div class="download-actions">
-        <a href="https://apps.apple.com/us/iphone/today" class="appstore-btn">
-          <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
-          </svg>
-          <div class="appstore-btn-text">
-            <small>Disponible en</small>
-            <strong>App Store</strong>
-          </div>
-        </a>
-        <div class="download-phone">
-          <img src="https://framerusercontent.com/images/PYJt59JQl6K2DsY2LD6LvPnFPno.png" alt="Buscafé app" width="220" height="478" loading="lazy" />
-        </div>
-      </div>
+      <a href="https://apps.apple.com/us/iphone/today" class="btn-primary">
+        <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+        </svg>
+        Descargar para iOS
+      </a>
     </div>
   </section>
 
@@ -453,7 +415,7 @@
     <div class="cafe-register-inner">
       <h3>¿Tenés una cafetería?</h3>
       <p>Sumá tu espacio a Buscafé y llegá a miles de personas que buscan el lugar ideal.</p>
-      <a href="mailto:xbonasso@gmail.com?subject=Registrar mi cafetería en Buscafé" class="btn-outline">
+      <a href="https://buscafe.framer.website/registrar-cafeteria" class="btn-outline" target="_blank">
         Registrar mi cafetería
       </a>
     </div>
