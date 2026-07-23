@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Buscafé — Descubrí tu próximo café</title>
+  <meta name="description" content="Encontrá el lugar ideal para trabajar, brunchear, reunirte o simplemente disfrutar un rico café." />
+  <meta property="og:title" content="Buscafé — Descubrí tu próximo café" />
+  <meta property="og:description" content="Encontrá el lugar ideal para trabajar, brunchear, reunirte o simplemente disfrutar un rico café." />
+  <meta property="og:image" content="https://framerusercontent.com/assets/ziZnxARgEBmNGSiKq2EfJcieJcI.png" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary: #2C1A0E;
+      --accent: #C17A3A;
+      --accent-light: #E8A96B;
+      --bg: #FDFAF6;
+      --bg-warm: #F5EFE6;
+      --white: #FFFFFF;
+      --text: #2C1A0E;
+      --text-light: #7A6353;
+      --border: #E8DDD3;
+      --radius: 20px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(253, 250, 246, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+    }
+
+    .nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .nav-logo img {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+
+    .nav-logo span {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--primary);
+      letter-spacing: -0.3px;
+    }
+
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      background: var(--primary);
+      color: var(--white);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 10px 20px;
+      border-radius: 50px;
+      transition: opacity 0.2s;
+    }
+
+    .nav-cta:hover { opacity: 0.85; }
+
+    .hero {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 80px 24px 60px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 60px;
+    }
+
+    .hero-text { display: flex; flex-direction: column; gap: 28px; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--bg-warm);
+      border: 1px solid var(--border);
+      color: var(--text-light);
+      font-size: 13px;
+      font-weight: 500;
+      padding: 8px 16px;
+      border-radius: 50px;
+      width: fit-content;
+    }
+
+    .badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    h1 {
+      font-size: clamp(40px, 5vw, 64px);
+      font-weight: 900;
+      line-height: 1.05;
+      letter-spacing: -1.5px;
+      color: var(--primary);
+    }
+
+    .hero-sub {
+      font-size: 17px;
+      color: var(--text-light);
+      line-height: 1.6;
+      max-width: 420px;
+    }
+
+    .hero-actions { display: flex; flex-direction: column; gap: 12px; }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--primary);
+      color: var(--white);
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 700;
+      padding: 16px 28px;
+      border-radius: 50px;
+      width: fit-content;
+      transition: opacity 0.2s, transform 0.15s;
+      box-shadow: 0 4px 20px rgba(44, 26, 14, 0.25);
+    }
+
+    .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+    .btn-primary svg { width: 20px; height: 20px; }
+
+    .hero-android {
+      font-size: 13px;
+      color: var(--text-light);
+      font-weight: 500;
+    }
+
+    .hero-phone {
+      display: flex;
+      justify-content: center;
+      align-items: flex-end;
+    }
+
+    .hero-phone img {
+      width: 100%;
+      max-width: 340px;
+      filter: drop-shadow(0 24px 60px rgba(44, 26, 14, 0.18));
+      border-radius: 40px;
+    }
+
+    .about {
+      background: var(--bg-warm);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 80px 24px;
+    }
+
+    .about-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: center;
+      gap: 80px;
+    }
+
+    .about-phone img {
+      width: 100%;
+      max-width: 300px;
+      filter: drop-shadow(0 20px 50px rgba(44, 26, 14, 0.2));
+      border-radius: 36px;
+    }
+
+    .about-text { display: flex; flex-direction: column; gap: 24px; }
+
+    .about-text p {
+      font-size: clamp(18px, 2.2vw, 26px);
+      font-weight: 600;
+      line-height: 1.5;
+      color: var(--primary);
+      letter-spacing: -0.3px;
+    }
+
+    .download {
+      padding: 100px 24px;
+      text-align: center;
+    }
+
+    .download-inner {
+      max-width: 600px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 40px;
+    }
+
+    .download h2 {
+      font-size: clamp(36px, 4.5vw, 56px);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -1.5px;
+      color: var(--primary);
+    }
+
+    .download-actions {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      width: 100%;
+    }
+
+    .appstore-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--primary);
+      color: var(--white);
+      text-decoration: none;
+      padding: 14px 28px;
+      border-radius: 50px;
+      transition: opacity 0.2s, transform 0.15s;
+      box-shadow: 0 4px 20px rgba(44, 26, 14, 0.25);
+    }
+
+    .appstore-btn:hover { opacity: 0.85; transform: translateY(-1px); }
+    .appstore-btn svg { width: 22px; height: 22px; }
+    .appstore-btn-text { text-align: left; }
+
+    .appstore-btn-text small {
+      display: block;
+      font-size: 11px;
+      font-weight: 500;
+      opacity: 0.75;
+    }
+
+    .appstore-btn-text strong {
+      display: block;
+      font-size: 16px;
+      font-weight: 700;
+    }
+
+    .download-phone img {
+      max-width: 220px;
+      filter: drop-shadow(0 16px 40px rgba(44, 26, 14, 0.15));
+      border-radius: 32px;
+    }
+
+    .cafe-register {
+      background: var(--bg-warm);
+      border-top: 1px solid var(--border);
+      padding: 64px 24px;
+      text-align: center;
+    }
+
+    .cafe-register-inner {
+      max-width: 500px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .cafe-register h3 {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--primary);
+    }
+
+    .cafe-register p {
+      font-size: 15px;
+      color: var(--text-light);
+      line-height: 1.6;
+    }
+
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: transparent;
+      color: var(--primary);
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 14px 28px;
+      border-radius: 50px;
+      border: 2px solid var(--primary);
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .btn-outline:hover { background: var(--primary); color: var(--white); }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 24px;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-copy { font-size: 13px; color: var(--text-light); }
+
+    .footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
+
+    .footer-links a {
+      font-size: 13px;
+      color: var(--text-light);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--primary); }
+    .footer-studio { font-size: 13px; color: var(--text-light); }
+
+    @media (max-width: 768px) {
+      .hero {
+        grid-template-columns: 1fr;
+        padding: 48px 20px 40px;
+        gap: 40px;
+        text-align: center;
+      }
+      .hero-text { align-items: center; }
+      .hero-sub { text-align: center; }
+      .hero-actions { align-items: center; }
+      .hero-phone { order: -1; }
+      .hero-phone img { max-width: 260px; }
+      .about-inner { grid-template-columns: 1fr; gap: 40px; text-align: center; }
+      .about-phone { display: flex; justify-content: center; }
+      .about-phone img { max-width: 240px; }
+      .footer-inner { flex-direction: column; align-items: flex-start; gap: 12px; }
+    }
+
+    @media (max-width: 480px) {
+      nav { padding: 0 16px; }
+      .download { padding: 64px 16px; }
+      .cafe-register { padding: 48px 16px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-inner">
+      <a href="#hero" class="nav-logo">
+        <img src="https://framerusercontent.com/images/MTy73UWUcLJSl0QND7bov2kJJKM.png" alt="Buscafé logo" width="36" height="36" />
+        <span>Buscafé</span>
+      </a>
+      <a href="#download" class="nav-cta">Descargar</a>
+    </div>
+  </nav>
+
+  <section id="hero">
+    <div class="hero">
+      <div class="hero-text">
+        <div class="badge">
+          <span class="badge-dot"></span>
+          Próximamente para Android
+        </div>
+        <h1>Descubrí tu próximo café</h1>
+        <p class="hero-sub">Encontrá el lugar ideal para trabajar, brunchear, reunirte o simplemente disfrutar un rico café.</p>
+        <div class="hero-actions">
+          <a href="https://apps.apple.com/us/iphone/today" class="btn-primary" id="download">
+            <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+            </svg>
+            Descargar para iOS
+          </a>
+          <span class="hero-android">Android disponible próximamente</span>
+        </div>
+      </div>
+      <div class="hero-phone">
+        <img src="https://framerusercontent.com/images/02gYBiuvKAmBSWYPEU6g730rvT4.png" alt="Buscafé en iPhone" width="376" height="786" loading="eager" />
+      </div>
+    </div>
+  </section>
+
+  <section class="about">
+    <div class="about-inner">
+      <div class="about-phone">
+        <img src="https://framerusercontent.com/images/RKofYpuEii5leHULlw2CGePg9E.png" alt="Buscafé dark mode" width="402" height="626" loading="lazy" />
+      </div>
+      <div class="about-text">
+        <p>Buscafé nació para que no pierdas tiempo buscando dónde tomar un buen café.</p>
+        <p>Encontrá el lugar ideal para trabajar, brunchear, reunirte o simplemente disfrutar un rico café.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="download">
+    <div class="download-inner">
+      <h2>Menos tiempo buscando.<br />Más tiempo disfrutando.</h2>
+      <div class="download-actions">
+        <a href="https://apps.apple.com/us/iphone/today" class="appstore-btn">
+          <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+          </svg>
+          <div class="appstore-btn-text">
+            <small>Disponible en</small>
+            <strong>App Store</strong>
+          </div>
+        </a>
+        <div class="download-phone">
+          <img src="https://framerusercontent.com/images/PYJt59JQl6K2DsY2LD6LvPnFPno.png" alt="Buscafé app" width="220" height="478" loading="lazy" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="cafe-register">
+    <div class="cafe-register-inner">
+      <h3>¿Tenés una cafetería?</h3>
+      <p>Sumá tu espacio a Buscafé y llegá a miles de personas que buscan el lugar ideal.</p>
+      <a href="mailto:xbonasso@gmail.com?subject=Registrar mi cafetería en Buscafé" class="btn-outline">
+        Registrar mi cafetería
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <span class="footer-copy">© 2026 Buscafé. Todos los derechos reservados.</span>
+      <div class="footer-links">
+        <a href="/privacy-policy">Políticas de Privacidad</a>
+        <a href="/terms-of-service">Términos y Condiciones</a>
+      </div>
+      <span class="footer-studio">Diseñado por Studio XB</span>
+    </div>
+  </footer>
+
+</body>
+</html>
