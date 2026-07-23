@@ -114,7 +114,7 @@ export default function CafeDetail() {
             {/* Info card overlapping hero */}
             <View style={styles.infoCard}>
               <View style={styles.infoCardHeader}>
-                <Text style={styles.cafeName}>{CAFE.name}</Text>
+                <Text style={styles.cafeName} numberOfLines={1} adjustsFontSizeToFit minimumFontScale={0.7}>{CAFE.name}</Text>
                 <View style={[styles.badge, { backgroundColor: isOpenNow(CAFE.horarios) ? Colors.success : "rgba(0,0,0,0.82)" }]}>
                   <Text style={styles.badgeText}>{isOpenNow(CAFE.horarios) ? "Abierto" : "Cerrado"}</Text>
                 </View>
@@ -445,7 +445,7 @@ const styles = StyleSheet.create({
     elevation: 6,
   },
   infoCardHeader: { flexDirection: "row", justifyContent: "space-between", alignItems: "center" },
-  cafeName: { fontSize: 22, fontWeight: "700", color: Colors.primary },
+  cafeName: { fontSize: 22, fontWeight: "700", color: Colors.primary, flex: 1, marginRight: 10 },
   badge: { borderRadius: 20, paddingHorizontal: 12, paddingVertical: 5 },
   badgeText: { color: Colors.white, fontSize: 14, fontWeight: "600" },
   ratingRow: { flexDirection: "row", alignItems: "center", gap: 4 },

@@ -5,13 +5,13 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Colors } from "../constants/colors";
 import { useState } from "react";
 
-const BASE_URL = "https://buscafe-mvp.netlify.app";
+const BASE_URL = "https://buscafe.framer.website";
 
 export default function CafeShare() {
   const insets = useSafeAreaInsets();
   const { id, name } = useLocalSearchParams<{ id: string; name?: string }>();
   const cafeName = name ?? "Cafetería";
-  const cafeUrl = `${BASE_URL}/cafe/${id}`;
+  const cafeUrl = BASE_URL;
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -23,12 +23,16 @@ export default function CafeShare() {
       }
     } else {
       // En nativo: abre el share sheet nativo de iOS/Android
-      await Share.share({ message: cafeUrl, title: cafeName });
+      await Share.share({
+        message: `¡Mirá ${cafeName} en Buscafé! Descargá la app: ${cafeUrl}`,
+        title: `${cafeName} — Buscafé`,
+        url: cafeUrl,
+      });
     }
   };
 
   const handleWhatsApp = async () => {
-    const text = encodeURIComponent(`¡Mirá esta cafetería en Buscafé! ${cafeName} — ${cafeUrl}`);
+    const text = encodeURIComponent(`¡Mirá ${cafeName} en Buscafé! Descargá la app: ${cafeUrl}`);
     if (Platform.OS === "web") {
       window.open(`https://wa.me/?text=${text}`, "_blank");
     } else {

@@ -28,13 +28,14 @@ export const FILTRO_KEYS: Record<string, string[]> = {
 
   // Servicios
   "Pet friendly":      ["pet friendly", "pet-friendly", "mascotas"],
-  "Terraza":           ["terraza", "con terraza"],
+  "Mesas afuera":      ["mesas afuera", "terraza", "con terraza"],
   "Gluten free":       ["sin tacc", "sin gluten", "gluten free", "gluten-free"],
   "Leche vegetal":     ["leche vegetal", "oat milk", "leche de avena", "leche de almendra", "leche de soja"],
   "Veggie":            ["veggie", "vegetariano", "vegano", "plant-based"],
   "Brunch":            ["brunch"],
   "Almuerzos":         ["almuerzo", "almuerzos"],
-  "Take away":         ["take away", "take_away", "takeaway", "para llevar"],
+  "Take away":         ["take away", "take_away", "takeaway", "para llevar"], // legacy — mantener para filtros guardados
+  "Para llevar":       ["para llevar", "take away", "take_away", "takeaway"],
   "Pastelería":        ["pastelería", "pasteleria", "pasteles", "tortas"],
   "Librería":          ["librería", "libreria", "libros"],
   "Eventos":           ["eventos", "música en vivo", "musica en vivo"],

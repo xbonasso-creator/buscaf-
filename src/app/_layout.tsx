@@ -1,6 +1,7 @@
 import { useEffect, Component, type ReactNode } from "react";
 import { Stack, useRouter, useSegments } from "expo-router";
 import { SafeAreaProvider } from "react-native-safe-area-context";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { Colors } from "../constants/colors";
 import { useAuthStore } from "../store/authStore";
@@ -70,6 +71,7 @@ export default function RootLayout() {
   }, []);
 
   return (
+    <GestureHandlerRootView style={{ flex: 1 }}>
     <SafeAreaProvider>
       <ErrorBoundary>
       <AuthGuard />
@@ -103,5 +105,6 @@ export default function RootLayout() {
       </Stack>
       </ErrorBoundary>
     </SafeAreaProvider>
+    </GestureHandlerRootView>
   );
 }

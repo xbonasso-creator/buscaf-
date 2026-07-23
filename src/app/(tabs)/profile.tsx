@@ -3,8 +3,6 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
 import * as ImagePicker from "expo-image-picker";
-import { useFavoritesStore } from "../../store/favoritesStore";
-import { useCuponerasStore } from "../../store/cuponerasStore";
 import { useAuthStore } from "../../store/authStore";
 import { useProfileStore } from "../../store/profileStore";
 import { Colors } from "../../constants/colors";
@@ -29,7 +27,6 @@ function SettingRow({ icon, label, onPress }: SettingRowProps) {
 
 export default function Profile() {
   const insets = useSafeAreaInsets();
-  const { favorites } = useFavoritesStore();
   const { user, signOut } = useAuthStore();
   const { avatarUrl, uploading, uploadAvatar } = useProfileStore();
 
@@ -91,18 +88,11 @@ export default function Profile() {
           </View>
         </View>
 
-        {/* Stats */}
-        <View style={styles.statsRow}>
-          <TouchableOpacity style={styles.statChip} onPress={() => router.push({ pathname: "/(tabs)/favorites", params: { from: "profile" } })}>
-            <Text style={styles.statLabel}>Favoritos</Text>
-            <Text style={styles.statValue}>{favorites.length}</Text>
-          </TouchableOpacity>
-          <View style={[styles.statChip, styles.statChipDisabled]}>
-            <Text style={[styles.statLabel, styles.statLabelDisabled]}>Mis cuponeras</Text>
-            <Text style={[styles.statValue, styles.statValueDisabled]}>—</Text>
-            <View style={styles.proximamenteBadge}>
-              <Text style={styles.proximamenteText}>Próximamente</Text>
-            </View>
+        {/* Mi actividad */}
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Mi actividad</Text>
+          <View style={styles.settingsCard}>
+            <SettingRow icon="heart-outline" label="Favoritos" onPress={() => router.push({ pathname: "/(tabs)/favorites", params: { from: "profile" } })} />
           </View>
         </View>
 
@@ -166,21 +156,6 @@ const styles = StyleSheet.create({
   userInfo: { gap: 6 },
   userName: { fontSize: 20, fontWeight: "700", color: Colors.primary },
   userEmail: { fontSize: 14, color: Colors.textLight },
-  statsRow: { flexDirection: "row", gap: 10 },
-  statChip: {
-    flex: 1, backgroundColor: Colors.surfaceWarm,
-    borderRadius: 14, paddingVertical: 14, alignItems: "center", justifyContent: "center", gap: 6,
-  },
-  statChipDisabled: { backgroundColor: "#F0EEEC", opacity: 0.7, position: "relative" },
-  statLabel: { fontSize: 14, color: Colors.primary, textAlign: "center" },
-  statLabelDisabled: { color: Colors.textLight },
-  statValue: { fontSize: 20, fontWeight: "700", color: Colors.primary },
-  statValueDisabled: { color: Colors.textLight },
-  proximamenteBadge: {
-    backgroundColor: Colors.secondary,
-    borderRadius: 6, paddingHorizontal: 6, paddingVertical: 2,
-  },
-  proximamenteText: { fontSize: 9, fontWeight: "700", color: Colors.white, textTransform: "uppercase", letterSpacing: 0.4 },
   section: { gap: 8 },
   sectionTitle: { fontSize: 15, fontWeight: "600", color: Colors.primary },
   settingsCard: { backgroundColor: Colors.white, borderRadius: 16, borderWidth: 1, borderColor: Colors.border, overflow: "hidden" },

@@ -12,7 +12,9 @@
       "bundleIdentifier": "com.xeniamaria.buscafe",
       "buildNumber": "1",
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
+        "ITSAppUsesNonExemptEncryption": false,
+        "NSLocationWhenInUseUsageDescription": "Buscafé usa tu ubicación para mostrarte las cafeterías más cercanas.",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "Buscafé usa tu ubicación para mostrarte las cafeterías más cercanas."
       }
     },
     "android": {
@@ -40,7 +42,13 @@
           }
         }
       ],
-      "expo-status-bar"
+      "expo-status-bar",
+      [
+        "@rnmapbox/maps",
+        {
+          "RNMapboxMapsDownloadToken": "sk.eyJ1IjoieGVuaWFtYXJpYWEiLCJhIjoiY21ydHBwcXptMDV1bzJ5cHYxNXdpaTA0NiJ9.8G8YAaKRB-iV1HQK395jAA"
+        }
+      ]
     ],
     "experiments": {
       "typedRoutes": true,

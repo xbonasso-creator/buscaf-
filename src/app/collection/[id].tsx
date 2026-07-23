@@ -1,7 +1,7 @@
 /**
  * /collection/[id] — pantalla de una colección individual
  */
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Platform, Modal } from "react-native";
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Platform, Modal, TextInput, KeyboardAvoidingView } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router, useLocalSearchParams } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
@@ -10,6 +10,7 @@ import Swipeable from "react-native-gesture-handler/Swipeable";
 import { useCollectionsStore } from "../../store/collectionsStore";
 import { useFavoritesStore } from "../../store/favoritesStore";
 import { useCafesStore } from "../../store/cafesStore";
+import { useToastStore } from "../../store/toastStore";
 import { type Cafe } from "../../data/cafes";
 import CardS from "../../components/ui/CardS";
 import { Colors } from "../../constants/colors";
@@ -40,13 +41,31 @@ function SwipeableCard({ item, onRemove }: { item: Cafe; onRemove: () => void })
 export default function CollectionDetail() {
   const insets = useSafeAreaInsets();
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { getCollection, addCafe, removeCafe } = useCollectionsStore();
+  const { addCafe, removeCafe } = useCollectionsStore();
+  // Selector reactivo — se re-renderiza cuando cambian los cafeIds
+  const collection = useCollectionsStore(state => state.collections.find(c => c.id === id));
   const { favorites } = useFavoritesStore();
   const { getCafe } = useCafesStore();
+  const { show: showToast } = useToastStore();
 
   const [showAddModal, setShowAddModal] = useState(false);
+  const [showRenameModal, setShowRenameModal] = useState(false);
+  const [renameText, setRenameText] = useState("");
+  const { renameCollection } = useCollectionsStore();
 
-  const collection = getCollection(id ?? "");
+  const openRename = () => {
+    setRenameText(collection?.name ?? "");
+    setShowRenameModal(true);
+  };
+
+  const confirmRename = () => {
+    const trimmed = renameText.trim();
+    if (trimmed && trimmed !== collection?.name) {
+      renameCollection(collection!.id, trimmed);
+      showToast("Nombre actualizado");
+    }
+    setShowRenameModal(false);
+  };
 
   const cafesInCollection = useMemo(() =>
     (collection?.cafeIds ?? [])
@@ -80,9 +99,14 @@ export default function CollectionDetail() {
             <Ionicons name="arrow-back" size={20} color={Colors.text} />
           </TouchableOpacity>
           <Text style={s.title} numberOfLines={1}>{collection.name}</Text>
-          <TouchableOpacity style={s.headerBtn} onPress={() => setShowAddModal(true)}>
-            <Ionicons name="add" size={20} color={Colors.text} />
-          </TouchableOpacity>
+          <View style={s.headerRight}>
+            <TouchableOpacity style={s.headerBtn} onPress={openRename}>
+              <Ionicons name="pencil-outline" size={18} color={Colors.text} />
+            </TouchableOpacity>
+            <TouchableOpacity style={s.headerBtn} onPress={() => setShowAddModal(true)}>
+              <Ionicons name="add" size={20} color={Colors.text} />
+            </TouchableOpacity>
+          </View>
         </View>
 
         {/* Lista */}
@@ -106,6 +130,34 @@ export default function CollectionDetail() {
           />
         )}
       </View>
+
+      {/* Modal renombrar colección */}
+      <Modal visible={showRenameModal} transparent animationType="fade">
+        <KeyboardAvoidingView behavior={Platform.OS === "ios" ? "padding" : undefined} style={s.renameOverlay}>
+          <TouchableOpacity style={s.renameBackdrop} activeOpacity={1} onPress={() => setShowRenameModal(false)} />
+          <View style={s.renameCard}>
+            <Text style={s.renameTitle}>Renombrar colección</Text>
+            <TextInput
+              style={s.renameInput}
+              value={renameText}
+              onChangeText={setRenameText}
+              autoFocus
+              selectTextOnFocus
+              maxLength={40}
+              returnKeyType="done"
+              onSubmitEditing={confirmRename}
+            />
+            <View style={s.renameBtns}>
+              <TouchableOpacity style={s.renameCancelBtn} onPress={() => setShowRenameModal(false)}>
+                <Text style={s.renameCancelText}>Cancelar</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={s.renameConfirmBtn} onPress={confirmRename}>
+                <Text style={s.renameConfirmText}>Guardar</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </KeyboardAvoidingView>
+      </Modal>
 
       {/* Modal agregar favoritos */}
       <Modal visible={showAddModal} animationType="slide" presentationStyle="pageSheet">
@@ -138,9 +190,10 @@ export default function CollectionDetail() {
                   onPress={() => {
                     addCafe(collection.id, item.id);
                     setShowAddModal(false);
+                    showToast("Cafetería agregada a la colección");
                   }}
                 >
-                  <View style={{ flex: 1, pointerEvents: "none" }}>
+                  <View pointerEvents="none" style={{ flex: 1 }}>
                     <CardS item={item} showHeart={false} />
                   </View>
                   <Ionicons name="add-circle-outline" size={22} color={Colors.primary} />
@@ -163,7 +216,53 @@ const s = StyleSheet.create({
     paddingHorizontal: 20, paddingBottom: 12,
   },
   headerBtn: { width: 40, height: 40, borderRadius: 20, borderWidth: 1.5, borderColor: Colors.border, alignItems: "center", justifyContent: "center" },
+  headerRight: { flexDirection: "row", gap: 8 },
   title: { flex: 1, fontSize: 18, fontWeight: "700", color: Colors.primary, textAlign: "center", marginHorizontal: 8 },
+
+  // Rename modal
+  renameOverlay: { flex: 1, justifyContent: "center", alignItems: "center" },
+  renameBackdrop: { ...StyleSheet.absoluteFillObject, backgroundColor: "rgba(0,0,0,0.4)" },
+  renameCard: {
+    width: "85%",
+    backgroundColor: Colors.white,
+    borderRadius: 18,
+    padding: 24,
+    gap: 16,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 6 },
+    shadowOpacity: 0.15,
+    shadowRadius: 16,
+    elevation: 10,
+  },
+  renameTitle: { fontSize: 16, fontWeight: "700", color: Colors.primary, textAlign: "center" },
+  renameInput: {
+    borderWidth: 1.5,
+    borderColor: Colors.border,
+    borderRadius: 12,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+    fontSize: 15,
+    color: Colors.text,
+    backgroundColor: Colors.background,
+  },
+  renameBtns: { flexDirection: "row", gap: 10 },
+  renameCancelBtn: {
+    flex: 1,
+    paddingVertical: 12,
+    borderRadius: 12,
+    borderWidth: 1.5,
+    borderColor: Colors.border,
+    alignItems: "center",
+  },
+  renameCancelText: { fontSize: 14, fontWeight: "600", color: Colors.textLight },
+  renameConfirmBtn: {
+    flex: 1,
+    paddingVertical: 12,
+    borderRadius: 12,
+    backgroundColor: Colors.primary,
+    alignItems: "center",
+  },
+  renameConfirmText: { fontSize: 14, fontWeight: "700", color: Colors.white },
 
   list: { paddingHorizontal: 16, gap: 10, paddingBottom: 32 },
 

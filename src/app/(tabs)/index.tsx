@@ -1,5 +1,5 @@
 import { useState, useMemo } from "react";
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, FlatList, ImageBackground, Image, Platform, Modal } from "react-native";
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, FlatList, ImageBackground, Image, Platform } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
@@ -10,7 +10,6 @@ import { type Cafe } from "../../data/cafes";
 import { useCafesStore } from "../../store/cafesStore";
 import { Colors } from "../../constants/colors";
 import Isotipo from "../../components/ui/Isotipo";
-import { ZONAS_MONTEVIDEO } from "../../store/locationStore";
 import CardS from "../../components/ui/CardS";
 import { matchesFiltro, PRECIO_MAP } from "../../utils/filters";
 
@@ -46,24 +45,36 @@ function CardActions({ item }: { item: Pick<Cafe, "id" | "name" | "rating" | "im
   );
 }
 
-// ── Card L — foto full-width, nombre + rating + dirección, acciones siempre top-right ──
+// ── Card L — info arriba, foto abajo ──────────────────────────────────────────
 function CardDestacado({ item }: { item: Cafe }) {
+  const { toggle: toggleFav, isFavorite } = useFavoritesStore();
+  const { show: showToast } = useToastStore();
+  const fav = isFavorite(item.id);
+
+  const handleHeart = (e: any) => {
+    e.stopPropagation?.();
+    const wasFav = isFavorite(item.id);
+    toggleFav(item);
+    if (!wasFav) showToast("Cafetería agregada a favoritos");
+  };
+
   return (
     <TouchableOpacity style={styles.cardDestacado} onPress={() => router.push(`/cafe/${item.id}`)}>
-      {/* Imagen — acciones absolutas, nunca se mueven */}
-      <ImageBackground source={{ uri: item.image }} style={styles.cardImage}>
-        <View style={styles.cardActionsAbs}>
-          <CardActions item={item} />
-        </View>
-      </ImageBackground>
-      {/* Contenido */}
-      <View style={styles.cardInfo}>
+      {/* Info — top */}
+      <View style={styles.cardDestacadoInfo}>
         <View style={styles.cardInfoRow}>
           <Text style={styles.cardName} numberOfLines={1}>{item.name}</Text>
-          <StarRating rating={item.rating} />
+          <View style={styles.cardDestacadoRight}>
+            <StarRating rating={item.rating} />
+            <TouchableOpacity hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }} onPress={handleHeart}>
+              <Ionicons name={fav ? "heart" : "heart-outline"} size={16} color={fav ? Colors.secondary : Colors.primary} />
+            </TouchableOpacity>
+          </View>
         </View>
         <Text style={styles.cardAddress} numberOfLines={1}>{item.direccion}</Text>
       </View>
+      {/* Imagen — bottom */}
+      <ImageBackground source={{ uri: item.image }} style={styles.cardImage} />
     </TouchableOpacity>
   );
 }
@@ -153,12 +164,9 @@ function CardDescuento({ item }: { item: Cafe }) {
 }
 
 
-const SORTED_BARRIOS = [...ZONAS_MONTEVIDEO].sort((a, b) => a.label.localeCompare(b.label, "es"));
-
 export default function Home() {
   const insets = useSafeAreaInsets();
   const [search, setSearch] = useState("");
-  const [barrioPickerOpen, setBarrioPickerOpen] = useState(false);
   const { active, toggle: toggleFilter, count } = useFiltersStore();
   const { cafes: CAFES } = useCafesStore();
   const extraActive = active.filter(f => !FILTROS.includes(f));
@@ -170,7 +178,7 @@ export default function Home() {
   const filterCount = count();
 
   // ── Cafés filtrados (base para carousels y búsqueda) ────────
-  const { price, barrio, setBarrio } = useFiltersStore();
+  const { price, barrio } = useFiltersStore();
   const normZona = (s: string) => s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/[\s-]+/g, "");
 
   const filteredCafes = useMemo(() => {
@@ -192,9 +200,20 @@ export default function Home() {
   const cafesDestacados = useMemo(() =>
     filteredCafes.filter(c => c.destacado).slice(0, 6), [filteredCafes]);
 
-  // "Mejor valorados" — automático rating ≥ 4.5, máx 6
-  const cafesCalificados = useMemo(() =>
-    filteredCafes.filter(c => (c.rating ?? 0) >= 4.5).sort((a, b) => b.rating - a.rating).slice(0, 6), [filteredCafes]);
+  // "Mejor valorados" — automático rating ≥ 4.5, máx 6, sin repetir cadena
+  const cafesCalificados = useMemo(() => {
+    const seen = new Set<string>();
+    return filteredCafes
+      .filter(c => (c.rating ?? 0) >= 4.5)
+      .sort((a, b) => b.rating - a.rating)
+      .filter(c => {
+        const key = c.name.toLowerCase().trim();
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      })
+      .slice(0, 6);
+  }, [filteredCafes]);
 
   // "Para llevar" — manual en Supabase (para_llevar = true), máx 6
   const cafesParaLlevar = useMemo(() =>
@@ -240,43 +259,6 @@ export default function Home() {
         </View>
         <Isotipo size={48} variant="light" />
       </View>
-
-      {/* Barrio dropdown pill — fixed */}
-      <View style={styles.barrioRow}>
-        <TouchableOpacity style={[styles.barrioDropdown, barrio && styles.barrioDropdownActive]} onPress={() => setBarrioPickerOpen(true)}>
-          <Ionicons name="location-outline" size={14} color={barrio ? Colors.white : Colors.primary} />
-          <Text style={[styles.barrioDropdownText, barrio && styles.barrioDropdownTextActive]} numberOfLines={1}>
-            {barrio ? SORTED_BARRIOS.find(z => z.id === barrio)?.label ?? "Barrio" : "Todos los barrios"}
-          </Text>
-          <Ionicons name={barrioPickerOpen ? "chevron-up" : "chevron-down"} size={14} color={barrio ? Colors.white : Colors.primary} />
-        </TouchableOpacity>
-      </View>
-
-      {/* Modal barrio picker */}
-      <Modal visible={barrioPickerOpen} transparent animationType="slide" onRequestClose={() => setBarrioPickerOpen(false)}>
-        <TouchableOpacity style={styles.modalOverlay} activeOpacity={1} onPress={() => setBarrioPickerOpen(false)} />
-        <View style={[styles.barrioSheet, { paddingBottom: insets.bottom + 16 }]}>
-          <View style={styles.sheetHandle} />
-          <Text style={styles.sheetTitle}>Filtrar por barrio</Text>
-          <TouchableOpacity
-            style={[styles.barrioOption, !barrio && styles.barrioOptionActive]}
-            onPress={() => { setBarrio(null); setBarrioPickerOpen(false); }}
-          >
-            <Text style={[styles.barrioOptionText, !barrio && styles.barrioOptionTextActive]}>Todos los barrios</Text>
-            {!barrio && <Ionicons name="checkmark" size={18} color={Colors.primary} />}
-          </TouchableOpacity>
-          {SORTED_BARRIOS.map(z => (
-            <TouchableOpacity
-              key={z.id}
-              style={[styles.barrioOption, barrio === z.id && styles.barrioOptionActive]}
-              onPress={() => { setBarrio(z.id); setBarrioPickerOpen(false); }}
-            >
-              <Text style={[styles.barrioOptionText, barrio === z.id && styles.barrioOptionTextActive]}>{z.label}</Text>
-              {barrio === z.id && <Ionicons name="checkmark" size={18} color={Colors.primary} />}
-            </TouchableOpacity>
-          ))}
-        </View>
-      </Modal>
 
       {/* Filtros fixed */}
       <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.filtrosScroll} contentContainerStyle={styles.filtrosContainer}>
@@ -372,24 +354,9 @@ export default function Home() {
               </View>
             )}
 
-            {/* 3 — Para llevar */}
-            {cafesParaLlevar.length > 0 && (
-              <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Para llevar</Text>
-                <FlatList
-                  horizontal
-                  data={cafesParaLlevar}
-                  keyExtractor={i => i.id}
-                  showsHorizontalScrollIndicator={false}
-                  contentContainerStyle={styles.carousel}
-                  renderItem={({ item }) => <CardCalificado item={item} />}
-                />
-              </View>
-            )}
-
-            {/* 4 — Recién agregados */}
+            {/* 3 — Recién agregados */}
             {cafesRecientes.length > 0 && (
-              <View style={[styles.section, { marginBottom: 24 }]}>
+              <View style={styles.section}>
                 <Text style={styles.sectionTitle}>Recién agregados</Text>
                 <FlatList
                   horizontal
@@ -398,6 +365,21 @@ export default function Home() {
                   showsHorizontalScrollIndicator={false}
                   contentContainerStyle={styles.carousel}
                   renderItem={({ item }) => <CardLogo item={item} />}
+                />
+              </View>
+            )}
+
+            {/* 4 — Para llevar */}
+            {cafesParaLlevar.length > 0 && (
+              <View style={[styles.section, { marginBottom: 24 }]}>
+                <Text style={styles.sectionTitle}>Para llevar</Text>
+                <FlatList
+                  horizontal
+                  data={cafesParaLlevar}
+                  keyExtractor={i => i.id}
+                  showsHorizontalScrollIndicator={false}
+                  contentContainerStyle={styles.carousel}
+                  renderItem={({ item }) => <CardCalificado item={item} />}
                 />
               </View>
             )}
@@ -475,6 +457,8 @@ const styles = StyleSheet.create({
   // ── Card L ──────────────────────────────────────────────────
   cardDestacado: { width: 260, backgroundColor: Colors.white, borderRadius: 16, overflow: "hidden" },
   cardImage: { width: "100%", height: 164 },
+  cardDestacadoInfo: { paddingHorizontal: 12, paddingTop: 12, paddingBottom: 10, gap: 3 },
+  cardDestacadoRight: { flexDirection: "row", alignItems: "center", gap: 6 },
   cardImageTop: { flexDirection: "row", alignItems: "flex-start", padding: 8 },
   cardActionsRow: { flexDirection: "row", gap: 6 },
   // Posicionamiento absoluto — badge izquierda, acciones derecha, nunca se mueven
@@ -497,7 +481,7 @@ const styles = StyleSheet.create({
   cardLogo: {
     width: 112,
     height: 112,
-    borderRadius: 20,
+    borderRadius: 16,
     backgroundColor: Colors.white,
     borderWidth: 1,
     borderColor: Colors.border,
@@ -506,12 +490,14 @@ const styles = StyleSheet.create({
     overflow: "hidden",
   },
   cardLogoImg: {
-    width: "80%",
-    height: "80%",
+    width: "100%",
+    height: "100%",
+    borderRadius: 16,
   },
   cardLogoFallback: {
     width: "100%",
     height: "100%",
+    borderRadius: 16,
     backgroundColor: Colors.surfaceCream,
     alignItems: "center",
     justifyContent: "center",

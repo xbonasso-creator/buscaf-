@@ -15,21 +15,19 @@ import { Colors } from "../constants/colors";
 const OPTION_ICONS: Record<string, React.ComponentProps<typeof Ionicons>["name"]> = {
   "Abierto ahora":        "time-outline",
   "Mejor calificados":    "star-outline",
-  "Terraza":              "sunny-outline",
+  "Mesas afuera":         "sunny-outline",
   "Pet friendly":         "paw-outline",
   "Gluten free":          "medical-outline",
-  "Leche vegetal":        "cafe-outline",
   "Veggie":               "leaf-outline",
   "Brunch":               "restaurant-outline",
   "Almuerzos":            "restaurant-outline",
-  "Take away":            "bag-handle-outline",
+  "Para llevar":          "bag-handle-outline",
   "Pastelería":           "color-palette-outline",
   "Librería":             "book-outline",
   "Eventos":              "calendar-outline",
   "Tienda":               "bag-outline",
   "Buen WiFi":            "wifi-outline",
   "Enchufes":             "flash-outline",
-  "Sillas cómodas":       "easel-outline",
   "Mesas amplias":        "grid-outline",
   "Silencioso":           "volume-mute-outline",
   "Espresso":             "cafe-outline",
@@ -45,11 +43,11 @@ const SORT_OPTIONS = ["Abierto ahora", "Mejor calificados"];
 const FILTER_SECTIONS = [
   {
     title: "Teletrabajo",
-    options: ["Silencioso", "Enchufes", "Sillas cómodas", "Buen WiFi", "Mesas amplias"],
+    options: ["Silencioso", "Enchufes", "Buen WiFi", "Mesas amplias"],
   },
   {
     title: "Servicios",
-    options: ["Pet friendly", "Terraza", "Take away", "Gluten free", "Leche vegetal", "Veggie", "Brunch", "Almuerzos", "Pastelería", "Librería", "Eventos", "Tienda"],
+    options: ["Pet friendly", "Mesas afuera", "Para llevar", "Gluten free", "Veggie", "Brunch", "Almuerzos", "Pastelería", "Librería", "Eventos", "Tienda"],
   },
   {
     title: "Métodos",

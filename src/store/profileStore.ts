@@ -6,6 +6,24 @@ const getAuthUser = () => {
   catch { return null; }
 };
 
+// Extrae el path relativo de una URL pública legacy o devuelve el path tal cual
+function extractPath(urlOrPath: string): string {
+  const marker = "/object/public/avatars/";
+  const idx = urlOrPath.indexOf(marker);
+  if (idx !== -1) {
+    return urlOrPath.slice(idx + marker.length).split("?")[0];
+  }
+  return urlOrPath.split("?")[0];
+}
+
+async function getSignedUrl(path: string): Promise<string | null> {
+  const { data, error } = await supabase.storage
+    .from("avatars")
+    .createSignedUrl(path, 31536000); // 1 año
+  if (error || !data?.signedUrl) return null;
+  return data.signedUrl;
+}
+
 type ProfileStore = {
   avatarUrl: string | null;
   uploading: boolean;
@@ -24,7 +42,13 @@ export const useProfileStore = create<ProfileStore>((set) => ({
       .select("avatar_url")
       .eq("id", userId)
       .single();
-    set({ avatarUrl: data?.avatar_url ?? null });
+
+    const stored = data?.avatar_url;
+    if (!stored) { set({ avatarUrl: null }); return; }
+
+    const path = extractPath(stored);
+    const signedUrl = await getSignedUrl(path);
+    set({ avatarUrl: signedUrl });
   },
 
   uploadAvatar: async (uri) => {
@@ -33,7 +57,6 @@ export const useProfileStore = create<ProfileStore>((set) => ({
 
     set({ uploading: true });
     try {
-      // Convertir URI a blob
       const response = await fetch(uri);
       const blob = await response.blob();
       const ext = uri.split(".").pop()?.split("?")[0] ?? "jpg";
@@ -46,17 +69,15 @@ export const useProfileStore = create<ProfileStore>((set) => ({
 
       if (uploadError) throw uploadError;
 
-      // Obtener URL pública
-      const { data } = supabase.storage.from("avatars").getPublicUrl(path);
-      const publicUrl = `${data.publicUrl}?t=${Date.now()}`; // cache-bust
-
-      // Guardar en profiles (upsert por si no existe la fila)
+      // Guardar el path (no la URL pública) en profiles
       await supabase
         .from("profiles")
-        .upsert({ id: user.id, avatar_url: publicUrl }, { onConflict: "id" });
+        .upsert({ id: user.id, avatar_url: path }, { onConflict: "id" });
 
-      set({ avatarUrl: publicUrl, uploading: false });
-      return null; // null = sin error
+      // Generar signed URL para mostrar en la app
+      const signedUrl = await getSignedUrl(path);
+      set({ avatarUrl: signedUrl, uploading: false });
+      return null;
     } catch (e) {
       console.error("uploadAvatar error:", e);
       return null;
