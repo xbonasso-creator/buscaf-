@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Registrar mi cafetería — Buscafé</title>
+  <meta name="description" content="Sumá tu cafetería a Buscafé para que más personas la descubran." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --primary: #2C1A0E;
+      --heading: #4A2C2A;
+      --accent: #C17A3A;
+      --bg: #FDFAF6;
+      --bg-warm: #F5EFE6;
+      --field-bg: #FBF8F4;
+      --white: #FFFFFF;
+      --text: #4A2C2A;
+      --text-light: #7A6353;
+      --border: #E8DDD3;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    /* NAV */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(253, 250, 246, 0.92);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+    }
+
+    .nav-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 64px;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+
+    .nav-logo img {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+
+    .nav-logo span {
+      font-size: 18px;
+      font-weight: 800;
+      color: var(--primary);
+      letter-spacing: -0.3px;
+    }
+
+    .nav-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--text-light);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-back:hover { color: var(--primary); }
+
+    /* FORM PAGE */
+    .form-page {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 60px 24px 80px;
+    }
+
+    .form-header {
+      margin-bottom: 40px;
+    }
+
+    .form-header h1 {
+      font-size: clamp(32px, 4vw, 48px);
+      font-weight: 900;
+      color: var(--heading);
+      letter-spacing: -1px;
+      line-height: 1.1;
+      margin-bottom: 14px;
+    }
+
+    .form-sub {
+      font-size: 16px;
+      color: var(--text-light);
+      line-height: 1.6;
+    }
+
+    /* Responsive line breaks */
+    .mob-br { display: none; }
+    .desk-br { display: inline; }
+    .mob-hide { display: inline; }
+
+    @media (max-width: 600px) {
+      .mob-br { display: inline; }
+      .desk-br { display: none; }
+      .mob-hide { display: none; }
+    }
+
+    /* FORM */
+    form {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: 0.2px;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    textarea,
+    select {
+      width: 100%;
+      background: var(--field-bg);
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      padding: 14px 16px;
+      font-size: 15px;
+      font-family: inherit;
+      color: var(--text);
+      outline: none;
+      transition: border-color 0.2s;
+      -webkit-appearance: none;
+    }
+
+    input[type="text"]::placeholder,
+    input[type="email"]::placeholder,
+    textarea::placeholder {
+      color: #B8A89A;
+    }
+
+    input:focus,
+    textarea:focus,
+    select:focus {
+      border-color: var(--accent);
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 100px;
+    }
+
+    /* CHECKBOXES */
+    .checks-section {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .checks-label {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .checks-group-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text-light);
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      margin-bottom: 8px;
+    }
+
+    .checks-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .check-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+    }
+
+    .check-chip input[type="checkbox"] {
+      display: none;
+    }
+
+    .chip-label {
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 14px;
+      border-radius: 50px;
+      border: 1.5px solid var(--border);
+      background: var(--field-bg);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text);
+      cursor: pointer;
+      transition: all 0.15s;
+      user-select: none;
+    }
+
+    .check-chip input:checked + .chip-label {
+      background: var(--primary);
+      border-color: var(--primary);
+      color: white;
+    }
+
+    /* DIVIDER */
+    .divider {
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* SUBMIT */
+    .btn-submit {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      background: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      padding: 18px 32px;
+      font-size: 16px;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+      transition: opacity 0.2s, transform 0.15s;
+      box-shadow: 0 4px 20px rgba(44, 26, 14, 0.25);
+    }
+
+    .btn-submit:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    .form-note {
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-light);
+      line-height: 1.5;
+    }
+
+    /* SUCCESS */
+    .success-msg {
+      display: none;
+      text-align: center;
+      padding: 40px 24px;
+      background: var(--bg-warm);
+      border-radius: 20px;
+      border: 1px solid var(--border);
+    }
+
+    .success-msg h2 {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--heading);
+      margin-bottom: 12px;
+    }
+
+    .success-msg p {
+      font-size: 15px;
+      color: var(--text-light);
+    }
+
+    /* FOOTER */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px 24px;
+    }
+
+    .footer-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-copy { font-size: 13px; color: var(--text-light); }
+    .footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
+
+    .footer-links a {
+      font-size: 13px;
+      color: var(--text-light);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--primary); }
+    .footer-studio { font-size: 13px; color: var(--text-light); }
+
+    @media (max-width: 480px) {
+      .form-page { padding: 40px 16px 60px; }
+      .footer-inner { flex-direction: column; align-items: flex-start; gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">
+        <img src="https://framerusercontent.com/images/MTy73UWUcLJSl0QND7bov2kJJKM.png" alt="Buscafé logo" width="36" height="36" />
+        <span>Buscafé</span>
+      </a>
+      <a href="/" class="nav-back">← Volver</a>
+    </div>
+  </nav>
+
+  <div class="form-page">
+    <div class="form-header">
+      <h1>Formá parte de Buscafé</h1>
+      <p class="form-sub">
+        Compartinos la información de tu cafetería<span class="mob-br"><br /></span><span class="mob-hide"> y la revisaremos</span><br class="desk-br" /> para incorporarla a la app.
+      </p>
+    </div>
+
+    <form name="registrar-cafeteria" method="POST" data-netlify="true" id="cafe-form">
+      <input type="hidden" name="form-name" value="registrar-cafeteria" />
+
+      <div class="field-group">
+        <label for="nombre">Nombre de la cafetería *</label>
+        <input type="text" id="nombre" name="nombre" placeholder="Ej: La Sede Café" required />
+      </div>
+
+      <div class="field-group">
+        <label for="contacto">Contacto comercial *</label>
+        <input type="text" id="contacto" name="contacto" placeholder="Nombre y apellido" required />
+      </div>
+
+      <div class="field-group">
+        <label for="email">Email *</label>
+        <input type="email" id="email" name="email" placeholder="hola@micafeteria.com" required />
+      </div>
+
+      <div class="field-group">
+        <label for="barrio">Barrio</label>
+        <input type="text" id="barrio" name="barrio" placeholder="Ej: Pocitos, Palermo…" />
+      </div>
+
+      <div class="field-group">
+        <label for="instagram">Instagram</label>
+        <input type="text" id="instagram" name="instagram" placeholder="@micafeteria" />
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="checks-section">
+        <span class="checks-label">Características</span>
+
+        <div>
+          <p class="checks-group-title">Teletrabajo</p>
+          <div class="checks-grid">
+            <label class="check-chip"><input type="checkbox" name="caracteristicas" value="Silencioso" /><span class="chip-label">Silencioso</span></label>
+            <label class="check-chip"><input type="checkbox" name="caracteristicas" value="Enchufes" /><span class="chip-label">Enchufes</span></label>
+            <label class="check-chip"><input type="checkbox" name="caracteristicas" value="Buen WiFi" /><span class="chip-label">Buen WiFi</span></label>
+            <label class="check-chip"><input type="checkbox" name="caracteristicas" value="Mesas amplias" /><span class="chip-label">Mesas amplias</span></label>
+          </div>
+        </div>
+
+        <div>
+          <p class="checks-group-title">Servicios</p>
+          <div class="checks-grid">
+            <label class="check-chip"><input type="checkbox" name="caracteristicas" value="Pet friendly" /><span class="chip-label">Pet friendly</span></label>
+            <label class="check-chip"><input type="checkbox" name="caracteristicas" value="Mesas afuera" /><span class="chip-label">Mesas afuera</span></label>
+            <label class="check-chip"><input type="checkbox" name="caracteristicas" value="Para llevar" /><span class="chip-label">Para llevar</span></label>
+            <label class="check-chip"><input type="checkbox" name="caracteristicas" value="Gluten free" /><span class="chip-label">Gluten free</span></label>
+            <label class="check-chip"><input type="checkbox" name="caracteristicas" value="Veggie" /><span class="chip-label">Veggie</span></label>
+            <label class="check-chip"><input type="checkbox" name="caracteristicas" value="Brunch" /><span class="chip-label">Brunch</span></label>
+            <label class="check-chip"><input type="checkbox" name="caracteristicas" value="Almuerzos" /><span class="chip-label">Almuerzos</span></label>
+            <label class="check-chip"><input type="checkbox" name="caracteristicas" value="Pastelería" /><span class="chip-label">Pastelería</span></label>
+            <label class="check-chip"><input type="checkbox" name="caracteristicas" value="Librería" /><span class="chip-label">Librería</span></label>
+            <label class="check-chip"><input type="checkbox" name="caracteristicas" value="Eventos" /><span class="chip-label">Eventos</span></label>
+            <label class="check-chip"><input type="checkbox" name="caracteristicas" value="Tienda" /><span class="chip-label">Tienda</span></label>
+          </div>
+        </div>
+
+        <div>
+          <p class="checks-group-title">Métodos de café</p>
+          <div class="checks-grid">
+            <label class="check-chip"><input type="checkbox" name="caracteristicas" value="Espresso" /><span class="chip-label">Espresso</span></label>
+            <label class="check-chip"><input type="checkbox" name="caracteristicas" value="V60" /><span class="chip-label">V60</span></label>
+            <label class="check-chip"><input type="checkbox" name="caracteristicas" value="Chemex" /><span class="chip-label">Chemex</span></label>
+            <label class="check-chip"><input type="checkbox" name="caracteristicas" value="Aeropress" /><span class="chip-label">Aeropress</span></label>
+            <label class="check-chip"><input type="checkbox" name="caracteristicas" value="Cold brew" /><span class="chip-label">Cold brew</span></label>
+            <label class="check-chip"><input type="checkbox" name="caracteristicas" value="Prensa francesa" /><span class="chip-label">Prensa francesa</span></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <button type="submit" class="btn-submit">Enviar registro</button>
+      <p class="form-note">Te contactaremos para confirmar tus datos antes de publicarla.</p>
+
+      <div class="success-msg" id="success">
+        <h2>¡Gracias!</h2>
+        <p>Recibimos tu registro. Te contactaremos pronto para confirmar los datos.</p>
+      </div>
+    </form>
+  </div>
+
+  <footer>
+    <div class="footer-inner">
+      <span class="footer-copy">© 2026 Buscafé. Todos los derechos reservados.</span>
+      <div class="footer-links">
+        <a href="/privacy-policy">Políticas de Privacidad</a>
+        <a href="/terms-of-service">Términos y Condiciones</a>
+      </div>
+      <span class="footer-studio">Diseñado por Studio XB</span>
+    </div>
+  </footer>
+
+  <script>
+    const form = document.getElementById('cafe-form');
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+      await fetch('/', { method: 'POST', body: data });
+      form.style.display = 'none';
+      document.getElementById('success').style.display = 'block';
+    });
+  </script>
+
+</body>
+</html>
