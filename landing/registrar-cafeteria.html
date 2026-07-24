@@ -15,12 +15,14 @@
       --primary: #2C1A0E;
       --heading: #4A2C2A;
       --accent: #C17A3A;
+      --error: #D94040;
       --bg: #FDFAF6;
       --bg-warm: #F5EFE6;
       --field-bg: #FBF8F4;
       --white: #FFFFFF;
-      --text: #4A2C2A;
+      --text: #3A2218;
       --text-light: #7A6353;
+      --text-placeholder: #B8A89A;
       --border: #E8DDD3;
     }
 
@@ -32,7 +34,6 @@
       color: var(--text);
     }
 
-    /* NAV */
     nav {
       position: sticky;
       top: 0;
@@ -60,12 +61,7 @@
       text-decoration: none;
     }
 
-    .nav-logo img {
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
-      object-fit: cover;
-    }
+    .nav-logo img { width: 36px; height: 36px; border-radius: 10px; object-fit: cover; }
 
     .nav-logo span {
       font-size: 18px;
@@ -87,16 +83,13 @@
 
     .nav-back:hover { color: var(--primary); }
 
-    /* FORM PAGE */
     .form-page {
       max-width: 640px;
       margin: 0 auto;
       padding: 60px 24px 80px;
     }
 
-    .form-header {
-      margin-bottom: 40px;
-    }
+    .form-header { margin-bottom: 40px; }
 
     .form-header h1 {
       font-size: clamp(32px, 4vw, 48px);
@@ -107,35 +100,11 @@
       margin-bottom: 14px;
     }
 
-    .form-sub {
-      font-size: 16px;
-      color: var(--text-light);
-      line-height: 1.6;
-    }
+    .form-sub { font-size: 16px; color: var(--text-light); line-height: 1.6; }
 
-    /* Responsive line breaks */
-    .mob-br { display: none; }
-    .desk-br { display: inline; }
-    .mob-hide { display: inline; }
+    form { display: flex; flex-direction: column; gap: 20px; }
 
-    @media (max-width: 600px) {
-      .mob-br { display: inline; }
-      .desk-br { display: none; }
-      .mob-hide { display: none; }
-    }
-
-    /* FORM */
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    .field-group {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
+    .field-group { display: flex; flex-direction: column; gap: 6px; }
 
     label {
       font-size: 13px;
@@ -146,8 +115,7 @@
 
     input[type="text"],
     input[type="email"],
-    textarea,
-    select {
+    textarea {
       width: 100%;
       background: var(--field-bg);
       border: 1.5px solid var(--border);
@@ -161,35 +129,25 @@
       -webkit-appearance: none;
     }
 
-    input[type="text"]::placeholder,
-    input[type="email"]::placeholder,
-    textarea::placeholder {
-      color: #B8A89A;
+    input::placeholder, textarea::placeholder { color: var(--text-placeholder); }
+    input:focus, textarea:focus { border-color: var(--accent); }
+
+    .was-validated input:invalid,
+    .was-validated textarea:invalid {
+      border-color: var(--error);
+      background: #FFF5F5;
     }
 
-    input:focus,
-    textarea:focus,
-    select:focus {
-      border-color: var(--accent);
-    }
+    .field-error { display: none; font-size: 12px; color: var(--error); font-weight: 500; }
 
-    textarea {
-      resize: vertical;
-      min-height: 100px;
-    }
+    .was-validated input:invalid ~ .field-error,
+    .was-validated textarea:invalid ~ .field-error { display: block; }
 
-    /* CHECKBOXES */
-    .checks-section {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
+    textarea { resize: vertical; min-height: 110px; }
 
-    .checks-label {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text);
-    }
+    .checks-section { display: flex; flex-direction: column; gap: 16px; }
+
+    .checks-label { font-size: 13px; font-weight: 600; color: var(--text); }
 
     .checks-group-title {
       font-size: 12px;
@@ -200,22 +158,9 @@
       margin-bottom: 8px;
     }
 
-    .checks-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
+    .checks-grid { display: flex; flex-wrap: wrap; gap: 8px; }
 
-    .check-chip {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      cursor: pointer;
-    }
-
-    .check-chip input[type="checkbox"] {
-      display: none;
-    }
+    .check-chip input[type="checkbox"] { display: none; }
 
     .chip-label {
       display: inline-flex;
@@ -238,13 +183,8 @@
       color: white;
     }
 
-    /* DIVIDER */
-    .divider {
-      height: 1px;
-      background: var(--border);
-    }
+    .divider { height: 1px; background: var(--border); }
 
-    /* SUBMIT */
     .btn-submit {
       display: flex;
       align-items: center;
@@ -264,41 +204,39 @@
     }
 
     .btn-submit:hover { opacity: 0.88; transform: translateY(-1px); }
+    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
-    .form-note {
-      text-align: center;
-      font-size: 13px;
-      color: var(--text-light);
-      line-height: 1.5;
-    }
+    .form-note { text-align: center; font-size: 13px; color: var(--text-light); line-height: 1.5; }
 
-    /* SUCCESS */
-    .success-msg {
+    .success-toast {
       display: none;
-      text-align: center;
-      padding: 40px 24px;
-      background: var(--bg-warm);
-      border-radius: 20px;
-      border: 1px solid var(--border);
+      align-items: flex-start;
+      gap: 14px;
+      background: #F0FBF4;
+      border: 1.5px solid #7BC89A;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 8px;
     }
 
-    .success-msg h2 {
-      font-size: 24px;
-      font-weight: 800;
-      color: var(--heading);
-      margin-bottom: 12px;
+    .success-toast.show { display: flex; }
+
+    .toast-icon {
+      width: 36px;
+      height: 36px;
+      background: #D4F4E1;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 18px;
     }
 
-    .success-msg p {
-      font-size: 15px;
-      color: var(--text-light);
-    }
+    .toast-title { font-size: 15px; font-weight: 700; color: #1A5C35; margin-bottom: 4px; }
+    .toast-body { font-size: 14px; color: #2D7A52; line-height: 1.5; }
 
-    /* FOOTER */
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 32px 24px;
-    }
+    footer { border-top: 1px solid var(--border); padding: 32px 24px; }
 
     .footer-inner {
       max-width: 1100px;
@@ -342,29 +280,39 @@
   </nav>
 
   <div class="form-page">
+
     <div class="form-header">
       <h1>Formá parte de Buscafé</h1>
-      <p class="form-sub">
-        Compartinos la información de tu cafetería<span class="mob-br"><br /></span><span class="mob-hide"> y la revisaremos</span><br class="desk-br" /> para incorporarla a la app.
-      </p>
+      <p class="form-sub">Compartinos la información de tu cafetería<br />para incorporarla a la app.</p>
     </div>
 
-    <form name="registrar-cafeteria" method="POST" data-netlify="true" id="cafe-form">
+    <div class="success-toast" id="success-toast">
+      <div class="toast-icon">✓</div>
+      <div class="toast-content">
+        <p class="toast-title">Formulario enviado con éxito</p>
+        <p class="toast-body">Te contactaremos para confirmar tus datos antes de publicarlos.</p>
+      </div>
+    </div>
+
+    <form name="registrar-cafeteria" method="POST" data-netlify="true" id="cafe-form" novalidate>
       <input type="hidden" name="form-name" value="registrar-cafeteria" />
 
       <div class="field-group">
         <label for="nombre">Nombre de la cafetería *</label>
         <input type="text" id="nombre" name="nombre" placeholder="Ej: La Sede Café" required />
+        <span class="field-error">Este campo es obligatorio.</span>
       </div>
 
       <div class="field-group">
         <label for="contacto">Contacto comercial *</label>
         <input type="text" id="contacto" name="contacto" placeholder="Nombre y apellido" required />
+        <span class="field-error">Este campo es obligatorio.</span>
       </div>
 
       <div class="field-group">
         <label for="email">Email *</label>
         <input type="email" id="email" name="email" placeholder="hola@micafeteria.com" required />
+        <span class="field-error">Ingresá un email válido.</span>
       </div>
 
       <div class="field-group">
@@ -424,14 +372,15 @@
 
       <div class="divider"></div>
 
-      <button type="submit" class="btn-submit">Enviar registro</button>
-      <p class="form-note">Te contactaremos para confirmar tus datos antes de publicarla.</p>
-
-      <div class="success-msg" id="success">
-        <h2>¡Gracias!</h2>
-        <p>Recibimos tu registro. Te contactaremos pronto para confirmar los datos.</p>
+      <div class="field-group">
+        <label for="comentarios">Otros comentarios</label>
+        <textarea id="comentarios" name="comentarios" placeholder="Contanos algo más sobre tu cafetería…"></textarea>
       </div>
+
+      <button type="submit" class="btn-submit" id="submit-btn">Enviar registro</button>
+      <p class="form-note">Revisaremos tu información antes de publicarla en la app.</p>
     </form>
+
   </div>
 
   <footer>
@@ -447,12 +396,35 @@
 
   <script>
     const form = document.getElementById('cafe-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const successToast = document.getElementById('success-toast');
+
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const data = new FormData(form);
-      await fetch('/', { method: 'POST', body: data });
-      form.style.display = 'none';
-      document.getElementById('success').style.display = 'block';
+      form.classList.add('was-validated');
+      if (!form.checkValidity()) {
+        const firstInvalid = form.querySelector(':invalid');
+        if (firstInvalid) firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Enviando…';
+
+      try {
+        const data = new FormData(form);
+        await fetch('/', { method: 'POST', body: data });
+        successToast.classList.add('show');
+        successToast.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        form.reset();
+        form.classList.remove('was-validated');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Enviar registro';
+      } catch {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Enviar registro';
+        alert('Hubo un error al enviar. Por favor intentá de nuevo.');
+      }
     });
   </script>
 
