@@ -266,7 +266,14 @@
       gap: 80px;
     }
 
-    .about-text { display: flex; flex-direction: column; gap: 24px; }
+    .about-text { display: flex; flex-direction: column; gap: 24px; align-items: flex-start; }
+
+    .about-isotipo {
+      width: 88px;
+      height: auto;
+      display: block;
+      margin-bottom: 4px;
+    }
 
     .about-text p {
       font-size: clamp(20px, 2.4vw, 28px);
@@ -408,13 +415,16 @@
         text-align: center;
       }
 
+      .about-text { align-items: center; }
+      .about-isotipo { margin: 0 auto 4px; }
+
       .phone-wrap.about-phone { order: 1; }
       .phone-frame.about-frame { max-width: 220px; }
 
       .download h2 { font-size: clamp(32px, 8vw, 48px); }
       .download .btn-primary { max-width: 100%; }
       .dl-line + .dl-line { margin-top: 14px; }
-      .mob-break { display: inline; }
+      .mob-break { display: inline !important; }
 
       .footer-inner {
         flex-direction: column;
@@ -498,6 +508,7 @@
         </div>
       </div>
       <div class="about-text">
+        <img src="https://xoddmbesiurqcxftjpqh.supabase.co/storage/v1/object/public/landing/isotipo.png" alt="Buscafé" class="about-isotipo" />
         <p>Buscafé nació para que no pierdas tiempo buscando dónde tomar un buen café.</p>
       </div>
     </div>
