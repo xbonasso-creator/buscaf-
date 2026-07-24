@@ -25,6 +25,7 @@
       --text: #2C1A0E;
       --text-light: #7A6353;
       --border: #E8DDD3;
+      --heading: #4A2C2A;
     }
 
     html { scroll-behavior: smooth; }
@@ -130,7 +131,7 @@
       font-weight: 900;
       line-height: 1.05;
       letter-spacing: -1.5px;
-      color: var(--primary);
+      color: var(--heading);
     }
 
     .hero-sub {
@@ -230,7 +231,7 @@
       font-weight: 900;
       line-height: 1.05;
       letter-spacing: -1.5px;
-      color: var(--primary);
+      color: var(--heading);
     }
 
     .download .btn-primary {
@@ -316,15 +317,14 @@
       .hero {
         grid-template-columns: 1fr;
         padding: 48px 20px 40px;
-        gap: 40px;
+        gap: 32px;
         text-align: center;
       }
       .hero-text { align-items: center; }
       .hero-sub { text-align: center; }
       .hero-actions { align-items: stretch; }
       .btn-primary { width: 100%; }
-      .phone-wrap { order: -1; }
-      .phone-frame { max-width: 220px; }
+      .phone-frame { max-width: 260px; }
       .about-inner { grid-template-columns: 1fr; gap: 40px; text-align: center; }
       .phone-wrap.about-phone { order: -1; }
       .phone-frame.about-frame { max-width: 220px; }
@@ -408,7 +408,7 @@
     <div class="cafe-register-inner">
       <h3>¿Tenés una cafetería?</h3>
       <p>Sumá tu espacio a Buscafé y llegá a miles de personas que buscan el lugar ideal.</p>
-      <a href="https://buscafe.framer.website/registrar-cafeteria" class="btn-outline" target="_blank">
+      <a href="/registrar-cafeteria" class="btn-outline">
         Registrar mi cafetería
       </a>
     </div>
