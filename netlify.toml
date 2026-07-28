@@ -2,7 +2,6 @@
   command = ""
   publish = "landing"
 
-# SPA routing — todas las rutas apuntan a index.html
 [[redirects]]
   from   = "/*"
   to     = "/index.html"

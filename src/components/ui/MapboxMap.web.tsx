@@ -2,9 +2,8 @@ import { useEffect, useRef } from "react";
 import { router } from "expo-router";
 import type { Cafe } from "../../data/cafes";
 
-const MAPBOX_TOKEN =
-  process.env.EXPO_PUBLIC_MAPBOX_TOKEN ??
-  "pk.eyJ1IjoieGVuaWFtYXJpYWEiLCJhIjoiY21yMHBrcTFxMGZvODJxcHJsY2FjNGVkbCJ9.gH7btC2-yCF6QVVbtmzEvw";
+// Token público (pk.) desde variable de entorno — ver .env.example
+const MAPBOX_TOKEN = process.env.EXPO_PUBLIC_MAPBOX_TOKEN ?? "";
 
 type Props = { cafes: Cafe[]; height?: number };
 
@@ -23,6 +22,9 @@ export default function MapboxMap({ cafes, height = 500 }: Props) {
     };
 
     async function initMap() {
+      if (!MAPBOX_TOKEN && __DEV__) {
+        console.warn("[Mapbox] Falta EXPO_PUBLIC_MAPBOX_TOKEN — el mapa no va a cargar tiles.");
+      }
       const mapboxgl = (await import("mapbox-gl")).default;
       if (cancelled || !containerRef.current) return;
 

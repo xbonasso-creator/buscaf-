@@ -15,8 +15,11 @@ import { cafeMatchesAllFilters } from "../../utils/filters";
 import MapboxGL from "@rnmapbox/maps";
 
 // ── Configuración Mapbox ──────────────────────────────────────────────────────
-// Reemplazá con tu Default public token (pk.) de console.mapbox.com
-const MAPBOX_TOKEN = "pk.eyJ1IjoieGVuaWFtYXJpYWEiLCJhIjoiY21yMHBrcTFxMGZvODJxcHJsY2FjNGVkbCJ9.gH7btC2-yCF6QVVbtmzEvw";
+// Token público (pk.) desde variable de entorno — ver .env.example
+const MAPBOX_TOKEN = process.env.EXPO_PUBLIC_MAPBOX_TOKEN ?? "";
+if (!MAPBOX_TOKEN && __DEV__) {
+  console.warn("[Mapbox] Falta EXPO_PUBLIC_MAPBOX_TOKEN — el mapa no va a cargar tiles.");
+}
 MapboxGL.setAccessToken(MAPBOX_TOKEN);
 
 const MVD_CENTER: [number, number] = [-56.1645, -34.9011]; // [lng, lat] centro de Montevideo

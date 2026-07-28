@@ -59,6 +59,9 @@ export type Cafe = {
   // ── Branding ──
   logo?: string;        // URL del logo circular de la cafetería
 
+  // ── Sucursales ──
+  cadena_id?: string;   // ID de grupo — cafés con el mismo cadena_id son sucursales
+
   // ── Curaduría manual (editable desde Supabase dashboard) ──
   destacado?: boolean;   // aparece en "Destacados de la semana"
   es_nuevo?: boolean;    // aparece en "Recién agregados"
@@ -395,6 +398,7 @@ function dbRowToCafe(row: any): Cafe {
     destacado:     row.destacado ?? false,
     es_nuevo:      row.es_nuevo ?? false,
     para_llevar:   row.para_llevar ?? false,
+    cadena_id:     row.cadena_id ?? undefined,
   };
 }
 
@@ -416,6 +420,20 @@ export async function getCafe(id: string): Promise<Cafe | null> {
     if (!error && data) return dbRowToCafe(data);
   } catch {}
   return CAFES_DB.find(c => c.id === id) ?? null; // fallback local
+}
+
+/** Devuelve las sucursales de la misma cadena, excluyendo la actual */
+export async function getSucursalesByCadena(cadenaId: string, currentId: string): Promise<Cafe[]> {
+  try {
+    const { supabase } = await import("../lib/supabase");
+    const { data, error } = await supabase
+      .from("cafes")
+      .select("*")
+      .eq("cadena_id", cadenaId)
+      .neq("id", currentId);
+    if (!error && data) return data.map(dbRowToCafe);
+  } catch {}
+  return [];
 }
 
 /** Versión síncrona para uso en render (MVP only — remover con backend real) */

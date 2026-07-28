@@ -34,7 +34,6 @@
       color: var(--text);
     }
 
-    /* NAV */
     nav {
       position: sticky;
       top: 0;
@@ -62,12 +61,7 @@
       text-decoration: none;
     }
 
-    .nav-logo img {
-      width: 36px;
-      height: 36px;
-      border-radius: 10px;
-      object-fit: cover;
-    }
+    .nav-logo img { width: 36px; height: 36px; border-radius: 10px; object-fit: cover; }
 
     .nav-logo span {
       font-size: 18px;
@@ -89,7 +83,6 @@
 
     .nav-back:hover { color: var(--primary); }
 
-    /* FORM PAGE */
     .form-page {
       max-width: 640px;
       margin: 0 auto;
@@ -107,24 +100,11 @@
       margin-bottom: 14px;
     }
 
-    .form-sub {
-      font-size: 16px;
-      color: var(--text-light);
-      line-height: 1.6;
-    }
+    .form-sub { font-size: 16px; color: var(--text-light); line-height: 1.6; }
 
-    /* FORM */
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
+    form { display: flex; flex-direction: column; gap: 20px; }
 
-    .field-group {
-      display: flex;
-      flex-direction: column;
-      gap: 6px;
-    }
+    .field-group { display: flex; flex-direction: column; gap: 6px; }
 
     label {
       font-size: 13px;
@@ -149,45 +129,25 @@
       -webkit-appearance: none;
     }
 
-    input::placeholder,
-    textarea::placeholder {
-      color: var(--text-placeholder);
-    }
+    input::placeholder, textarea::placeholder { color: var(--text-placeholder); }
+    input:focus, textarea:focus { border-color: var(--accent); }
 
-    input:focus,
-    textarea:focus {
-      border-color: var(--accent);
-    }
-
-    /* Validation */
     .was-validated input:invalid,
     .was-validated textarea:invalid {
       border-color: var(--error);
       background: #FFF5F5;
     }
 
-    .field-error {
-      display: none;
-      font-size: 12px;
-      color: var(--error);
-      font-weight: 500;
-    }
+    .field-error { display: none; font-size: 12px; color: var(--error); font-weight: 500; }
 
     .was-validated input:invalid ~ .field-error,
-    .was-validated textarea:invalid ~ .field-error {
-      display: block;
-    }
+    .was-validated textarea:invalid ~ .field-error { display: block; }
 
     textarea { resize: vertical; min-height: 110px; }
 
-    /* CHECKBOXES */
     .checks-section { display: flex; flex-direction: column; gap: 16px; }
 
-    .checks-label {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text);
-    }
+    .checks-label { font-size: 13px; font-weight: 600; color: var(--text); }
 
     .checks-group-title {
       font-size: 12px;
@@ -223,10 +183,8 @@
       color: white;
     }
 
-    /* DIVIDER */
     .divider { height: 1px; background: var(--border); }
 
-    /* SUBMIT */
     .btn-submit {
       display: flex;
       align-items: center;
@@ -248,14 +206,8 @@
     .btn-submit:hover { opacity: 0.88; transform: translateY(-1px); }
     .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
 
-    .form-note {
-      text-align: center;
-      font-size: 13px;
-      color: var(--text-light);
-      line-height: 1.5;
-    }
+    .form-note { text-align: center; font-size: 13px; color: var(--text-light); line-height: 1.5; }
 
-    /* SUCCESS NOTIFICATION */
     .success-toast {
       display: none;
       align-items: flex-start;
@@ -263,7 +215,7 @@
       background: #F0FBF4;
       border: 1.5px solid #7BC89A;
       border-radius: 16px;
-      padding: 20px 20px;
+      padding: 20px;
       margin-bottom: 8px;
     }
 
@@ -281,24 +233,10 @@
       font-size: 18px;
     }
 
-    .toast-content {}
-    .toast-title {
-      font-size: 15px;
-      font-weight: 700;
-      color: #1A5C35;
-      margin-bottom: 4px;
-    }
-    .toast-body {
-      font-size: 14px;
-      color: #2D7A52;
-      line-height: 1.5;
-    }
+    .toast-title { font-size: 15px; font-weight: 700; color: #1A5C35; margin-bottom: 4px; }
+    .toast-body { font-size: 14px; color: #2D7A52; line-height: 1.5; }
 
-    /* FOOTER */
-    footer {
-      border-top: 1px solid var(--border);
-      padding: 32px 24px;
-    }
+    footer { border-top: 1px solid var(--border); padding: 32px 24px; }
 
     .footer-inner {
       max-width: 1100px;
@@ -345,13 +283,9 @@
 
     <div class="form-header">
       <h1>Formá parte de Buscafé</h1>
-      <p class="form-sub">
-        Compartinos la información de tu cafetería<br />
-        para incorporarla a la app.
-      </p>
+      <p class="form-sub">Compartinos la información de tu cafetería para incorporarla a la app.</p>
     </div>
 
-    <!-- Toast de éxito -->
     <div class="success-toast" id="success-toast">
       <div class="toast-icon">✓</div>
       <div class="toast-content">
@@ -467,7 +401,6 @@
 
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
-
       form.classList.add('was-validated');
       if (!form.checkValidity()) {
         const firstInvalid = form.querySelector(':invalid');
@@ -481,12 +414,8 @@
       try {
         const data = new FormData(form);
         await fetch('/', { method: 'POST', body: data });
-
-        // Mostrar toast de éxito
         successToast.classList.add('show');
         successToast.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-
-        // Limpiar formulario
         form.reset();
         form.classList.remove('was-validated');
         submitBtn.disabled = false;

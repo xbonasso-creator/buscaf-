@@ -6,13 +6,13 @@
  *  │        Francisco Ros 2738, Punta Carretas        │
  *  └─────────────────────────────────────────────────┘
  */
-import { View, Text, StyleSheet, TouchableOpacity, Image } from "react-native";
-import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
-import { useFavoritesStore } from "../../store/favoritesStore";
-import { useToastStore } from "../../store/toastStore";
+import { router } from "expo-router";
+import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Colors } from "../../constants/colors";
 import { type Cafe } from "../../data/cafes";
+import { useFavoritesStore } from "../../store/favoritesStore";
+import { useToastStore } from "../../store/toastStore";
 
 type Props = {
   item: Cafe;
@@ -22,13 +22,13 @@ type Props = {
 };
 
 export default function CardS({ item, showHeart = true, onCollectionPress }: Props) {
-  const { toggle: toggleFav, isFavorite } = useFavoritesStore();
+  const toggleFav = useFavoritesStore(state => state.toggle);
   const { show: showToast } = useToastStore();
-  const fav = isFavorite(item.id);
+  const fav = useFavoritesStore(state => !!state.favorites.find(f => f.id === item.id));
 
   const handleHeart = (e: any) => {
     e.stopPropagation?.();
-    const wasFav = isFavorite(item.id);
+    const wasFav = fav;
     toggleFav(item);
     if (!wasFav) showToast("Cafetería agregada a favoritos");
   };

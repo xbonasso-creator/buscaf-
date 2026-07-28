@@ -9,6 +9,11 @@ import { useEffect, useRef } from "react";
 import { View, Text, StyleSheet, Animated, Image, Platform } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { supabase } from "../lib/supabase";
+import { useAuthStore } from "../store/authStore";
+
+const ONBOARDING_KEY = "buscafe:onboardingDone";
 
 const P = "#4A2C2A"; // primary
 const S = "#C8A882"; // secondary
@@ -108,14 +113,34 @@ export default function SplashScreen() {
     });
 
     // ── 5. Fade out y navegar a los 4s ───────────────────────────
-    timers.push(setTimeout(() => {
+    timers.push(setTimeout(async () => {
       if (!mounted) return;
-      const hasSeenOnboarding =
-        typeof localStorage !== "undefined"
-          ? localStorage.getItem("buscafe:onboardingDone") === "true"
-          : false;
+
+      // Verificar sesión activa de Supabase
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        // Hidratar el store con la sesión persistida
+        useAuthStore.setState({ session, user: session.user, initialized: true });
+        // Cargar datos del usuario en background
+        useAuthStore.getState().initialize();
+      }
+
+      // Verificar si ya vio el onboarding (AsyncStorage en nativo, localStorage en web)
+      let hasSeenOnboarding = false;
+      if (Platform.OS === "web" && typeof localStorage !== "undefined") {
+        hasSeenOnboarding = localStorage.getItem(ONBOARDING_KEY) === "true";
+      } else {
+        hasSeenOnboarding = (await AsyncStorage.getItem(ONBOARDING_KEY)) === "true";
+      }
+
       Animated.timing(screenO, { toValue: 0, duration: 420, useNativeDriver: true }).start(() => {
-        router.replace(hasSeenOnboarding ? "/(auth)/login" : "/onboarding");
+        if (session) {
+          router.replace("/(tabs)");
+        } else if (hasSeenOnboarding) {
+          router.replace("/(auth)/login");
+        } else {
+          router.replace("/onboarding");
+        }
       });
     }, 4000));
 

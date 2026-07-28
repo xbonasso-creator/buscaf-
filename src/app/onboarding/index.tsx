@@ -19,11 +19,15 @@ import {
   Easing,
   TouchableOpacity,
   Dimensions,
+  Platform,
 } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Colors } from "../../constants/colors";
+
+const ONBOARDING_KEY = "buscafe:onboardingDone";
 
 const P  = Colors.primary;
 const S  = Colors.secondary;
@@ -290,13 +294,16 @@ export default function Onboarding() {
     ]).start();
   }, []);
 
-  const markDone = () => {
-    if (typeof localStorage !== "undefined")
-      localStorage.setItem("buscafe:onboardingDone", "true");
+  const markDone = async () => {
+    if (Platform.OS === "web" && typeof localStorage !== "undefined") {
+      localStorage.setItem(ONBOARDING_KEY, "true");
+    } else {
+      await AsyncStorage.setItem(ONBOARDING_KEY, "true");
+    }
   };
 
   const goTo = (next: number) => {
-    if (next > 2) { markDone(); router.replace("/(auth)/login"); return; }
+    if (next > 2) { markDone(); router.replace("/(auth)/register"); return; }
 
     Animated.spring(dotAnim,   { toValue: next, friction: 7,  tension: 45, useNativeDriver: false }).start();
     Animated.timing(sceneAnim, { toValue: next, duration: 500, easing: EIO, useNativeDriver: false }).start();
@@ -378,7 +385,7 @@ export default function Onboarding() {
             </TouchableOpacity>
           ) : <View style={s.navBtn} />}
           {step < 2 ? (
-            <TouchableOpacity onPress={() => { markDone(); router.replace("/(auth)/login"); }} style={s.navBtn}>
+            <TouchableOpacity onPress={() => { markDone(); router.replace("/(auth)/register"); }} style={s.navBtn}>
               <Text style={s.skipText}>Saltar</Text>
             </TouchableOpacity>
           ) : <View style={s.navBtn} />}

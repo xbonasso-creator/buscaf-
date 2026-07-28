@@ -9,6 +9,7 @@ import { useCafesStore } from "../../store/cafesStore";
 import { useResenasStore } from "../../store/resenasStore";
 import { Colors } from "../../constants/colors";
 import { useState } from "react";
+import SucursalesDropdown from "../../components/cafe/SucursalesDropdown";
 
 function Stars({ count }: { count: number }) {
   return (
@@ -280,6 +281,17 @@ export default function CafeDetail() {
                     <Image key={i} source={{ uri }} style={styles.fotoThumb} />
                   ))}
                 </ScrollView>
+              </View>
+            )}
+
+            {/* ── SUCURSALES (opcional) ── */}
+            {!!CAFE.cadena_id && (
+              <View style={styles.section}>
+                <SucursalesDropdown
+                  cadenaId={CAFE.cadena_id}
+                  currentId={CAFE.id}
+                  currentName={CAFE.name}
+                />
               </View>
             )}
 

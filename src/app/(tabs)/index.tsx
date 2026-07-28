@@ -25,16 +25,16 @@ function StarRating({ rating }: { rating: number }) {
 }
 
 function CardActions({ item }: { item: Pick<Cafe, "id" | "name" | "rating" | "image" | "direccion"> }) {
-  const { toggle: toggleFav, isFavorite } = useFavoritesStore();
+  const toggleFav = useFavoritesStore(state => state.toggle);
+  const fav = useFavoritesStore(state => !!state.favorites.find(f => f.id === item.id));
   const { show: showToast } = useToastStore();
-  const fav = isFavorite(item.id);
   return (
     <View style={styles.cardActionsRow}>
       <TouchableOpacity
         style={styles.actionBtn}
         onPress={(e) => {
           e.stopPropagation?.();
-          const wasFav = isFavorite(item.id);
+          const wasFav = fav;
           toggleFav(item);
           if (!wasFav) showToast("Cafetería agregada a favoritos");
         }}
@@ -47,13 +47,13 @@ function CardActions({ item }: { item: Pick<Cafe, "id" | "name" | "rating" | "im
 
 // ── Card L — info arriba, foto abajo ──────────────────────────────────────────
 function CardDestacado({ item }: { item: Cafe }) {
-  const { toggle: toggleFav, isFavorite } = useFavoritesStore();
+  const toggleFav = useFavoritesStore(state => state.toggle);
+  const fav = useFavoritesStore(state => !!state.favorites.find(f => f.id === item.id));
   const { show: showToast } = useToastStore();
-  const fav = isFavorite(item.id);
 
   const handleHeart = (e: any) => {
     e.stopPropagation?.();
-    const wasFav = isFavorite(item.id);
+    const wasFav = fav;
     toggleFav(item);
     if (!wasFav) showToast("Cafetería agregada a favoritos");
   };
@@ -82,14 +82,14 @@ function CardDestacado({ item }: { item: Cafe }) {
 // ── Card M — nombre + stars + heart top-right + imagen ──
 function CardCalificado({ item }: { item: Cafe }) {
   const { active } = useFiltersStore();
-  const { toggle: toggleFav, isFavorite } = useFavoritesStore();
+  const toggleFav = useFavoritesStore(state => state.toggle);
+  const fav = useFavoritesStore(state => !!state.favorites.find(f => f.id === item.id));
   const { show: showToast } = useToastStore();
   const showBadge = active.includes("Abierto ahora");
-  const fav = isFavorite(item.id);
 
   const handleHeart = (e: any) => {
     e.stopPropagation?.();
-    const wasFav = isFavorite(item.id);
+    const wasFav = fav;
     toggleFav(item);
     if (!wasFav) showToast("Cafetería agregada a favoritos");
   };
@@ -341,8 +341,8 @@ export default function Home() {
 
             {/* 2 — Mejor valorados */}
             {cafesCalificados.length > 0 && (
-              <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Mejor valorados</Text>
+              <View style={[styles.section, styles.descuentosSection]}>
+                <Text style={[styles.sectionTitle, styles.sectionTitleLight]}>Mejor valorados</Text>
                 <FlatList
                   horizontal
                   data={cafesCalificados}

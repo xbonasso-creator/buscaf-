@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, TouchableOpacity, Image, Platform, Alert, ActivityIndicator } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Image, Platform, Alert, ActivityIndicator, Linking } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { router } from "expo-router";
 import { Ionicons } from "@expo/vector-icons";
@@ -34,9 +34,17 @@ export default function Profile() {
   const displayEmail = user?.email ?? "";
 
   const handlePickAvatar = async () => {
-    const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    const { status, canAskAgain } = await ImagePicker.requestMediaLibraryPermissionsAsync();
     if (status !== "granted") {
-      Alert.alert("Permiso requerido", "Necesitamos acceso a tus fotos para cambiar el avatar.");
+      if (!canAskAgain) {
+        Alert.alert(
+          "Acceso a fotos bloqueado",
+          "Para cambiar tu foto de perfil, habilitá el acceso en Ajustes → Buscafé → Fotos.",
+          [{ text: "Cancelar", style: "cancel" }, { text: "Ir a Ajustes", onPress: () => Linking.openSettings() }]
+        );
+      } else {
+        Alert.alert("Permiso requerido", "Necesitamos acceso a tus fotos para cambiar tu foto de perfil.");
+      }
       return;
     }
     const result = await ImagePicker.launchImageLibraryAsync({

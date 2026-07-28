@@ -9,7 +9,7 @@
     "userInterfaceStyle": "automatic",
     "ios": {
       "icon": "./assets/expo.icon",
-      "bundleIdentifier": "com.xeniamaria.buscafe",
+      "bundleIdentifier": "com.buscafe.app",
       "buildNumber": "1",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false,
@@ -33,6 +33,13 @@
     "plugins": [
       "expo-router",
       [
+        "expo-image-picker",
+        {
+          "photosPermission": "Buscafé necesita acceso a tus fotos para que puedas cambiar tu foto de perfil."
+        }
+      ],
+      "expo-apple-authentication",
+      [
         "expo-splash-screen",
         {
           "backgroundColor": "#208AEF",
@@ -45,9 +52,7 @@
       "expo-status-bar",
       [
         "@rnmapbox/maps",
-        {
-          "RNMapboxMapsDownloadToken": "sk.eyJ1IjoieGVuaWFtYXJpYWEiLCJhIjoiY21ydHBwcXptMDV1bzJ5cHYxNXdpaTA0NiJ9.8G8YAaKRB-iV1HQK395jAA"
-        }
+        {}
       ]
     ],
     "experiments": {

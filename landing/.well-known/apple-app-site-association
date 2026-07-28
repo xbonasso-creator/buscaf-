@@ -1,0 +1,13 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "59FNQB2N7H.com.buscafe.app",
+        "paths": [
+          "/cafeteria/*"
+        ]
+      }
+    ]
+  }
+}

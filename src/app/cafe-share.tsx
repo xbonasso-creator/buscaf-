@@ -5,13 +5,13 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { Colors } from "../constants/colors";
 import { useState } from "react";
 
-const BASE_URL = "https://buscafe.framer.website";
+const BASE_URL = "https://buscafe.app";
 
 export default function CafeShare() {
   const insets = useSafeAreaInsets();
   const { id, name } = useLocalSearchParams<{ id: string; name?: string }>();
   const cafeName = name ?? "Cafetería";
-  const cafeUrl = BASE_URL;
+  const cafeUrl = id ? `${BASE_URL}/cafe/${id}` : BASE_URL;
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {

@@ -1,9 +1,13 @@
 import { create } from "zustand";
+import { Platform } from "react-native";
+import * as WebBrowser from "expo-web-browser";
 import { supabase, type User, type Session } from "../lib/supabase";
 import { useFavoritesStore } from "./favoritesStore";
 import { useCuponerasStore } from "./cuponerasStore";
 import { useProfileStore } from "./profileStore";
 import { useQuieroIrStore } from "./quieroIrStore";
+
+const REDIRECT_URI = "buscafeclean://auth/callback";
 
 type AuthStore = {
   user: User | null;
@@ -13,7 +17,9 @@ type AuthStore = {
 
   // Actions
   signIn: (email: string, password: string) => Promise<string | null>;
-  signUp: (email: string, password: string, name: string) => Promise<string | null>;
+  signUp: (email: string, password: string, name: string) => Promise<{ error: string | null; autoLogin: boolean }>;
+  signInWithGoogle: () => Promise<string | null>;
+  signInWithApple: () => Promise<string | null>;
   signOut: () => Promise<void>;
   initialize: () => Promise<void>;
   resetPassword: (email: string) => Promise<string | null>;
@@ -81,13 +87,82 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
 
   signUp: async (email, password, name) => {
     set({ loading: true });
-    const { error } = await supabase.auth.signUp({
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: { data: { name } },
     });
+    // Si Supabase devuelve sesión inmediatamente (email confirm desactivado), auto-login
+    if (!error && data.session) {
+      set({ session: data.session, user: data.session.user });
+    }
     set({ loading: false });
-    return error?.message ?? null;
+    return { error: error?.message ?? null, autoLogin: !error && !!data.session };
+  },
+
+  signInWithGoogle: async () => {
+    set({ loading: true });
+    try {
+      const { data, error } = await supabase.auth.signInWithOAuth({
+        provider: "google",
+        options: { redirectTo: REDIRECT_URI, skipBrowserRedirect: true },
+      });
+      if (error || !data?.url) {
+        set({ loading: false });
+        return error?.message ?? "No se pudo iniciar el proceso de autenticación.";
+      }
+      const result = await WebBrowser.openAuthSessionAsync(data.url, REDIRECT_URI);
+      if (result.type === "success" && result.url) {
+        const url = new URL(result.url);
+        const code = url.searchParams.get("code");
+        if (code) {
+          const { data: sessionData, error: exchangeError } = await supabase.auth.exchangeCodeForSession(code);
+          if (!exchangeError && sessionData.session) {
+            set({ session: sessionData.session, user: sessionData.session.user });
+          } else if (exchangeError) {
+            set({ loading: false });
+            return exchangeError.message;
+          }
+        }
+      }
+    } catch (e: any) {
+      set({ loading: false });
+      return e?.message ?? "Error al iniciar sesión con Google.";
+    }
+    set({ loading: false });
+    return null;
+  },
+
+  signInWithApple: async () => {
+    if (Platform.OS !== "ios") return "Sign in with Apple solo está disponible en iOS.";
+    set({ loading: true });
+    try {
+      const AppleAuth = await import("expo-apple-authentication");
+      const credential = await AppleAuth.signInAsync({
+        requestedScopes: [
+          AppleAuth.AppleAuthenticationScope.FULL_NAME,
+          AppleAuth.AppleAuthenticationScope.EMAIL,
+        ],
+      });
+      if (!credential.identityToken) {
+        set({ loading: false });
+        return "No se pudo obtener el token de Apple.";
+      }
+      const { data, error } = await supabase.auth.signInWithIdToken({
+        provider: "apple",
+        token: credential.identityToken,
+      });
+      if (!error && data.session) {
+        set({ session: data.session, user: data.session.user });
+      }
+      set({ loading: false });
+      return error?.message ?? null;
+    } catch (e: any) {
+      set({ loading: false });
+      // El usuario canceló → no es un error real
+      if (e?.code === "ERR_REQUEST_CANCELED") return null;
+      return e?.message ?? "Error al iniciar sesión con Apple.";
+    }
   },
 
   signOut: async () => {
