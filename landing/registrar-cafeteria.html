@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Registrar mi cafetería — Buscafé</title>
-  <meta name="description" content="Sumá tu cafetería a Buscafé para que más personas la descubran." />
+  <title>Registrá tu cafetería — Buscafé</title>
+  <meta name="description" content="Sumá tu cafetería a Buscafé y llegá a más personas." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
@@ -12,421 +12,1140 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --primary: #2C1A0E;
-      --heading: #4A2C2A;
-      --accent: #C17A3A;
-      --error: #D94040;
-      --bg: #FDFAF6;
-      --bg-warm: #F5EFE6;
-      --field-bg: #FBF8F4;
-      --white: #FFFFFF;
-      --text: #3A2218;
-      --text-light: #7A6353;
+      --primary:          #2C1A0E;
+      --heading:          #4A2C2A;
+      --accent:           #C17A3A;
+      --error:            #D94040;
+      --success:          #1A7A46;
+      --bg:               #FDFAF6;
+      --bg-warm:          #F5EFE6;
+      --field-bg:         #FBF8F4;
+      --white:            #FFFFFF;
+      --text:             #3A2218;
+      --text-light:       #7A6353;
       --text-placeholder: #B8A89A;
-      --border: #E8DDD3;
+      --border:           #E8DDD3;
+      --radius:           14px;
+      --radius-sm:        10px;
+      --radius-pill:      50px;
+      --shadow-md:        0 4px 20px rgba(44,26,14,.12);
     }
 
     html { scroll-behavior: smooth; }
-
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       background: var(--bg);
       color: var(--text);
+      min-height: 100vh;
     }
 
+    /* ── NAV ─────────────────────────────────────────── */
     nav {
-      position: sticky;
-      top: 0;
-      z-index: 100;
-      background: rgba(253, 250, 246, 0.92);
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(253,250,246,.92);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border);
       padding: 0 24px;
     }
-
     .nav-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      max-width: 1100px; margin: 0 auto;
+      display: flex; align-items: center; justify-content: space-between;
       height: 64px;
     }
-
     .nav-logo {
-      display: flex;
-      align-items: center;
-      gap: 10px;
+      display: flex; align-items: center; gap: 10px;
       text-decoration: none;
     }
-
     .nav-logo img { width: 36px; height: 36px; border-radius: 10px; object-fit: cover; }
-
-    .nav-logo span {
-      font-size: 18px;
-      font-weight: 800;
-      color: var(--primary);
-      letter-spacing: -0.3px;
-    }
-
+    .nav-logo span { font-size: 18px; font-weight: 800; color: var(--primary); letter-spacing: -.3px; }
     .nav-back {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      color: var(--text-light);
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 500;
-      transition: color 0.2s;
+      display: inline-flex; align-items: center; gap: 6px;
+      color: var(--text-light); text-decoration: none;
+      font-size: 14px; font-weight: 500; transition: color .2s;
     }
-
     .nav-back:hover { color: var(--primary); }
 
-    .form-page {
-      max-width: 640px;
+    /* ── WIZARD PAGE ─────────────────────────────────── */
+    .wizard-page {
+      max-width: 680px;
       margin: 0 auto;
-      padding: 60px 24px 80px;
+      padding: 48px 24px 100px;
     }
 
-    .form-header { margin-bottom: 40px; }
-
-    .form-header h1 {
-      font-size: clamp(32px, 4vw, 48px);
-      font-weight: 900;
-      color: var(--heading);
-      letter-spacing: -1px;
-      line-height: 1.1;
-      margin-bottom: 14px;
+    /* ── PROGRESS ─────────────────────────────────────── */
+    .progress-section { margin-bottom: 44px; }
+    .progress-meta {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 10px;
+    }
+    .progress-label {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: var(--text-light);
+    }
+    .progress-step-name { font-size: 12px; font-weight: 600; color: var(--accent); }
+    .progress-bar-bg {
+      height: 3px; background: var(--border);
+      border-radius: 99px; overflow: hidden;
+    }
+    .progress-bar-fill {
+      height: 100%; background: var(--accent);
+      border-radius: 99px;
+      transition: width .5s cubic-bezier(.4,0,.2,1);
     }
 
-    .form-sub { font-size: 16px; color: var(--text-light); line-height: 1.6; }
-
-    form { display: flex; flex-direction: column; gap: 20px; }
-
-    .field-group { display: flex; flex-direction: column; gap: 6px; }
-
-    label {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text);
-      letter-spacing: 0.2px;
+    /* ── STEP TRANSITIONS ────────────────────────────── */
+    .steps-wrapper { position: relative; }
+    .step { display: none; }
+    .step.active {
+      display: block;
+      animation: stepIn .32s cubic-bezier(.4,0,.2,1) forwards;
     }
+    .step.active.from-back {
+      animation: stepInBack .32s cubic-bezier(.4,0,.2,1) forwards;
+    }
+    @keyframes stepIn {
+      from { opacity: 0; transform: translateX(28px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+    @keyframes stepInBack {
+      from { opacity: 0; transform: translateX(-28px); }
+      to   { opacity: 1; transform: translateX(0); }
+    }
+
+    /* ── STEP HEADER ─────────────────────────────────── */
+    .step-header { margin-bottom: 32px; }
+    .step-header h1 {
+      font-size: clamp(26px, 4vw, 38px);
+      font-weight: 900; color: var(--heading);
+      letter-spacing: -.8px; line-height: 1.15;
+      margin-bottom: 10px;
+    }
+    .step-header p { font-size: 16px; color: var(--text-light); line-height: 1.6; }
+
+    /* ── FORM FIELDS ─────────────────────────────────── */
+    .field-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 18px; }
+    .field-group:last-of-type { margin-bottom: 0; }
+    label { font-size: 13px; font-weight: 600; color: var(--text); letter-spacing: .1px; }
+    .label-opt { font-size: 11px; font-weight: 500; color: var(--text-light); margin-left: 4px; }
 
     input[type="text"],
     input[type="email"],
-    textarea {
-      width: 100%;
-      background: var(--field-bg);
-      border: 1.5px solid var(--border);
-      border-radius: 12px;
-      padding: 14px 16px;
-      font-size: 15px;
-      font-family: inherit;
-      color: var(--text);
-      outline: none;
-      transition: border-color 0.2s;
+    input[type="tel"] {
+      width: 100%; background: var(--field-bg);
+      border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+      padding: 13px 15px; font-size: 15px; font-family: inherit;
+      color: var(--text); outline: none;
+      transition: border-color .2s, box-shadow .2s;
       -webkit-appearance: none;
     }
+    input::placeholder { color: var(--text-placeholder); }
+    input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(193,122,58,.12);
+    }
+    input.invalid { border-color: var(--error); background: #FFF8F8; }
+    .field-error { font-size: 12px; color: var(--error); font-weight: 500; display: none; }
+    .field-error.show { display: block; }
 
-    input::placeholder, textarea::placeholder { color: var(--text-placeholder); }
-    input:focus, textarea:focus { border-color: var(--accent); }
+    /* ── DIVIDER ─────────────────────────────────────── */
+    .divider { height: 1px; background: var(--border); margin: 28px 0; }
 
-    .was-validated input:invalid,
-    .was-validated textarea:invalid {
-      border-color: var(--error);
-      background: #FFF5F5;
+    /* ── LOGO UPLOAD ─────────────────────────────────── */
+    .logo-zone {
+      border: 2px dashed var(--border); border-radius: var(--radius);
+      padding: 28px 20px; text-align: center;
+      cursor: pointer; background: var(--field-bg);
+      transition: border-color .2s, background .2s;
+      position: relative; overflow: hidden;
+    }
+    .logo-zone:hover, .logo-zone.over {
+      border-color: var(--accent);
+      background: rgba(193,122,58,.04);
+    }
+    .logo-zone input[type="file"] {
+      position: absolute; inset: 0; width: 100%; height: 100%;
+      opacity: 0; cursor: pointer;
+    }
+    .logo-zone-content { pointer-events: none; }
+    .logo-zone-icon { font-size: 28px; margin-bottom: 8px; }
+    .logo-zone-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+    .logo-zone-sub { font-size: 12px; color: var(--text-light); }
+    .logo-zone-sub span { color: var(--accent); font-weight: 600; }
+
+    .logo-preview {
+      display: none; flex-direction: column;
+      align-items: center; gap: 10px;
+    }
+    .logo-preview.show { display: flex; }
+    .logo-preview img {
+      width: 72px; height: 72px; border-radius: 14px;
+      object-fit: cover; box-shadow: var(--shadow-md);
+    }
+    .logo-preview-name { font-size: 13px; font-weight: 600; color: var(--text); }
+    .logo-remove {
+      font-size: 12px; color: var(--text-light);
+      background: none; border: 1px solid var(--border);
+      border-radius: 20px; padding: 3px 12px;
+      cursor: pointer; font-family: inherit;
+      transition: all .15s; pointer-events: all;
+    }
+    .logo-remove:hover { color: var(--error); border-color: var(--error); }
+
+    /* ── RADIO TOGGLE (Sí/No) ────────────────────────── */
+    .radio-row { display: flex; gap: 10px; }
+    .radio-opt { flex: 1; }
+    .radio-opt input { display: none; }
+    .radio-opt-label {
+      display: flex; align-items: center; justify-content: center;
+      padding: 11px 16px; border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm); font-size: 14px; font-weight: 600;
+      color: var(--text-light); cursor: pointer;
+      transition: all .15s; background: var(--field-bg);
+    }
+    .radio-opt input:checked + .radio-opt-label {
+      border-color: var(--primary); color: var(--primary);
+      background: rgba(44,26,14,.06);
     }
 
-    .field-error { display: none; font-size: 12px; color: var(--error); font-weight: 500; }
+    /* ── SUCURSALES ──────────────────────────────────── */
+    .sucursales-wrap {
+      display: none; flex-direction: column; gap: 12px;
+      margin-top: 16px; padding-top: 4px;
+    }
+    .sucursales-wrap.show { display: flex; }
+    .sucursal-card {
+      background: var(--bg-warm); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 16px;
+      display: flex; flex-direction: column; gap: 10px;
+      position: relative;
+    }
+    .sucursal-num {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .1em; color: var(--text-light);
+    }
+    .sucursal-remove {
+      position: absolute; top: 12px; right: 12px;
+      width: 26px; height: 26px; border: none;
+      background: rgba(217,64,64,.1); color: var(--error);
+      border-radius: 50%; cursor: pointer; font-size: 14px;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .15s; font-family: inherit;
+    }
+    .sucursal-remove:hover { background: rgba(217,64,64,.2); }
+    .btn-add-sucursal {
+      display: flex; align-items: center; justify-content: center; gap: 7px;
+      background: none; border: 1.5px dashed var(--border);
+      border-radius: var(--radius-sm); padding: 11px 16px;
+      font-size: 14px; font-weight: 600; color: var(--text-light);
+      cursor: pointer; font-family: inherit; transition: all .15s; width: 100%;
+    }
+    .btn-add-sucursal:hover {
+      border-color: var(--accent); color: var(--accent);
+      background: rgba(193,122,58,.04);
+    }
 
-    .was-validated input:invalid ~ .field-error,
-    .was-validated textarea:invalid ~ .field-error { display: block; }
-
-    textarea { resize: vertical; min-height: 110px; }
-
-    .checks-section { display: flex; flex-direction: column; gap: 16px; }
-
-    .checks-label { font-size: 13px; font-weight: 600; color: var(--text); }
-
-    .checks-group-title {
-      font-size: 12px;
-      font-weight: 700;
+    /* ── SERVICE CHIPS ───────────────────────────────── */
+    .services-block { display: flex; flex-direction: column; gap: 22px; }
+    .svc-group { display: flex; flex-direction: column; gap: 10px; }
+    .svc-group-title {
+      font-size: 11px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .1em;
       color: var(--text-light);
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      margin-bottom: 8px;
+    }
+    .chips-row { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip input[type="checkbox"] { display: none; }
+    .chip-lbl {
+      display: inline-flex; align-items: center;
+      padding: 8px 14px; border-radius: var(--radius-pill);
+      border: 1.5px solid var(--border); background: var(--field-bg);
+      font-size: 13px; font-weight: 500; color: var(--text);
+      cursor: pointer; transition: all .15s; user-select: none;
+    }
+    .chip input:checked + .chip-lbl {
+      background: var(--primary); border-color: var(--primary); color: #fff;
     }
 
-    .checks-grid { display: flex; flex-wrap: wrap; gap: 8px; }
-
-    .check-chip input[type="checkbox"] { display: none; }
-
-    .chip-label {
-      display: inline-flex;
-      align-items: center;
-      padding: 8px 14px;
-      border-radius: 50px;
-      border: 1.5px solid var(--border);
-      background: var(--field-bg);
-      font-size: 13px;
-      font-weight: 500;
-      color: var(--text);
-      cursor: pointer;
-      transition: all 0.15s;
-      user-select: none;
+    /* ── PLAN CARDS (Step 2) ─────────────────────────── */
+    .plans-stack { display: flex; flex-direction: column; gap: 12px; }
+    .plan-card {
+      border: 2px solid var(--border); border-radius: var(--radius);
+      padding: 22px 22px 20px; cursor: pointer;
+      background: var(--white); transition: all .2s; position: relative;
     }
-
-    .check-chip input:checked + .chip-label {
-      background: var(--primary);
+    .plan-card:hover { border-color: #c9a07a; box-shadow: 0 2px 12px rgba(44,26,14,.08); }
+    .plan-card.selected {
       border-color: var(--primary);
-      color: white;
+      box-shadow: 0 0 0 4px rgba(44,26,14,.07);
+    }
+    .plan-card input[type="radio"] { display: none; }
+    .plan-popular {
+      position: absolute; top: 18px; right: 18px;
+      font-size: 9px; font-weight: 800; text-transform: uppercase;
+      letter-spacing: .08em; background: var(--accent); color: #fff;
+      padding: 3px 10px; border-radius: 100px;
+    }
+    .plan-tier {
+      font-size: 10px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .12em; color: var(--accent); margin-bottom: 4px;
+    }
+    .plan-title {
+      font-size: 22px; font-weight: 900; color: var(--heading);
+      letter-spacing: -.5px; margin-bottom: 3px;
+    }
+    .plan-price {
+      font-size: 14px; font-weight: 700; color: var(--text-light);
+      margin-bottom: 12px;
+    }
+    .plan-price b { font-size: 17px; color: var(--primary); }
+    .plan-tagline { font-size: 14px; color: var(--text-light); margin-bottom: 14px; line-height: 1.5; }
+    .plan-feats { display: flex; flex-direction: column; gap: 7px; }
+    .plan-feat {
+      font-size: 13px; color: var(--text);
+      display: flex; gap: 9px; align-items: flex-start; line-height: 1.45;
+    }
+    .plan-feat::before {
+      content: "✓"; font-size: 11px; font-weight: 800; color: var(--accent);
+      flex-shrink: 0; margin-top: 2px;
+    }
+    .plan-feat-inc {
+      font-size: 12px; font-weight: 600; color: var(--accent);
+      margin-bottom: 5px; padding-bottom: 8px; border-bottom: 1px solid var(--border);
     }
 
-    .divider { height: 1px; background: var(--border); }
-
-    .btn-submit {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 100%;
-      background: var(--primary);
-      color: white;
-      border: none;
-      border-radius: 50px;
-      padding: 18px 32px;
-      font-size: 16px;
-      font-weight: 700;
-      font-family: inherit;
-      cursor: pointer;
-      transition: opacity 0.2s, transform 0.15s;
-      box-shadow: 0 4px 20px rgba(44, 26, 14, 0.25);
+    /* ── PAYMENT (Step 3) ────────────────────────────── */
+    .pay-summary {
+      background: var(--bg-warm); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 22px; margin-bottom: 22px;
     }
-
-    .btn-submit:hover { opacity: 0.88; transform: translateY(-1px); }
-    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
-
-    .form-note { text-align: center; font-size: 13px; color: var(--text-light); line-height: 1.5; }
-
-    .success-toast {
-      display: none;
-      align-items: flex-start;
-      gap: 14px;
-      background: #F0FBF4;
-      border: 1.5px solid #7BC89A;
-      border-radius: 16px;
-      padding: 20px;
-      margin-bottom: 8px;
+    .pay-summary-label {
+      font-size: 11px; font-weight: 700; text-transform: uppercase;
+      letter-spacing: .1em; color: var(--text-light); margin-bottom: 8px;
     }
-
-    .success-toast.show { display: flex; }
-
-    .toast-icon {
-      width: 36px;
-      height: 36px;
-      background: #D4F4E1;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      font-size: 18px;
+    .pay-plan-name { font-size: 20px; font-weight: 900; color: var(--heading); margin-bottom: 4px; }
+    .pay-price {
+      font-size: 34px; font-weight: 900; color: var(--primary); letter-spacing: -1px;
     }
+    .pay-price-sub { font-size: 13px; color: var(--text-light); margin-top: 2px; }
+    .pay-placeholder {
+      border: 2px dashed var(--border); border-radius: var(--radius);
+      padding: 28px 20px; text-align: center; margin-bottom: 20px;
+    }
+    .pay-placeholder-icon { font-size: 28px; margin-bottom: 10px; }
+    .pay-placeholder-title { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
+    .pay-placeholder-sub {
+      font-size: 13px; color: var(--text-light); line-height: 1.6; max-width: 400px; margin: 0 auto;
+    }
+    .providers {
+      display: flex; align-items: center; justify-content: center;
+      gap: 10px; margin-top: 16px; flex-wrap: wrap;
+    }
+    .provider {
+      font-size: 11px; font-weight: 700; color: var(--text-light);
+      background: var(--bg-warm); border: 1px solid var(--border);
+      border-radius: 8px; padding: 5px 12px;
+    }
+    .pay-note {
+      background: rgba(193,122,58,.07); border: 1px solid rgba(193,122,58,.25);
+      border-radius: var(--radius-sm); padding: 14px 16px;
+      font-size: 13px; color: var(--text); line-height: 1.55;
+    }
+    .pay-note strong { color: var(--accent); }
 
-    .toast-title { font-size: 15px; font-weight: 700; color: #1A5C35; margin-bottom: 4px; }
-    .toast-body { font-size: 14px; color: #2D7A52; line-height: 1.5; }
+    /* ── SUCCESS (Step 4) ────────────────────────────── */
+    .success-wrap { text-align: center; padding: 16px 0 32px; }
+    .success-icon {
+      width: 76px; height: 76px;
+      background: linear-gradient(135deg, #F0FBF4, #C8EDD9);
+      border: 2px solid #9ED6B7; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 34px; margin: 0 auto 24px;
+      animation: pop .5s cubic-bezier(.34,1.56,.64,1) both;
+    }
+    @keyframes pop {
+      from { transform: scale(.6); opacity: 0; }
+      to   { transform: scale(1);  opacity: 1; }
+    }
+    .success-title {
+      font-size: 30px; font-weight: 900; color: var(--heading);
+      letter-spacing: -.8px; line-height: 1.2; margin-bottom: 14px;
+    }
+    .success-body {
+      font-size: 16px; color: var(--text-light); line-height: 1.7;
+      max-width: 500px; margin: 0 auto 28px;
+    }
+    .success-steps {
+      background: var(--bg-warm); border: 1px solid var(--border);
+      border-radius: var(--radius); padding: 6px 0; text-align: left;
+      margin-bottom: 32px;
+    }
+    .success-step {
+      display: flex; gap: 14px; align-items: flex-start;
+      padding: 14px 20px; border-bottom: 1px solid var(--border);
+    }
+    .success-step:last-child { border-bottom: none; }
+    .ss-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+    .ss-text { font-size: 14px; color: var(--text); line-height: 1.5; }
+    .ss-text strong { color: var(--primary); }
+    .btn-home {
+      display: inline-flex; align-items: center; justify-content: center;
+      gap: 8px; padding: 15px 36px;
+      background: var(--primary); color: #fff;
+      border: none; border-radius: var(--radius-pill);
+      font-size: 15px; font-weight: 700; font-family: inherit;
+      text-decoration: none; cursor: pointer;
+      transition: opacity .2s, transform .15s;
+      box-shadow: var(--shadow-md);
+    }
+    .btn-home:hover { opacity: .88; transform: translateY(-1px); }
 
+    /* ── WIZARD NAV BUTTONS ──────────────────────────── */
+    .wizard-nav {
+      margin-top: 40px; display: flex;
+      align-items: center; gap: 12px;
+    }
+    .btn-back-wiz {
+      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+      padding: 14px 20px; background: none;
+      border: 1.5px solid var(--border); border-radius: var(--radius-pill);
+      font-size: 15px; font-weight: 600; color: var(--text-light);
+      cursor: pointer; font-family: inherit; transition: all .2s;
+      white-space: nowrap;
+    }
+    .btn-back-wiz:hover { border-color: var(--primary); color: var(--primary); }
+    .btn-back-wiz:disabled { opacity: .3; cursor: not-allowed; }
+
+    .btn-next-wiz {
+      flex: 1; display: flex; align-items: center;
+      justify-content: center; gap: 8px;
+      padding: 16px 28px; background: var(--primary);
+      border: none; border-radius: var(--radius-pill);
+      font-size: 15px; font-weight: 700; color: #fff;
+      cursor: pointer; font-family: inherit;
+      transition: opacity .2s, transform .15s;
+      box-shadow: var(--shadow-md);
+    }
+    .btn-next-wiz:hover { opacity: .88; transform: translateY(-1px); }
+    .btn-next-wiz:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+    .btn-next-wiz .spinner {
+      display: none; width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,.4);
+      border-top-color: #fff; border-radius: 50%;
+      animation: spin .6s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .btn-next-wiz.loading .spinner { display: block; }
+    .btn-next-wiz.loading .btn-label { opacity: .6; }
+
+    /* ── FOOTER ──────────────────────────────────────── */
     footer { border-top: 1px solid var(--border); padding: 32px 24px; }
-
     .footer-inner {
-      max-width: 1100px;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
-      gap: 16px;
+      max-width: 1100px; margin: 0 auto;
+      display: flex; align-items: center;
+      justify-content: space-between; flex-wrap: wrap; gap: 16px;
     }
-
     .footer-copy { font-size: 13px; color: var(--text-light); }
     .footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
-
-    .footer-links a {
-      font-size: 13px;
-      color: var(--text-light);
-      text-decoration: none;
-      transition: color 0.2s;
-    }
-
+    .footer-links a { font-size: 13px; color: var(--text-light); text-decoration: none; transition: color .2s; }
     .footer-links a:hover { color: var(--primary); }
     .footer-studio { font-size: 13px; color: var(--text-light); }
 
-    @media (max-width: 480px) {
-      .form-page { padding: 40px 16px 60px; }
+    /* ── RESPONSIVE ──────────────────────────────────── */
+    @media (max-width: 520px) {
+      .wizard-page { padding: 32px 16px 80px; }
+      .plan-card { padding: 18px 16px 16px; }
+      .wizard-nav { flex-direction: column-reverse; }
+      .btn-back-wiz, .btn-next-wiz { width: 100%; }
       .footer-inner { flex-direction: column; align-items: flex-start; gap: 12px; }
+      .success-title { font-size: 24px; }
     }
   </style>
 </head>
 <body>
 
-  <nav>
-    <div class="nav-inner">
-      <a href="/" class="nav-logo">
-        <img src="https://framerusercontent.com/images/MTy73UWUcLJSl0QND7bov2kJJKM.png" alt="Buscafé logo" width="36" height="36" />
-        <span>Buscafé</span>
-      </a>
-      <a href="/" class="nav-back">← Volver</a>
+<!-- ── NAV ──────────────────────────────────────────── -->
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <img src="https://framerusercontent.com/images/MTy73UWUcLJSl0QND7bov2kJJKM.png" alt="Buscafé" width="36" height="36" />
+      <span>Buscafé</span>
+    </a>
+    <a href="/" class="nav-back">← Volver</a>
+  </div>
+</nav>
+
+<!-- ── WIZARD ─────────────────────────────────────────── -->
+<div class="wizard-page">
+
+  <!-- Progress -->
+  <div class="progress-section">
+    <div class="progress-meta">
+      <span class="progress-label" id="progress-label">Paso 1 de 3</span>
+      <span class="progress-step-name" id="progress-name">Tu cafetería</span>
     </div>
-  </nav>
-
-  <div class="form-page">
-
-    <div class="form-header">
-      <h1>Formá parte de Buscafé</h1>
-      <p class="form-sub">Compartinos la información de tu cafetería para incorporarla a la app.</p>
+    <div class="progress-bar-bg">
+      <div class="progress-bar-fill" id="progress-fill" style="width:33%"></div>
     </div>
+  </div>
 
-    <div class="success-toast" id="success-toast">
-      <div class="toast-icon">✓</div>
-      <div class="toast-content">
-        <p class="toast-title">Formulario enviado con éxito</p>
-        <p class="toast-body">Te contactaremos para confirmar tus datos antes de publicarlos.</p>
+  <!-- Steps -->
+  <div class="steps-wrapper">
+
+    <!-- ── STEP 1: Datos ─────────────────────────────── -->
+    <div class="step active" id="step-1">
+      <div class="step-header">
+        <h1>Registrá tu cafetería</h1>
+        <p>Completá los datos de tu local para sumarte a Buscafé.</p>
       </div>
-    </div>
 
-    <form name="registrar-cafeteria" method="POST" data-netlify="true" id="cafe-form" novalidate>
-      <input type="hidden" name="form-name" value="registrar-cafeteria" />
+      <!-- Logo -->
+      <div class="field-group">
+        <label>Logo de la cafetería <span class="label-opt">— opcional</span></label>
+        <div class="logo-zone" id="logo-zone">
+          <input type="file" id="logo-input" accept="image/*" />
+          <div class="logo-zone-content" id="logo-zone-content">
+            <div class="logo-zone-icon">☕</div>
+            <div class="logo-zone-title">Arrastrá tu logo aquí</div>
+            <div class="logo-zone-sub">o <span>hacé clic para buscarlo</span> · PNG, JPG, SVG</div>
+          </div>
+          <div class="logo-preview" id="logo-preview">
+            <img id="logo-preview-img" src="" alt="Logo preview" />
+            <div class="logo-preview-name" id="logo-preview-name"></div>
+            <button type="button" class="logo-remove" id="logo-remove">Quitar</button>
+          </div>
+        </div>
+      </div>
 
+      <div class="divider"></div>
+
+      <!-- Nombre -->
       <div class="field-group">
         <label for="nombre">Nombre de la cafetería *</label>
-        <input type="text" id="nombre" name="nombre" placeholder="Ej: La Sede Café" required />
-        <span class="field-error">Este campo es obligatorio.</span>
+        <input type="text" id="nombre" name="nombre" placeholder="Ej: La Sede Café" />
+        <span class="field-error" id="err-nombre">Este campo es obligatorio.</span>
       </div>
 
+      <!-- Dirección -->
       <div class="field-group">
-        <label for="contacto">Contacto comercial *</label>
-        <input type="text" id="contacto" name="contacto" placeholder="Nombre y apellido" required />
-        <span class="field-error">Este campo es obligatorio.</span>
+        <label for="direccion">Dirección principal *</label>
+        <input type="text" id="direccion" name="direccion" placeholder="Ej: Av. Brasil 2786, Pocitos" />
+        <span class="field-error" id="err-direccion">Este campo es obligatorio.</span>
       </div>
 
+      <!-- Sucursales -->
       <div class="field-group">
-        <label for="email">Email *</label>
-        <input type="email" id="email" name="email" placeholder="hola@micafeteria.com" required />
-        <span class="field-error">Ingresá un email válido.</span>
+        <label>¿Tenés sucursales?</label>
+        <div class="radio-row">
+          <label class="radio-opt">
+            <input type="radio" name="tiene-sucursales" id="suc-no" value="no" checked />
+            <span class="radio-opt-label">No</span>
+          </label>
+          <label class="radio-opt">
+            <input type="radio" name="tiene-sucursales" id="suc-si" value="si" />
+            <span class="radio-opt-label">Sí</span>
+          </label>
+        </div>
+
+        <div class="sucursales-wrap" id="sucursales-wrap">
+          <div id="sucursales-list"></div>
+          <button type="button" class="btn-add-sucursal" id="btn-add-sucursal">
+            + Agregar sucursal
+          </button>
+        </div>
       </div>
 
+      <div class="divider"></div>
+
+      <!-- WhatsApp -->
       <div class="field-group">
-        <label for="barrio">Barrio</label>
-        <input type="text" id="barrio" name="barrio" placeholder="Ej: Pocitos, Palermo…" />
+        <label for="whatsapp">WhatsApp / Teléfono de contacto *</label>
+        <input type="tel" id="whatsapp" name="whatsapp" placeholder="+598 99 000 000" />
+        <span class="field-error" id="err-whatsapp">Este campo es obligatorio.</span>
       </div>
 
+      <!-- Email -->
       <div class="field-group">
-        <label for="instagram">Instagram</label>
+        <label for="email">Mail comercial *</label>
+        <input type="email" id="email" name="email" placeholder="hola@micafeteria.com" />
+        <span class="field-error" id="err-email">Ingresá un email válido.</span>
+      </div>
+
+      <!-- Instagram -->
+      <div class="field-group">
+        <label for="instagram">Instagram <span class="label-opt">— opcional</span></label>
         <input type="text" id="instagram" name="instagram" placeholder="@micafeteria" />
       </div>
 
       <div class="divider"></div>
 
-      <div class="checks-section">
-        <span class="checks-label">Características</span>
-
-        <div>
-          <p class="checks-group-title">Teletrabajo</p>
-          <div class="checks-grid">
-            <label class="check-chip"><input type="checkbox" name="caracteristicas" value="Silencioso" /><span class="chip-label">Silencioso</span></label>
-            <label class="check-chip"><input type="checkbox" name="caracteristicas" value="Enchufes" /><span class="chip-label">Enchufes</span></label>
-            <label class="check-chip"><input type="checkbox" name="caracteristicas" value="Buen WiFi" /><span class="chip-label">Buen WiFi</span></label>
-            <label class="check-chip"><input type="checkbox" name="caracteristicas" value="Mesas amplias" /><span class="chip-label">Mesas amplias</span></label>
-          </div>
-        </div>
-
-        <div>
-          <p class="checks-group-title">Servicios</p>
-          <div class="checks-grid">
-            <label class="check-chip"><input type="checkbox" name="caracteristicas" value="Pet friendly" /><span class="chip-label">Pet friendly</span></label>
-            <label class="check-chip"><input type="checkbox" name="caracteristicas" value="Mesas afuera" /><span class="chip-label">Mesas afuera</span></label>
-            <label class="check-chip"><input type="checkbox" name="caracteristicas" value="Para llevar" /><span class="chip-label">Para llevar</span></label>
-            <label class="check-chip"><input type="checkbox" name="caracteristicas" value="Gluten free" /><span class="chip-label">Gluten free</span></label>
-            <label class="check-chip"><input type="checkbox" name="caracteristicas" value="Veggie" /><span class="chip-label">Veggie</span></label>
-            <label class="check-chip"><input type="checkbox" name="caracteristicas" value="Brunch" /><span class="chip-label">Brunch</span></label>
-            <label class="check-chip"><input type="checkbox" name="caracteristicas" value="Almuerzos" /><span class="chip-label">Almuerzos</span></label>
-            <label class="check-chip"><input type="checkbox" name="caracteristicas" value="Pastelería" /><span class="chip-label">Pastelería</span></label>
-            <label class="check-chip"><input type="checkbox" name="caracteristicas" value="Librería" /><span class="chip-label">Librería</span></label>
-            <label class="check-chip"><input type="checkbox" name="caracteristicas" value="Eventos" /><span class="chip-label">Eventos</span></label>
-            <label class="check-chip"><input type="checkbox" name="caracteristicas" value="Tienda" /><span class="chip-label">Tienda</span></label>
-          </div>
-        </div>
-
-        <div>
-          <p class="checks-group-title">Métodos de café</p>
-          <div class="checks-grid">
-            <label class="check-chip"><input type="checkbox" name="caracteristicas" value="Espresso" /><span class="chip-label">Espresso</span></label>
-            <label class="check-chip"><input type="checkbox" name="caracteristicas" value="V60" /><span class="chip-label">V60</span></label>
-            <label class="check-chip"><input type="checkbox" name="caracteristicas" value="Chemex" /><span class="chip-label">Chemex</span></label>
-            <label class="check-chip"><input type="checkbox" name="caracteristicas" value="Aeropress" /><span class="chip-label">Aeropress</span></label>
-            <label class="check-chip"><input type="checkbox" name="caracteristicas" value="Cold brew" /><span class="chip-label">Cold brew</span></label>
-            <label class="check-chip"><input type="checkbox" name="caracteristicas" value="Prensa francesa" /><span class="chip-label">Prensa francesa</span></label>
-          </div>
-        </div>
-      </div>
-
-      <div class="divider"></div>
-
+      <!-- Servicios -->
       <div class="field-group">
-        <label for="comentarios">Otros comentarios</label>
-        <textarea id="comentarios" name="comentarios" placeholder="Contanos algo más sobre tu cafetería…"></textarea>
+        <label>¿Qué ofrece tu cafetería? <span class="label-opt">— opcional, elegí los que apliquen</span></label>
       </div>
 
-      <button type="submit" class="btn-submit" id="submit-btn">Enviar registro</button>
-      <p class="form-note">Revisaremos tu información antes de publicarla en la app.</p>
-    </form>
+      <div class="services-block">
+        <div class="svc-group">
+          <div class="svc-group-title">Quiero trabajar</div>
+          <div class="chips-row">
+            <label class="chip"><input type="checkbox" name="svc" value="Silencioso" /><span class="chip-lbl">Silencioso</span></label>
+            <label class="chip"><input type="checkbox" name="svc" value="Enchufes" /><span class="chip-lbl">Enchufes</span></label>
+            <label class="chip"><input type="checkbox" name="svc" value="Buen WiFi" /><span class="chip-lbl">Buen WiFi</span></label>
+            <label class="chip"><input type="checkbox" name="svc" value="Mesas amplias" /><span class="chip-lbl">Mesas amplias</span></label>
+            <label class="chip"><input type="checkbox" name="svc" value="Laptop friendly" /><span class="chip-lbl">Laptop friendly</span></label>
+            <label class="chip"><input type="checkbox" name="svc" value="Cowork" /><span class="chip-lbl">Cowork</span></label>
+          </div>
+        </div>
+        <div class="svc-group">
+          <div class="svc-group-title">Gastronomía</div>
+          <div class="chips-row">
+            <label class="chip"><input type="checkbox" name="svc" value="Brunch" /><span class="chip-lbl">Brunch</span></label>
+            <label class="chip"><input type="checkbox" name="svc" value="Sin gluten" /><span class="chip-lbl">Sin gluten</span></label>
+            <label class="chip"><input type="checkbox" name="svc" value="Opciones veggies" /><span class="chip-lbl">Opciones veggies</span></label>
+            <label class="chip"><input type="checkbox" name="svc" value="Almuerzos" /><span class="chip-lbl">Almuerzos</span></label>
+            <label class="chip"><input type="checkbox" name="svc" value="Pastelería" /><span class="chip-lbl">Pastelería</span></label>
+            <label class="chip"><input type="checkbox" name="svc" value="Sándwiches" /><span class="chip-lbl">Sándwiches</span></label>
+          </div>
+        </div>
+        <div class="svc-group">
+          <div class="svc-group-title">Otros servicios</div>
+          <div class="chips-row">
+            <label class="chip"><input type="checkbox" name="svc" value="Pet friendly" /><span class="chip-lbl">Pet friendly</span></label>
+            <label class="chip"><input type="checkbox" name="svc" value="Bike friendly" /><span class="chip-lbl">Bike friendly</span></label>
+            <label class="chip"><input type="checkbox" name="svc" value="Tienda" /><span class="chip-lbl">Tienda</span></label>
+            <label class="chip"><input type="checkbox" name="svc" value="Para llevar" /><span class="chip-lbl">Para llevar</span></label>
+            <label class="chip"><input type="checkbox" name="svc" value="Eventos" /><span class="chip-lbl">Eventos</span></label>
+            <label class="chip"><input type="checkbox" name="svc" value="Librería" /><span class="chip-lbl">Librería</span></label>
+            <label class="chip"><input type="checkbox" name="svc" value="Accesible" /><span class="chip-lbl">Accesible</span></label>
+          </div>
+        </div>
+        <div class="svc-group">
+          <div class="svc-group-title">Métodos de café</div>
+          <div class="chips-row">
+            <label class="chip"><input type="checkbox" name="svc" value="Espresso" /><span class="chip-lbl">Espresso</span></label>
+            <label class="chip"><input type="checkbox" name="svc" value="V60" /><span class="chip-lbl">V60</span></label>
+            <label class="chip"><input type="checkbox" name="svc" value="Aeropress" /><span class="chip-lbl">Aeropress</span></label>
+            <label class="chip"><input type="checkbox" name="svc" value="Cold brew" /><span class="chip-lbl">Cold brew</span></label>
+            <label class="chip"><input type="checkbox" name="svc" value="Prensa francesa" /><span class="chip-lbl">Prensa francesa</span></label>
+            <label class="chip"><input type="checkbox" name="svc" value="Chemex" /><span class="chip-lbl">Chemex</span></label>
+          </div>
+        </div>
+        <div class="svc-group">
+          <div class="svc-group-title">Al aire libre</div>
+          <div class="chips-row">
+            <label class="chip"><input type="checkbox" name="svc" value="Mesas afuera" /><span class="chip-lbl">Mesas afuera</span></label>
+            <label class="chip"><input type="checkbox" name="svc" value="Espacio verde" /><span class="chip-lbl">Espacio verde</span></label>
+            <label class="chip"><input type="checkbox" name="svc" value="Terraza" /><span class="chip-lbl">Terraza</span></label>
+          </div>
+        </div>
+        <div class="svc-group">
+          <div class="svc-group-title">Voy con niños</div>
+          <div class="chips-row">
+            <label class="chip"><input type="checkbox" name="svc" value="Familiar" /><span class="chip-lbl">Familiar</span></label>
+            <label class="chip"><input type="checkbox" name="svc" value="Cambiador" /><span class="chip-lbl">Cambiador</span></label>
+            <label class="chip"><input type="checkbox" name="svc" value="Sillas para niños" /><span class="chip-lbl">Sillas para niños</span></label>
+          </div>
+        </div>
+      </div>
+    </div><!-- /step-1 -->
 
+    <!-- ── STEP 2: Plan ──────────────────────────────── -->
+    <div class="step" id="step-2">
+      <div class="step-header">
+        <h1>Elegí tu plan</h1>
+        <p>Podés empezar gratis y cambiar de plan cuando quieras. Sin permanencia.</p>
+      </div>
+
+      <div class="plans-stack">
+
+        <!-- Básico -->
+        <label class="plan-card" id="card-basico">
+          <input type="radio" name="plan" value="basico" id="plan-basico" />
+          <div class="plan-tier">Quiero estar en el mapa</div>
+          <div class="plan-title">Básico</div>
+          <div class="plan-price">Gratis</div>
+          <div class="plan-tagline">Sumate a Buscafé y dejate encontrar.</div>
+          <div class="plan-feats">
+            <div class="plan-feat">Ficha completa (fotos, horarios, servicios)</div>
+            <div class="plan-feat">Visibilidad en el listado y el mapa</div>
+            <div class="plan-feat">Redirección directa a Instagram</div>
+            <div class="plan-feat">Redirección directa a Google Maps</div>
+            <div class="plan-feat">1 cuponera virtual activa</div>
+          </div>
+        </label>
+
+        <!-- Standard -->
+        <label class="plan-card" id="card-standard">
+          <input type="radio" name="plan" value="standard" id="plan-standard" />
+          <div class="plan-popular">El más elegido</div>
+          <div class="plan-tier">Quiero más visibilidad</div>
+          <div class="plan-title">Standard</div>
+          <div class="plan-price"><b>USD 35</b> / mes</div>
+          <div class="plan-tagline">Llegá a más personas todos los días.</div>
+          <div class="plan-feats">
+            <div class="plan-feat-inc">Incluye todo el Plan Básico, más:</div>
+            <div class="plan-feat">Publicá tus eventos</div>
+            <div class="plan-feat">Menú semanal y promociones activas</div>
+            <div class="plan-feat">Productos destacados en tu perfil</div>
+            <div class="plan-feat">Hasta 2 cuponeras virtuales activas</div>
+          </div>
+        </label>
+
+        <!-- Premium -->
+        <label class="plan-card" id="card-premium">
+          <input type="radio" name="plan" value="premium" id="plan-premium" />
+          <div class="plan-tier">Quiero ser referente</div>
+          <div class="plan-title">Premium</div>
+          <div class="plan-price"><b>USD 65</b> / mes</div>
+          <div class="plan-tagline">Convertite en la cafetería de referencia de tu barrio.</div>
+          <div class="plan-feats">
+            <div class="plan-feat-inc">Incluye todo el Plan Standard, más:</div>
+            <div class="plan-feat">Posicionamiento destacado en Inicio</div>
+            <div class="plan-feat">Banner rotativo en Home</div>
+            <div class="plan-feat">Campañas temáticas propias</div>
+            <div class="plan-feat">Flash Café — 2 push notifications mensuales</div>
+            <div class="plan-feat">Contenido dedicado en el Instagram de Buscafé</div>
+            <div class="plan-feat">Hasta 4 cuponeras virtuales activas</div>
+          </div>
+        </label>
+
+      </div>
+      <span class="field-error" id="err-plan" style="margin-top:12px;display:none">Seleccioná un plan para continuar.</span>
+    </div><!-- /step-2 -->
+
+    <!-- ── STEP 3: Pago ──────────────────────────────── -->
+    <div class="step" id="step-3">
+      <div class="step-header">
+        <h1>Activá tu plan</h1>
+        <p>Revisá el resumen de tu suscripción.</p>
+      </div>
+
+      <!-- Summary -->
+      <div class="pay-summary">
+        <div class="pay-summary-label">Plan seleccionado</div>
+        <div class="pay-plan-name" id="pay-plan-name">—</div>
+        <div class="pay-price" id="pay-price">—</div>
+        <div class="pay-price-sub">por mes · sin permanencia</div>
+      </div>
+
+      <!-- Payment placeholder -->
+      <div class="pay-placeholder">
+        <div class="pay-placeholder-icon">🔒</div>
+        <div class="pay-placeholder-title">Pago seguro — próximamente</div>
+        <div class="pay-placeholder-sub">
+          Estamos integrando los medios de pago. Por ahora, confirmá tu solicitud y nuestro equipo te enviará el link de pago por email.
+        </div>
+        <div class="providers">
+          <span class="provider">Mercado Pago</span>
+          <span class="provider">Stripe</span>
+          <span class="provider">Rebill</span>
+        </div>
+      </div>
+
+      <div class="pay-note">
+        📩 <strong>¿Cómo funciona?</strong> Una vez que confirmés tu solicitud, te contactaremos al mail que dejaste con el link de pago seguro y los próximos pasos para activar tu perfil.
+      </div>
+    </div><!-- /step-3 -->
+
+    <!-- ── STEP 4: Confirmación ──────────────────────── -->
+    <div class="step" id="step-4">
+      <div class="success-wrap">
+        <div class="success-icon">☕</div>
+        <h1 class="success-title">Ya sos parte de Buscafé.</h1>
+        <p class="success-body">
+          Recibimos tu solicitud con éxito. Nuestro equipo va a revisar la información que enviaste para asegurarse de que tu cafetería cumpla con los estándares de la guía.
+        </p>
+        <div class="success-steps">
+          <div class="success-step">
+            <div class="ss-icon">📋</div>
+            <div class="ss-text"><strong>Revisión de tu cafetería</strong><br>Verificamos que los datos estén completos y que cumpla con los criterios de la guía Buscafé.</div>
+          </div>
+          <div class="success-step">
+            <div class="ss-icon">📩</div>
+            <div class="ss-text"><strong>Te escribimos por email</strong><br>Cuando esté todo listo, te enviamos las instrucciones para completar la activación de tu perfil.</div>
+          </div>
+          <div class="success-step">
+            <div class="ss-icon">🗺️</div>
+            <div class="ss-text"><strong>Aparecés en la app</strong><br>Tu cafetería empieza a ser descubierta por personas que buscan exactamente lo que ofrecés.</div>
+          </div>
+        </div>
+        <a href="/" class="btn-home">Volver al inicio</a>
+      </div>
+    </div><!-- /step-4 -->
+
+  </div><!-- /steps-wrapper -->
+
+  <!-- Wizard navigation -->
+  <div class="wizard-nav" id="wizard-nav">
+    <button class="btn-back-wiz" id="btn-back" disabled>← Volver</button>
+    <button class="btn-next-wiz" id="btn-next">
+      <span class="spinner"></span>
+      <span class="btn-label">Continuar</span>
+    </button>
   </div>
 
-  <footer>
-    <div class="footer-inner">
-      <span class="footer-copy">© 2026 Buscafé. Todos los derechos reservados.</span>
-      <div class="footer-links">
-        <a href="/privacy-policy">Políticas de Privacidad</a>
-        <a href="/terms-of-service">Términos y Condiciones</a>
-      </div>
-      <span class="footer-studio">Diseñado por Studio XB</span>
+</div><!-- /wizard-page -->
+
+<!-- ── FOOTER ─────────────────────────────────────────── -->
+<footer>
+  <div class="footer-inner">
+    <span class="footer-copy">© 2026 Buscafé. Todos los derechos reservados.</span>
+    <div class="footer-links">
+      <a href="/privacy-policy">Políticas de Privacidad</a>
+      <a href="/terms-of-service">Términos y Condiciones</a>
     </div>
-  </footer>
+    <span class="footer-studio">Diseñado por Studio XB</span>
+  </div>
+</footer>
 
-  <script>
-    const form = document.getElementById('cafe-form');
-    const submitBtn = document.getElementById('submit-btn');
-    const successToast = document.getElementById('success-toast');
+<!-- Hidden Netlify form (detectado en build time) -->
+<form name="registrar-cafeteria" netlify netlify-honeypot="bot-field" hidden>
+  <input name="bot-field" />
+  <input name="nombre" />
+  <input name="instagram" />
+  <input name="whatsapp" />
+  <input name="email" />
+  <input name="direccion" />
+  <input name="sucursales" />
+  <input name="servicios" />
+  <input name="plan" />
+  <input name="logo-nombre" />
+</form>
 
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      form.classList.add('was-validated');
-      if (!form.checkValidity()) {
-        const firstInvalid = form.querySelector(':invalid');
-        if (firstInvalid) firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        return;
+<script>
+  /* ── STATE ─────────────────────────────────────────── */
+  const state = {
+    currentStep: 1,
+    selectedPlan: null,
+    sucursalesList: [],
+    logoFile: null,
+    goingBack: false,
+  };
+
+  /* ── STEPS CONFIG ──────────────────────────────────── */
+  const STEP_NAMES = {
+    1: 'Tu cafetería',
+    2: 'Elegí un plan',
+    3: 'Activar plan',
+    4: 'Confirmación',
+  };
+
+  function getVisibleSteps() {
+    const isPaid = state.selectedPlan && state.selectedPlan !== 'basico';
+    return isPaid ? [1, 2, 3, 4] : [1, 2, 4];
+  }
+
+  function getStepPosition(step) {
+    return getVisibleSteps().indexOf(step) + 1;
+  }
+
+  function getTotalVisible() {
+    return getVisibleSteps().length;
+  }
+
+  /* ── UI REFS ────────────────────────────────────────── */
+  const progressLabel = document.getElementById('progress-label');
+  const progressName  = document.getElementById('progress-name');
+  const progressFill  = document.getElementById('progress-fill');
+  const btnBack       = document.getElementById('btn-back');
+  const btnNext       = document.getElementById('btn-next');
+  const btnLabel      = btnNext.querySelector('.btn-label');
+  const wizardNav     = document.getElementById('wizard-nav');
+
+  /* ── PROGRESS UPDATE ────────────────────────────────── */
+  function updateProgress(step) {
+    const pos   = getStepPosition(step);
+    const total = getTotalVisible();
+    const pct   = (pos / total) * 100;
+    progressLabel.textContent = `Paso ${pos} de ${total}`;
+    progressName.textContent  = STEP_NAMES[step];
+    progressFill.style.width  = pct + '%';
+
+    // back button
+    btnBack.disabled = pos === 1;
+
+    // next button label
+    if (step === 4) {
+      wizardNav.style.display = 'none';
+    } else {
+      wizardNav.style.display = 'flex';
+      if (step === 3) {
+        btnLabel.textContent = 'Confirmar solicitud';
+      } else if (step === 2 && state.selectedPlan === 'basico') {
+        btnLabel.textContent = 'Confirmar registro';
+      } else {
+        btnLabel.textContent = 'Continuar';
       }
+    }
+  }
 
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Enviando…';
+  /* ── SHOW STEP ──────────────────────────────────────── */
+  function showStep(nextStep, fromBack = false) {
+    const currentEl = document.getElementById(`step-${state.currentStep}`);
+    const nextEl    = document.getElementById(`step-${nextStep}`);
 
-      try {
-        const data = new FormData(form);
-        await fetch('/', { method: 'POST', body: data });
-        successToast.classList.add('show');
-        successToast.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        form.reset();
-        form.classList.remove('was-validated');
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Enviar registro';
-      } catch {
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Enviar registro';
-        alert('Hubo un error al enviar. Por favor intentá de nuevo.');
+    currentEl.classList.remove('active', 'from-back');
+    currentEl.classList.add('exiting');
+
+    setTimeout(() => {
+      currentEl.classList.remove('exiting');
+      currentEl.style.display = 'none';
+
+      nextEl.style.display = 'block';
+      nextEl.classList.remove('from-back');
+      if (fromBack) nextEl.classList.add('from-back');
+      nextEl.classList.add('active');
+
+      state.currentStep = nextStep;
+      updateProgress(nextStep);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }, 200);
+  }
+
+  /* ── STEP 1 VALIDATION ──────────────────────────────── */
+  function validateStep1() {
+    let ok = true;
+
+    const nombre = document.getElementById('nombre');
+    const errNombre = document.getElementById('err-nombre');
+    if (!nombre.value.trim()) {
+      nombre.classList.add('invalid');
+      errNombre.classList.add('show');
+      ok = false;
+    } else {
+      nombre.classList.remove('invalid');
+      errNombre.classList.remove('show');
+    }
+
+    const dir = document.getElementById('direccion');
+    const errDir = document.getElementById('err-direccion');
+    if (!dir.value.trim()) {
+      dir.classList.add('invalid');
+      errDir.classList.add('show');
+      ok = false;
+    } else {
+      dir.classList.remove('invalid');
+      errDir.classList.remove('show');
+    }
+
+    const wa = document.getElementById('whatsapp');
+    const errWa = document.getElementById('err-whatsapp');
+    if (!wa.value.trim()) {
+      wa.classList.add('invalid');
+      errWa.classList.add('show');
+      ok = false;
+    } else {
+      wa.classList.remove('invalid');
+      errWa.classList.remove('show');
+    }
+
+    const email = document.getElementById('email');
+    const errEmail = document.getElementById('err-email');
+    const emailOk = email.value.trim() && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim());
+    if (!emailOk) {
+      email.classList.add('invalid');
+      errEmail.classList.add('show');
+      ok = false;
+    } else {
+      email.classList.remove('invalid');
+      errEmail.classList.remove('show');
+    }
+
+    if (!ok) {
+      const firstInvalid = document.querySelector('.invalid');
+      if (firstInvalid) firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    return ok;
+  }
+
+  /* ── STEP 2 VALIDATION ──────────────────────────────── */
+  function validateStep2() {
+    const errPlan = document.getElementById('err-plan');
+    if (!state.selectedPlan) {
+      errPlan.style.display = 'block';
+      return false;
+    }
+    errPlan.style.display = 'none';
+    return true;
+  }
+
+  /* ── PLAN SELECTION ─────────────────────────────────── */
+  const planCards = document.querySelectorAll('.plan-card');
+  planCards.forEach(card => {
+    card.addEventListener('click', () => {
+      planCards.forEach(c => c.classList.remove('selected'));
+      card.classList.add('selected');
+      const radio = card.querySelector('input[type="radio"]');
+      radio.checked = true;
+      state.selectedPlan = radio.value;
+      document.getElementById('err-plan').style.display = 'none';
+
+      // update payment summary
+      const names  = { basico: 'Plan Básico', standard: 'Plan Standard', premium: 'Plan Premium' };
+      const prices = { basico: 'Gratis', standard: 'USD 35', premium: 'USD 65' };
+      document.getElementById('pay-plan-name').textContent = names[state.selectedPlan];
+      document.getElementById('pay-price').textContent     = prices[state.selectedPlan];
+
+      // update next button label live
+      if (state.currentStep === 2) {
+        btnLabel.textContent = state.selectedPlan === 'basico' ? 'Confirmar registro' : 'Continuar';
       }
     });
-  </script>
+  });
+
+  /* ── SUBMIT FORM TO NETLIFY ─────────────────────────── */
+  async function submitForm() {
+    btnNext.disabled = true;
+    btnNext.classList.add('loading');
+    btnLabel.textContent = 'Enviando…';
+
+    const servicios = [...document.querySelectorAll('input[name="svc"]:checked')]
+      .map(el => el.value).join(', ');
+
+    const sucursalesData = state.sucursalesList.map((_, i) => {
+      const card = document.getElementById(`suc-card-${i}`);
+      if (!card) return null;
+      const nombre = card.querySelector('.suc-nombre').value.trim();
+      const dir    = card.querySelector('.suc-dir').value.trim();
+      return nombre ? `${nombre} — ${dir}` : dir;
+    }).filter(Boolean).join(' | ');
+
+    const body = new URLSearchParams({
+      'form-name': 'registrar-cafeteria',
+      'nombre':    document.getElementById('nombre').value.trim(),
+      'email':     document.getElementById('email').value.trim(),
+      'whatsapp':  document.getElementById('whatsapp').value.trim(),
+      'instagram': document.getElementById('instagram').value.trim(),
+      'direccion': document.getElementById('direccion').value.trim(),
+      'sucursales': sucursalesData,
+      'servicios': servicios,
+      'plan':      state.selectedPlan || 'basico',
+      'logo-nombre': state.logoFile ? state.logoFile.name : '',
+    });
+
+    try {
+      await fetch('/', { method: 'POST', body, headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
+      showStep(4);
+    } catch {
+      btnNext.disabled = false;
+      btnNext.classList.remove('loading');
+      btnLabel.textContent = 'Continuar';
+      alert('Hubo un error al enviar. Por favor intentá de nuevo.');
+    }
+  }
+
+  /* ── NEXT BUTTON ─────────────────────────────────────── */
+  btnNext.addEventListener('click', async () => {
+    const steps = getVisibleSteps();
+    const pos   = getStepPosition(state.currentStep);
+    const next  = steps[pos]; // next visible step
+
+    if (state.currentStep === 1) {
+      if (!validateStep1()) return;
+      showStep(2);
+    } else if (state.currentStep === 2) {
+      if (!validateStep2()) return;
+      if (state.selectedPlan === 'basico') {
+        await submitForm();
+      } else {
+        showStep(3);
+      }
+    } else if (state.currentStep === 3) {
+      await submitForm();
+    }
+  });
+
+  /* ── BACK BUTTON ─────────────────────────────────────── */
+  btnBack.addEventListener('click', () => {
+    const steps = getVisibleSteps();
+    const pos   = getStepPosition(state.currentStep);
+    const prev  = steps[pos - 2];
+    if (prev) showStep(prev, true);
+  });
+
+  /* ── LOGO UPLOAD ─────────────────────────────────────── */
+  const logoZone    = document.getElementById('logo-zone');
+  const logoInput   = document.getElementById('logo-input');
+  const logoContent = document.getElementById('logo-zone-content');
+  const logoPreview = document.getElementById('logo-preview');
+  const logoImg     = document.getElementById('logo-preview-img');
+  const logoName    = document.getElementById('logo-preview-name');
+  const logoRemove  = document.getElementById('logo-remove');
+
+  function handleLogoFile(file) {
+    if (!file || !file.type.startsWith('image/')) return;
+    state.logoFile = file;
+    const reader = new FileReader();
+    reader.onload = e => {
+      logoImg.src = e.target.result;
+      logoName.textContent = file.name;
+      logoContent.style.display = 'none';
+      logoPreview.classList.add('show');
+    };
+    reader.readAsDataURL(file);
+  }
+
+  logoInput.addEventListener('change', e => handleLogoFile(e.target.files[0]));
+
+  logoZone.addEventListener('dragover', e => { e.preventDefault(); logoZone.classList.add('over'); });
+  logoZone.addEventListener('dragleave', () => logoZone.classList.remove('over'));
+  logoZone.addEventListener('drop', e => {
+    e.preventDefault();
+    logoZone.classList.remove('over');
+    handleLogoFile(e.dataTransfer.files[0]);
+  });
+
+  logoRemove.addEventListener('click', e => {
+    e.preventDefault();
+    e.stopPropagation();
+    state.logoFile = null;
+    logoInput.value = '';
+    logoImg.src = '';
+    logoPreview.classList.remove('show');
+    logoContent.style.display = '';
+  });
+
+  /* ── SUCURSALES ──────────────────────────────────────── */
+  const sucRadios = document.querySelectorAll('input[name="tiene-sucursales"]');
+  const sucWrap   = document.getElementById('sucursales-wrap');
+  const sucList   = document.getElementById('sucursales-list');
+  const btnAddSuc = document.getElementById('btn-add-sucursal');
+  let   sucCount  = 0;
+
+  sucRadios.forEach(r => r.addEventListener('change', () => {
+    if (document.getElementById('suc-si').checked) {
+      sucWrap.classList.add('show');
+      if (sucCount === 0) addSucursal();
+    } else {
+      sucWrap.classList.remove('show');
+    }
+  }));
+
+  function addSucursal() {
+    const idx = sucCount++;
+    state.sucursalesList.push(idx);
+    const card = document.createElement('div');
+    card.className = 'sucursal-card';
+    card.id = `suc-card-${idx}`;
+    card.innerHTML = `
+      <div class="sucursal-num">Sucursal ${idx + 1}</div>
+      <button type="button" class="sucursal-remove" title="Eliminar">✕</button>
+      <input type="text" class="suc-nombre" placeholder="Nombre de la sucursal (opcional)" />
+      <input type="text" class="suc-dir" placeholder="Dirección" required />
+    `;
+    card.querySelector('.sucursal-remove').addEventListener('click', () => {
+      card.remove();
+      state.sucursalesList = state.sucursalesList.filter(i => i !== idx);
+    });
+    sucList.appendChild(card);
+  }
+
+  btnAddSuc.addEventListener('click', addSucursal);
+
+  /* ── INITIAL PROGRESS ────────────────────────────────── */
+  updateProgress(1);
+</script>
 
 </body>
 </html>
