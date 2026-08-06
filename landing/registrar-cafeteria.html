@@ -356,12 +356,14 @@
     /* ── SUCCESS (Step 4) ────────────────────────────── */
     .success-wrap { text-align: center; padding: 16px 0 32px; }
     .success-icon {
-      width: 76px; height: 76px;
-      background: linear-gradient(135deg, #F0FBF4, #C8EDD9);
-      border: 2px solid #9ED6B7; border-radius: 50%;
+      width: 80px; height: 80px;
+      background: var(--bg-warm);
+      border: 1.5px solid var(--border); border-radius: 20px;
       display: flex; align-items: center; justify-content: center;
-      font-size: 34px; margin: 0 auto 24px;
+      margin: 0 auto 24px;
       animation: pop .5s cubic-bezier(.34,1.56,.64,1) both;
+      box-shadow: 0 4px 20px rgba(44,26,14,.1);
+      overflow: hidden;
     }
     @keyframes pop {
       from { transform: scale(.6); opacity: 0; }
@@ -505,7 +507,12 @@
         <div class="logo-zone" id="logo-zone">
           <input type="file" id="logo-input" accept="image/*" />
           <div class="logo-zone-content" id="logo-zone-content">
-            <div class="logo-zone-icon">☕</div>
+            <div class="logo-zone-icon">
+              <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10 22H22M16 18V10M16 10L12.5 13.5M16 10L19.5 13.5" stroke="#B8A89A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+                <rect x="1.5" y="1.5" width="29" height="29" rx="8.5" stroke="#E8DDD3" stroke-width="1.5" stroke-dasharray="4 3"/>
+              </svg>
+            </div>
             <div class="logo-zone-title">Arrastrá tu logo aquí</div>
             <div class="logo-zone-sub">o <span>hacé clic para buscarlo</span> · PNG, JPG, SVG</div>
           </div>
@@ -730,7 +737,14 @@
 
       <!-- Payment placeholder -->
       <div class="pay-placeholder">
-        <div class="pay-placeholder-icon">🔒</div>
+        <div class="pay-placeholder-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="7" y="16" width="22" height="15" rx="4" fill="#F5EFE6" stroke="#C17A3A" stroke-width="1.8"/>
+            <path d="M12 16V11C12 7.686 14.686 5 18 5C21.314 5 24 7.686 24 11V16" stroke="#C17A3A" stroke-width="1.8" stroke-linecap="round"/>
+            <circle cx="18" cy="24" r="2.5" fill="#C17A3A"/>
+            <line x1="18" y1="26" x2="18" y2="29" stroke="#C17A3A" stroke-width="1.8" stroke-linecap="round"/>
+          </svg>
+        </div>
         <div class="pay-placeholder-title">Pago seguro — próximamente</div>
         <div class="pay-placeholder-sub">
           Estamos integrando los medios de pago. Por ahora, confirmá tu solicitud y nuestro equipo te enviará el link de pago por email.
@@ -750,7 +764,9 @@
     <!-- ── STEP 4: Confirmación ──────────────────────── -->
     <div class="step" id="step-4">
       <div class="success-wrap">
-        <div class="success-icon">☕</div>
+        <div class="success-icon">
+          <img src="https://framerusercontent.com/images/MTy73UWUcLJSl0QND7bov2kJJKM.png" alt="Buscafé" width="44" height="44" style="border-radius:10px;object-fit:cover;" />
+        </div>
         <h1 class="success-title">Ya sos parte de Buscafé.</h1>
         <p class="success-body">
           Recibimos tu solicitud con éxito. Nuestro equipo va a revisar la información que enviaste para asegurarse de que tu cafetería cumpla con los estándares de la guía.
