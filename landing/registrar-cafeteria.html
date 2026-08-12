@@ -480,8 +480,8 @@
 <!-- ── WIZARD ─────────────────────────────────────────── -->
 <div class="wizard-page">
 
-  <!-- Progress -->
-  <div class="progress-section">
+  <!-- Progress (oculto en modo simple, ver SIMPLE_MODE en el script) -->
+  <div class="progress-section" id="progress-section">
     <div class="progress-meta">
       <span class="progress-label" id="progress-label">Paso 1 de 3</span>
       <span class="progress-step-name" id="progress-name">Tu cafetería</span>
@@ -656,7 +656,7 @@
       </div>
     </div><!-- /step-1 -->
 
-    <!-- ── STEP 2: Plan ──────────────────────────────── -->
+    <!-- ── STEP 2: Plan (oculto en modo simple, código intacto) ─── -->
     <div class="step" id="step-2">
       <div class="step-header">
         <h1>Elegí tu plan</h1>
@@ -720,7 +720,7 @@
       <span class="field-error" id="err-plan" style="margin-top:12px;display:none">Seleccioná un plan para continuar.</span>
     </div><!-- /step-2 -->
 
-    <!-- ── STEP 3: Pago ──────────────────────────────── -->
+    <!-- ── STEP 3: Pago (oculto en modo simple, código intacto) ─── -->
     <div class="step" id="step-3">
       <div class="step-header">
         <h1>Activá tu plan</h1>
@@ -829,6 +829,16 @@
 </form>
 
 <script>
+  /* ────────────────────────────────────────────────────
+     MODO SIMPLE
+     true  → solo formulario (paso 1) + mensaje de éxito (paso 4).
+             Los pasos de plan (2) y pago (3) quedan en el
+             código pero no se muestran ni se recorren.
+     false → wizard completo (form → plan → pago → éxito).
+     Cuando lancen los packs, cambiar esto a false.
+  ──────────────────────────────────────────────────── */
+  const SIMPLE_MODE = true;
+
   /* ── STATE ─────────────────────────────────────────── */
   const state = {
     currentStep: 1,
@@ -847,6 +857,7 @@
   };
 
   function getVisibleSteps() {
+    if (SIMPLE_MODE) return [1, 4];
     const isPaid = state.selectedPlan && state.selectedPlan !== 'basico';
     return isPaid ? [1, 2, 3, 4] : [1, 2, 4];
   }
@@ -860,6 +871,7 @@
   }
 
   /* ── UI REFS ────────────────────────────────────────── */
+  const progressSection = document.getElementById('progress-section');
   const progressLabel = document.getElementById('progress-label');
   const progressName  = document.getElementById('progress-name');
   const progressFill  = document.getElementById('progress-fill');
@@ -868,8 +880,26 @@
   const btnLabel      = btnNext.querySelector('.btn-label');
   const wizardNav     = document.getElementById('wizard-nav');
 
+  // En modo simple no mostramos la barra de progreso: es un formulario único.
+  if (SIMPLE_MODE) {
+    progressSection.style.display = 'none';
+  }
+
   /* ── PROGRESS UPDATE ────────────────────────────────── */
   function updateProgress(step) {
+    if (step === 4) {
+      wizardNav.style.display = 'none';
+    } else {
+      wizardNav.style.display = 'flex';
+    }
+
+    if (SIMPLE_MODE) {
+      // Sin barra de progreso ni "paso X de Y"; solo el botón de continuar.
+      btnBack.disabled = true;
+      if (step !== 4) btnLabel.textContent = 'Enviar registro';
+      return;
+    }
+
     const pos   = getStepPosition(step);
     const total = getTotalVisible();
     const pct   = (pos / total) * 100;
@@ -877,21 +907,14 @@
     progressName.textContent  = STEP_NAMES[step];
     progressFill.style.width  = pct + '%';
 
-    // back button
     btnBack.disabled = pos === 1;
 
-    // next button label
-    if (step === 4) {
-      wizardNav.style.display = 'none';
+    if (step === 3) {
+      btnLabel.textContent = 'Confirmar solicitud';
+    } else if (step === 2 && state.selectedPlan === 'basico') {
+      btnLabel.textContent = 'Confirmar registro';
     } else {
-      wizardNav.style.display = 'flex';
-      if (step === 3) {
-        btnLabel.textContent = 'Confirmar solicitud';
-      } else if (step === 2 && state.selectedPlan === 'basico') {
-        btnLabel.textContent = 'Confirmar registro';
-      } else {
-        btnLabel.textContent = 'Continuar';
-      }
+      btnLabel.textContent = 'Continuar';
     }
   }
 
@@ -1036,6 +1059,7 @@
       'direccion': document.getElementById('direccion').value.trim(),
       'sucursales': sucursalesData,
       'servicios': servicios,
+      // En modo simple todavía no hay selección de plan: se registra como básico/gratis.
       'plan':      state.selectedPlan || 'basico',
       'logo-nombre': state.logoFile ? state.logoFile.name : '',
     });
@@ -1046,19 +1070,21 @@
     } catch {
       btnNext.disabled = false;
       btnNext.classList.remove('loading');
-      btnLabel.textContent = 'Continuar';
+      btnLabel.textContent = SIMPLE_MODE ? 'Enviar registro' : 'Continuar';
       alert('Hubo un error al enviar. Por favor intentá de nuevo.');
     }
   }
 
   /* ── NEXT BUTTON ─────────────────────────────────────── */
   btnNext.addEventListener('click', async () => {
-    const steps = getVisibleSteps();
-    const pos   = getStepPosition(state.currentStep);
-    const next  = steps[pos]; // next visible step
-
     if (state.currentStep === 1) {
       if (!validateStep1()) return;
+
+      if (SIMPLE_MODE) {
+        // Modo simple: del formulario se salta directo al mensaje de éxito.
+        await submitForm();
+        return;
+      }
       showStep(2);
     } else if (state.currentStep === 2) {
       if (!validateStep2()) return;
@@ -1074,6 +1100,7 @@
 
   /* ── BACK BUTTON ─────────────────────────────────────── */
   btnBack.addEventListener('click', () => {
+    if (SIMPLE_MODE) return; // solo hay un paso visible antes del éxito
     const steps = getVisibleSteps();
     const pos   = getStepPosition(state.currentStep);
     const prev  = steps[pos - 2];
