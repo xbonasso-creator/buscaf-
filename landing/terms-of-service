@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="./favicon.png" />
+  <title>Términos y Condiciones — Buscafé</title>
+  <meta name="description" content="Leé los términos y condiciones de uso de Buscafé." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --espresso: #2A1608;
+      --terracotta: #C2542A;
+      --bg: #FBF6EE;
+      --bg-warm: #F1E4D0;
+      --white: #FFFFFF;
+      --text: #2A1608;
+      --text-light: #8A7360;
+      --border: #E5D6C0;
+      --font: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font); background: var(--bg); color: var(--text); overflow-x: hidden; }
+    a { color: var(--terracotta); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+    :focus-visible { outline: 2.5px solid var(--terracotta); outline-offset: 3px; }
+
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+    }
+    .nav-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 68px;
+    }
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
+    }
+    .nav-logo img { width: 34px; height: 34px; border-radius: 9px; object-fit: cover; }
+    .nav-logo span {
+      font-size: 19px;
+      font-weight: 600;
+      color: var(--espresso);
+      letter-spacing: -0.3px;
+    }
+    .nav-back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-light);
+      text-decoration: none;
+      padding: 8px 14px;
+      border-radius: 50px;
+      border: 1.5px solid var(--border);
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .nav-back:hover { border-color: var(--espresso); color: var(--espresso); text-decoration: none; }
+
+    /* ── PAGE HEADER ── */
+    .page-header {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 48px 24px 40px;
+    }
+    .page-header-inner {
+      max-width: 760px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .page-label {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--terracotta);
+    }
+    .page-header h1 {
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 700;
+      letter-spacing: -0.5px;
+      color: var(--espresso);
+      line-height: 1.15;
+    }
+    .page-meta {
+      font-size: 13.5px;
+      color: var(--text-light);
+      margin-top: 4px;
+    }
+
+    /* ── CONTENT ── */
+    .content {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 48px 24px 80px;
+      display: flex;
+      flex-direction: column;
+      gap: 40px;
+    }
+    .section { display: flex; flex-direction: column; gap: 14px; }
+    .section h2 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #4A2D2A;
+      letter-spacing: -0.2px;
+    }
+    .section p, .section li {
+      font-size: 15px;
+      color: var(--text-light);
+      line-height: 1.75;
+    }
+    .section ul {
+      padding-left: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .section ul li::marker { color: var(--terracotta); }
+    .divider { height: 1px; background: var(--border); }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 24px 24px 32px;
+    }
+    .footer-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-copy { font-size: 13px; color: var(--text-light); }
+    .footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
+    .footer-links a { font-size: 13px; color: var(--text-light); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--espresso); }
+
+    @media (max-width: 768px) {
+      nav { padding: 0 16px; }
+      .page-header { padding: 36px 20px 32px; }
+      .content { padding: 36px 20px 64px; }
+      .footer-inner { flex-direction: column; align-items: flex-start; gap: 12px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a href="/" class="nav-logo">
+        <img src="./logo-icon.png" alt="Buscafé logo" width="34" height="34" />
+        <span>Buscafé</span>
+      </a>
+      <a href="/" class="nav-back">← Volver al inicio</a>
+    </div>
+  </nav>
+
+  <!-- PAGE HEADER -->
+  <div class="page-header">
+    <div class="page-header-inner">
+      <span class="page-label">Legal</span>
+      <h1>Términos y Condiciones</h1>
+      <p class="page-meta">Última actualización: junio de 2026</p>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <main class="content">
+
+    <div class="section">
+      <p>Bienvenido a <strong>Buscafé</strong>. Al acceder o usar nuestra aplicación móvil y sitio web, aceptás estos Términos y Condiciones en su totalidad. Si no estás de acuerdo con alguna parte, por favor no uses el servicio.</p>
+      <p>Para cualquier consulta, escribinos a <a href="mailto:hola@buscafe.app">hola@buscafe.app</a>.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section">
+      <h2>1. Descripción del servicio</h2>
+      <p>Buscafé es una plataforma digital que permite a los usuarios descubrir, explorar y guardar cafeterías de especialidad. El servicio incluye la aplicación móvil disponible en iOS y Android, así como el sitio web informativo.</p>
+      <p>El uso básico de la app es gratuito para usuarios finales. Las cafeterías pueden acceder a funciones de visibilidad adicionales mediante planes de suscripción.</p>
+    </div>
+
+    <div class="section">
+      <h2>2. Registro y cuenta</h2>
+      <p>Para acceder a funciones personalizadas (favoritos, historial, preferencias) necesitás crear una cuenta. Al hacerlo:</p>
+      <ul>
+        <li>Sos responsable de mantener la confidencialidad de tu contraseña.</li>
+        <li>Aceptás proporcionar información veraz y actualizada.</li>
+        <li>Nos comprometemos a proteger tus datos según nuestra <a href="/privacy-policy">Política de Privacidad</a>.</li>
+        <li>Una cuenta es de uso personal e intransferible.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>3. Uso aceptable</h2>
+      <p>Al usar Buscafé, aceptás no:</p>
+      <ul>
+        <li>Publicar contenido falso, engañoso, ofensivo o que infrinja derechos de terceros.</li>
+        <li>Intentar acceder sin autorización a sistemas, cuentas o datos ajenos.</li>
+        <li>Usar la plataforma para fines comerciales no autorizados o scraping automatizado.</li>
+        <li>Interferir con el funcionamiento normal del servicio.</li>
+        <li>Crear cuentas falsas o suplantar la identidad de otras personas o cafeterías.</li>
+      </ul>
+      <p>Nos reservamos el derecho de suspender o eliminar cuentas que violen estas condiciones, sin previo aviso.</p>
+    </div>
+
+    <div class="section">
+      <h2>4. Contenido generado por usuarios</h2>
+      <p>Al subir reseñas, fotos u otro contenido a la plataforma:</p>
+      <ul>
+        <li>Garantizás que tenés los derechos necesarios sobre ese contenido.</li>
+        <li>Nos otorgás una licencia no exclusiva, gratuita y mundial para usar, mostrar y distribuir ese contenido dentro del servicio.</li>
+        <li>Aceptás que podemos moderar o eliminar contenido que incumpla estas condiciones o nuestras guías de comunidad.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>5. Registro de cafeterías</h2>
+      <p>Los propietarios de cafeterías que registren su local en Buscafé aceptan que:</p>
+      <ul>
+        <li>La información proporcionada es veraz y está actualizada.</li>
+        <li>Buscafé puede mostrar esa información a los usuarios de la plataforma.</li>
+        <li>El equipo de Buscafé revisará el registro antes de publicarlo.</li>
+        <li>Nos reservamos el derecho de rechazar o dar de baja registros que no cumplan nuestros estándares.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>6. Propiedad intelectual</h2>
+      <p>Todos los elementos de Buscafé (nombre, logo, diseño, código, textos e imágenes propias) son propiedad de Buscafé y están protegidos por las leyes de propiedad intelectual aplicables. No podés reproducirlos, modificarlos ni distribuirlos sin autorización expresa por escrito.</p>
+    </div>
+
+    <div class="section">
+      <h2>7. Exactitud de la información</h2>
+      <p>Buscafé actúa como plataforma de descubrimiento. Si bien hacemos esfuerzos por mantener la información actualizada, no garantizamos que los horarios, precios, servicios o disponibilidad de las cafeterías sean exactos en todo momento. Recomendamos verificar directamente con cada local antes de visitar.</p>
+    </div>
+
+    <div class="section">
+      <h2>8. Limitación de responsabilidad</h2>
+      <p>En la máxima medida permitida por la ley, Buscafé no será responsable por:</p>
+      <ul>
+        <li>Daños directos, indirectos o incidentales derivados del uso o la imposibilidad de uso del servicio.</li>
+        <li>Inexactitudes en la información de las cafeterías listadas.</li>
+        <li>Interrupciones del servicio por mantenimiento, fallas técnicas o causas fuera de nuestro control.</li>
+      </ul>
+    </div>
+
+    <div class="section">
+      <h2>9. Modificaciones del servicio</h2>
+      <p>Podemos modificar, suspender o discontinuar cualquier parte del servicio en cualquier momento, con o sin aviso previo. No seremos responsables ante vos ni ante terceros por dichas modificaciones.</p>
+    </div>
+
+    <div class="section">
+      <h2>10. Cambios en los términos</h2>
+      <p>Podemos actualizar estos términos periódicamente. Te notificaremos sobre cambios relevantes mediante un aviso en la app o por email. El uso continuado de Buscafé después de la notificación implica la aceptación de los nuevos términos.</p>
+    </div>
+
+    <div class="section">
+      <h2>11. Ley aplicable</h2>
+      <p>Estos términos se rigen por las leyes de la República Oriental del Uruguay. Cualquier disputa que no pueda resolverse amigablemente será sometida a los tribunales competentes de Montevideo.</p>
+    </div>
+
+    <div class="section">
+      <h2>12. Contacto</h2>
+      <p>Para consultas sobre estos términos o el servicio en general, escribinos a <a href="mailto:hola@buscafe.app">hola@buscafe.app</a>. Respondemos en un plazo de 5 días hábiles.</p>
+    </div>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-inner">
+      <span class="footer-copy">© 2026 Buscafé. Todos los derechos reservados.</span>
+      <div class="footer-links">
+        <a href="/privacy-policy">Políticas de Privacidad</a>
+        <a href="/terms-of-service">Términos y Condiciones</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
