@@ -39,7 +39,6 @@
       min-height: 100vh;
     }
 
-    /* ── NAV ─────────────────────────────────────────── */
     nav {
       position: sticky; top: 0; z-index: 100;
       background: rgba(253,250,246,.92);
@@ -53,10 +52,7 @@
       display: flex; align-items: center; justify-content: space-between;
       height: 64px;
     }
-    .nav-logo {
-      display: flex; align-items: center; gap: 10px;
-      text-decoration: none;
-    }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
     .nav-logo img { width: 36px; height: 36px; border-radius: 10px; object-fit: cover; }
     .nav-logo span { font-size: 18px; font-weight: 800; color: var(--primary); letter-spacing: -.3px; }
     .nav-back {
@@ -66,73 +62,32 @@
     }
     .nav-back:hover { color: var(--primary); }
 
-    /* ── WIZARD PAGE ─────────────────────────────────── */
-    .wizard-page {
-      max-width: 680px;
-      margin: 0 auto;
-      padding: 48px 24px 100px;
-    }
+    .wizard-page { max-width: 680px; margin: 0 auto; padding: 48px 24px 100px; }
 
-    /* ── PROGRESS ─────────────────────────────────────── */
     .progress-section { margin-bottom: 44px; }
-    .progress-meta {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 10px;
-    }
-    .progress-label {
-      font-size: 11px; font-weight: 700;
-      letter-spacing: .1em; text-transform: uppercase;
-      color: var(--text-light);
-    }
+    .progress-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+    .progress-label { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text-light); }
     .progress-step-name { font-size: 12px; font-weight: 600; color: var(--accent); }
-    .progress-bar-bg {
-      height: 3px; background: var(--border);
-      border-radius: 99px; overflow: hidden;
-    }
-    .progress-bar-fill {
-      height: 100%; background: var(--accent);
-      border-radius: 99px;
-      transition: width .5s cubic-bezier(.4,0,.2,1);
-    }
+    .progress-bar-bg { height: 3px; background: var(--border); border-radius: 99px; overflow: hidden; }
+    .progress-bar-fill { height: 100%; background: var(--accent); border-radius: 99px; transition: width .5s cubic-bezier(.4,0,.2,1); }
 
-    /* ── STEP TRANSITIONS ────────────────────────────── */
     .steps-wrapper { position: relative; }
     .step { display: none; }
-    .step.active {
-      display: block;
-      animation: stepIn .32s cubic-bezier(.4,0,.2,1) forwards;
-    }
-    .step.active.from-back {
-      animation: stepInBack .32s cubic-bezier(.4,0,.2,1) forwards;
-    }
-    @keyframes stepIn {
-      from { opacity: 0; transform: translateX(28px); }
-      to   { opacity: 1; transform: translateX(0); }
-    }
-    @keyframes stepInBack {
-      from { opacity: 0; transform: translateX(-28px); }
-      to   { opacity: 1; transform: translateX(0); }
-    }
+    .step.active { display: block; animation: stepIn .32s cubic-bezier(.4,0,.2,1) forwards; }
+    .step.active.from-back { animation: stepInBack .32s cubic-bezier(.4,0,.2,1) forwards; }
+    @keyframes stepIn { from { opacity: 0; transform: translateX(28px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes stepInBack { from { opacity: 0; transform: translateX(-28px); } to { opacity: 1; transform: translateX(0); } }
 
-    /* ── STEP HEADER ─────────────────────────────────── */
     .step-header { margin-bottom: 32px; }
-    .step-header h1 {
-      font-size: clamp(26px, 4vw, 38px);
-      font-weight: 900; color: var(--heading);
-      letter-spacing: -.8px; line-height: 1.15;
-      margin-bottom: 10px;
-    }
+    .step-header h1 { font-size: clamp(26px, 4vw, 38px); font-weight: 900; color: var(--heading); letter-spacing: -.8px; line-height: 1.15; margin-bottom: 10px; }
     .step-header p { font-size: 16px; color: var(--text-light); line-height: 1.6; }
 
-    /* ── FORM FIELDS ─────────────────────────────────── */
     .field-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 18px; }
     .field-group:last-of-type { margin-bottom: 0; }
     label { font-size: 13px; font-weight: 600; color: var(--text); letter-spacing: .1px; }
     .label-opt { font-size: 11px; font-weight: 500; color: var(--text-light); margin-left: 4px; }
 
-    input[type="text"],
-    input[type="email"],
-    input[type="tel"] {
+    input[type="text"], input[type="email"], input[type="tel"] {
       width: 100%; background: var(--field-bg);
       border: 1.5px solid var(--border); border-radius: var(--radius-sm);
       padding: 13px 15px; font-size: 15px; font-family: inherit;
@@ -141,18 +96,13 @@
       -webkit-appearance: none;
     }
     input::placeholder { color: var(--text-placeholder); }
-    input:focus {
-      border-color: var(--accent);
-      box-shadow: 0 0 0 3px rgba(193,122,58,.12);
-    }
+    input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(193,122,58,.12); }
     input.invalid { border-color: var(--error); background: #FFF8F8; }
     .field-error { font-size: 12px; color: var(--error); font-weight: 500; display: none; }
     .field-error.show { display: block; }
 
-    /* ── DIVIDER ─────────────────────────────────────── */
     .divider { height: 1px; background: var(--border); margin: 28px 0; }
 
-    /* ── LOGO UPLOAD ─────────────────────────────────── */
     .logo-zone {
       border: 2px dashed var(--border); border-radius: var(--radius);
       padding: 28px 20px; text-align: center;
@@ -160,29 +110,17 @@
       transition: border-color .2s, background .2s;
       position: relative; overflow: hidden;
     }
-    .logo-zone:hover, .logo-zone.over {
-      border-color: var(--accent);
-      background: rgba(193,122,58,.04);
-    }
-    .logo-zone input[type="file"] {
-      position: absolute; inset: 0; width: 100%; height: 100%;
-      opacity: 0; cursor: pointer;
-    }
+    .logo-zone:hover, .logo-zone.over { border-color: var(--accent); background: rgba(193,122,58,.04); }
+    .logo-zone input[type="file"] { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
     .logo-zone-content { pointer-events: none; }
     .logo-zone-icon { font-size: 28px; margin-bottom: 8px; }
     .logo-zone-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
     .logo-zone-sub { font-size: 12px; color: var(--text-light); }
     .logo-zone-sub span { color: var(--accent); font-weight: 600; }
 
-    .logo-preview {
-      display: none; flex-direction: column;
-      align-items: center; gap: 10px;
-    }
+    .logo-preview { display: none; flex-direction: column; align-items: center; gap: 10px; }
     .logo-preview.show { display: flex; }
-    .logo-preview img {
-      width: 72px; height: 72px; border-radius: 14px;
-      object-fit: cover; box-shadow: var(--shadow-md);
-    }
+    .logo-preview img { width: 72px; height: 72px; border-radius: 14px; object-fit: cover; box-shadow: var(--shadow-md); }
     .logo-preview-name { font-size: 13px; font-weight: 600; color: var(--text); }
     .logo-remove {
       font-size: 12px; color: var(--text-light);
@@ -193,7 +131,6 @@
     }
     .logo-remove:hover { color: var(--error); border-color: var(--error); }
 
-    /* ── RADIO TOGGLE (Sí/No) ────────────────────────── */
     .radio-row { display: flex; gap: 10px; }
     .radio-opt { flex: 1; }
     .radio-opt input { display: none; }
@@ -204,16 +141,9 @@
       color: var(--text-light); cursor: pointer;
       transition: all .15s; background: var(--field-bg);
     }
-    .radio-opt input:checked + .radio-opt-label {
-      border-color: var(--primary); color: var(--primary);
-      background: rgba(44,26,14,.06);
-    }
+    .radio-opt input:checked + .radio-opt-label { border-color: var(--primary); color: var(--primary); background: rgba(44,26,14,.06); }
 
-    /* ── SUCURSALES ──────────────────────────────────── */
-    .sucursales-wrap {
-      display: none; flex-direction: column; gap: 12px;
-      margin-top: 16px; padding-top: 4px;
-    }
+    .sucursales-wrap { display: none; flex-direction: column; gap: 12px; margin-top: 16px; padding-top: 4px; }
     .sucursales-wrap.show { display: flex; }
     .sucursal-card {
       background: var(--bg-warm); border: 1px solid var(--border);
@@ -221,10 +151,7 @@
       display: flex; flex-direction: column; gap: 10px;
       position: relative;
     }
-    .sucursal-num {
-      font-size: 10px; font-weight: 700; text-transform: uppercase;
-      letter-spacing: .1em; color: var(--text-light);
-    }
+    .sucursal-num { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--text-light); }
     .sucursal-remove {
       position: absolute; top: 12px; right: 12px;
       width: 26px; height: 26px; border: none;
@@ -241,19 +168,11 @@
       font-size: 14px; font-weight: 600; color: var(--text-light);
       cursor: pointer; font-family: inherit; transition: all .15s; width: 100%;
     }
-    .btn-add-sucursal:hover {
-      border-color: var(--accent); color: var(--accent);
-      background: rgba(193,122,58,.04);
-    }
+    .btn-add-sucursal:hover { border-color: var(--accent); color: var(--accent); background: rgba(193,122,58,.04); }
 
-    /* ── SERVICE CHIPS ───────────────────────────────── */
     .services-block { display: flex; flex-direction: column; gap: 22px; }
     .svc-group { display: flex; flex-direction: column; gap: 10px; }
-    .svc-group-title {
-      font-size: 11px; font-weight: 700;
-      text-transform: uppercase; letter-spacing: .1em;
-      color: var(--text-light);
-    }
+    .svc-group-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--text-light); }
     .chips-row { display: flex; flex-wrap: wrap; gap: 8px; }
     .chip input[type="checkbox"] { display: none; }
     .chip-lbl {
@@ -263,11 +182,8 @@
       font-size: 13px; font-weight: 500; color: var(--text);
       cursor: pointer; transition: all .15s; user-select: none;
     }
-    .chip input:checked + .chip-lbl {
-      background: var(--primary); border-color: var(--primary); color: #fff;
-    }
+    .chip input:checked + .chip-lbl { background: var(--primary); border-color: var(--primary); color: #fff; }
 
-    /* ── PLAN CARDS (Step 2) ─────────────────────────── */
     .plans-stack { display: flex; flex-direction: column; gap: 12px; }
     .plan-card {
       border: 2px solid var(--border); border-radius: var(--radius);
@@ -275,10 +191,7 @@
       background: var(--white); transition: all .2s; position: relative;
     }
     .plan-card:hover { border-color: #c9a07a; box-shadow: 0 2px 12px rgba(44,26,14,.08); }
-    .plan-card.selected {
-      border-color: var(--primary);
-      box-shadow: 0 0 0 4px rgba(44,26,14,.07);
-    }
+    .plan-card.selected { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(44,26,14,.07); }
     .plan-card input[type="radio"] { display: none; }
     .plan-popular {
       position: absolute; top: 18px; right: 18px;
@@ -286,74 +199,30 @@
       letter-spacing: .08em; background: var(--accent); color: #fff;
       padding: 3px 10px; border-radius: 100px;
     }
-    .plan-tier {
-      font-size: 10px; font-weight: 700; text-transform: uppercase;
-      letter-spacing: .12em; color: var(--accent); margin-bottom: 4px;
-    }
-    .plan-title {
-      font-size: 22px; font-weight: 900; color: var(--heading);
-      letter-spacing: -.5px; margin-bottom: 3px;
-    }
-    .plan-price {
-      font-size: 14px; font-weight: 700; color: var(--text-light);
-      margin-bottom: 12px;
-    }
+    .plan-tier { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: var(--accent); margin-bottom: 4px; }
+    .plan-title { font-size: 22px; font-weight: 900; color: var(--heading); letter-spacing: -.5px; margin-bottom: 3px; }
+    .plan-price { font-size: 14px; font-weight: 700; color: var(--text-light); margin-bottom: 12px; }
     .plan-price b { font-size: 17px; color: var(--primary); }
     .plan-tagline { font-size: 14px; color: var(--text-light); margin-bottom: 14px; line-height: 1.5; }
     .plan-feats { display: flex; flex-direction: column; gap: 7px; }
-    .plan-feat {
-      font-size: 13px; color: var(--text);
-      display: flex; gap: 9px; align-items: flex-start; line-height: 1.45;
-    }
-    .plan-feat::before {
-      content: "✓"; font-size: 11px; font-weight: 800; color: var(--accent);
-      flex-shrink: 0; margin-top: 2px;
-    }
-    .plan-feat-inc {
-      font-size: 12px; font-weight: 600; color: var(--accent);
-      margin-bottom: 5px; padding-bottom: 8px; border-bottom: 1px solid var(--border);
-    }
+    .plan-feat { font-size: 13px; color: var(--text); display: flex; gap: 9px; align-items: flex-start; line-height: 1.45; }
+    .plan-feat::before { content: "✓"; font-size: 11px; font-weight: 800; color: var(--accent); flex-shrink: 0; margin-top: 2px; }
+    .plan-feat-inc { font-size: 12px; font-weight: 600; color: var(--accent); margin-bottom: 5px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
 
-    /* ── PAYMENT (Step 3) ────────────────────────────── */
-    .pay-summary {
-      background: var(--bg-warm); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 22px; margin-bottom: 22px;
-    }
-    .pay-summary-label {
-      font-size: 11px; font-weight: 700; text-transform: uppercase;
-      letter-spacing: .1em; color: var(--text-light); margin-bottom: 8px;
-    }
+    .pay-summary { background: var(--bg-warm); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; margin-bottom: 22px; }
+    .pay-summary-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--text-light); margin-bottom: 8px; }
     .pay-plan-name { font-size: 20px; font-weight: 900; color: var(--heading); margin-bottom: 4px; }
-    .pay-price {
-      font-size: 34px; font-weight: 900; color: var(--primary); letter-spacing: -1px;
-    }
+    .pay-price { font-size: 34px; font-weight: 900; color: var(--primary); letter-spacing: -1px; }
     .pay-price-sub { font-size: 13px; color: var(--text-light); margin-top: 2px; }
-    .pay-placeholder {
-      border: 2px dashed var(--border); border-radius: var(--radius);
-      padding: 28px 20px; text-align: center; margin-bottom: 20px;
-    }
+    .pay-placeholder { border: 2px dashed var(--border); border-radius: var(--radius); padding: 28px 20px; text-align: center; margin-bottom: 20px; }
     .pay-placeholder-icon { font-size: 28px; margin-bottom: 10px; }
     .pay-placeholder-title { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
-    .pay-placeholder-sub {
-      font-size: 13px; color: var(--text-light); line-height: 1.6; max-width: 400px; margin: 0 auto;
-    }
-    .providers {
-      display: flex; align-items: center; justify-content: center;
-      gap: 10px; margin-top: 16px; flex-wrap: wrap;
-    }
-    .provider {
-      font-size: 11px; font-weight: 700; color: var(--text-light);
-      background: var(--bg-warm); border: 1px solid var(--border);
-      border-radius: 8px; padding: 5px 12px;
-    }
-    .pay-note {
-      background: rgba(193,122,58,.07); border: 1px solid rgba(193,122,58,.25);
-      border-radius: var(--radius-sm); padding: 14px 16px;
-      font-size: 13px; color: var(--text); line-height: 1.55;
-    }
+    .pay-placeholder-sub { font-size: 13px; color: var(--text-light); line-height: 1.6; max-width: 400px; margin: 0 auto; }
+    .providers { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+    .provider { font-size: 11px; font-weight: 700; color: var(--text-light); background: var(--bg-warm); border: 1px solid var(--border); border-radius: 8px; padding: 5px 12px; }
+    .pay-note { background: rgba(193,122,58,.07); border: 1px solid rgba(193,122,58,.25); border-radius: var(--radius-sm); padding: 14px 16px; font-size: 13px; color: var(--text); line-height: 1.55; }
     .pay-note strong { color: var(--accent); }
 
-    /* ── SUCCESS (Step 4) ────────────────────────────── */
     .success-wrap { text-align: center; padding: 16px 0 32px; }
     .success-icon {
       width: 80px; height: 80px;
@@ -365,27 +234,11 @@
       box-shadow: 0 4px 20px rgba(44,26,14,.1);
       overflow: hidden;
     }
-    @keyframes pop {
-      from { transform: scale(.6); opacity: 0; }
-      to   { transform: scale(1);  opacity: 1; }
-    }
-    .success-title {
-      font-size: 30px; font-weight: 900; color: var(--heading);
-      letter-spacing: -.8px; line-height: 1.2; margin-bottom: 14px;
-    }
-    .success-body {
-      font-size: 16px; color: var(--text-light); line-height: 1.7;
-      max-width: 500px; margin: 0 auto 28px;
-    }
-    .success-steps {
-      background: var(--bg-warm); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 6px 0; text-align: left;
-      margin-bottom: 32px;
-    }
-    .success-step {
-      display: flex; gap: 14px; align-items: flex-start;
-      padding: 14px 20px; border-bottom: 1px solid var(--border);
-    }
+    @keyframes pop { from { transform: scale(.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .success-title { font-size: 30px; font-weight: 900; color: var(--heading); letter-spacing: -.8px; line-height: 1.2; margin-bottom: 14px; }
+    .success-body { font-size: 16px; color: var(--text-light); line-height: 1.7; max-width: 500px; margin: 0 auto 28px; }
+    .success-steps { background: var(--bg-warm); border: 1px solid var(--border); border-radius: var(--radius); padding: 6px 0; text-align: left; margin-bottom: 32px; }
+    .success-step { display: flex; gap: 14px; align-items: flex-start; padding: 14px 20px; border-bottom: 1px solid var(--border); }
     .success-step:last-child { border-bottom: none; }
     .ss-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
     .ss-text { font-size: 14px; color: var(--text); line-height: 1.5; }
@@ -402,11 +255,7 @@
     }
     .btn-home:hover { opacity: .88; transform: translateY(-1px); }
 
-    /* ── WIZARD NAV BUTTONS ──────────────────────────── */
-    .wizard-nav {
-      margin-top: 40px; display: flex;
-      align-items: center; gap: 12px;
-    }
+    .wizard-nav { margin-top: 40px; display: flex; align-items: center; gap: 12px; }
     .btn-back-wiz {
       display: inline-flex; align-items: center; justify-content: center; gap: 6px;
       padding: 14px 20px; background: none;
@@ -440,20 +289,14 @@
     .btn-next-wiz.loading .spinner { display: block; }
     .btn-next-wiz.loading .btn-label { opacity: .6; }
 
-    /* ── FOOTER ──────────────────────────────────────── */
     footer { border-top: 1px solid var(--border); padding: 32px 24px; }
-    .footer-inner {
-      max-width: 1100px; margin: 0 auto;
-      display: flex; align-items: center;
-      justify-content: space-between; flex-wrap: wrap; gap: 16px;
-    }
+    .footer-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
     .footer-copy { font-size: 13px; color: var(--text-light); }
     .footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
     .footer-links a { font-size: 13px; color: var(--text-light); text-decoration: none; transition: color .2s; }
     .footer-links a:hover { color: var(--primary); }
     .footer-studio { font-size: 13px; color: var(--text-light); }
 
-    /* ── RESPONSIVE ──────────────────────────────────── */
     @media (max-width: 520px) {
       .wizard-page { padding: 32px 16px 80px; }
       .plan-card { padding: 18px 16px 16px; }
@@ -466,7 +309,6 @@
 </head>
 <body>
 
-<!-- ── NAV ──────────────────────────────────────────── -->
 <nav>
   <div class="nav-inner">
     <a href="/" class="nav-logo">
@@ -477,10 +319,8 @@
   </div>
 </nav>
 
-<!-- ── WIZARD ─────────────────────────────────────────── -->
 <div class="wizard-page">
 
-  <!-- Progress (oculto en modo simple, ver SIMPLE_MODE en el script) -->
   <div class="progress-section" id="progress-section">
     <div class="progress-meta">
       <span class="progress-label" id="progress-label">Paso 1 de 3</span>
@@ -491,17 +331,14 @@
     </div>
   </div>
 
-  <!-- Steps -->
   <div class="steps-wrapper">
 
-    <!-- ── STEP 1: Datos ─────────────────────────────── -->
     <div class="step active" id="step-1">
       <div class="step-header">
         <h1>Registrá tu cafetería</h1>
         <p>Completá los datos de tu local para sumarte a Buscafé.</p>
       </div>
 
-      <!-- Logo -->
       <div class="field-group">
         <label>Logo de la cafetería <span class="label-opt">— opcional</span></label>
         <div class="logo-zone" id="logo-zone">
@@ -526,21 +363,18 @@
 
       <div class="divider"></div>
 
-      <!-- Nombre -->
       <div class="field-group">
         <label for="nombre">Nombre de la cafetería *</label>
         <input type="text" id="nombre" name="nombre" placeholder="Ej: La Sede Café" />
         <span class="field-error" id="err-nombre">Este campo es obligatorio.</span>
       </div>
 
-      <!-- Dirección -->
       <div class="field-group">
         <label for="direccion">Dirección principal *</label>
         <input type="text" id="direccion" name="direccion" placeholder="Ej: Av. Brasil 2786, Pocitos" />
         <span class="field-error" id="err-direccion">Este campo es obligatorio.</span>
       </div>
 
-      <!-- Sucursales -->
       <div class="field-group">
         <label>¿Tenés sucursales?</label>
         <div class="radio-row">
@@ -564,21 +398,18 @@
 
       <div class="divider"></div>
 
-      <!-- WhatsApp -->
       <div class="field-group">
         <label for="whatsapp">WhatsApp / Teléfono de contacto *</label>
         <input type="tel" id="whatsapp" name="whatsapp" placeholder="+598 99 000 000" />
         <span class="field-error" id="err-whatsapp">Este campo es obligatorio.</span>
       </div>
 
-      <!-- Email -->
       <div class="field-group">
         <label for="email">Mail comercial *</label>
         <input type="email" id="email" name="email" placeholder="hola@micafeteria.com" />
         <span class="field-error" id="err-email">Ingresá un email válido.</span>
       </div>
 
-      <!-- Instagram -->
       <div class="field-group">
         <label for="instagram">Instagram <span class="label-opt">— opcional</span></label>
         <input type="text" id="instagram" name="instagram" placeholder="@micafeteria" />
@@ -586,31 +417,24 @@
 
       <div class="divider"></div>
 
-      <!-- Servicios -->
+      <!-- Promociones bancarias — ahora es campo de texto libre, ubicado antes de Servicios -->
+      <div class="field-group">
+        <label for="promos-bancarias">Promociones bancarias <span class="label-opt">— opcional</span></label>
+        <input type="text" id="promos-bancarias" name="promos-bancarias" placeholder="Ej: 20% con Itaú los martes, 2x1 con OCA los jueves" />
+      </div>
+
+      <div class="divider"></div>
+
       <div class="field-group">
         <label>¿Qué ofrece tu cafetería? <span class="label-opt">— opcional, elegí los que apliquen</span></label>
       </div>
 
       <div class="services-block">
         <div class="svc-group">
-          <div class="svc-group-title">Promociones bancarias</div>
-          <div class="chips-row">
-            <label class="chip"><input type="checkbox" name="svc" value="Itaú" /><span class="chip-lbl">Itaú</span></label>
-            <label class="chip"><input type="checkbox" name="svc" value="Santander" /><span class="chip-lbl">Santander</span></label>
-            <label class="chip"><input type="checkbox" name="svc" value="BROU" /><span class="chip-lbl">BROU</span></label>
-            <label class="chip"><input type="checkbox" name="svc" value="OCA" /><span class="chip-lbl">OCA</span></label>
-            <label class="chip"><input type="checkbox" name="svc" value="Scotiabank" /><span class="chip-lbl">Scotiabank</span></label>
-            <label class="chip"><input type="checkbox" name="svc" value="BBVA" /><span class="chip-lbl">BBVA</span></label>
-          </div>
-        </div>
-        <div class="svc-group">
           <div class="svc-group-title">Quiero trabajar</div>
           <div class="chips-row">
             <label class="chip"><input type="checkbox" name="svc" value="Silencioso" /><span class="chip-lbl">Silencioso</span></label>
-            <label class="chip"><input type="checkbox" name="svc" value="Enchufes" /><span class="chip-lbl">Enchufes</span></label>
-            <label class="chip"><input type="checkbox" name="svc" value="Buen WiFi" /><span class="chip-lbl">Buen WiFi</span></label>
             <label class="chip"><input type="checkbox" name="svc" value="Mesas amplias" /><span class="chip-lbl">Mesas amplias</span></label>
-            <label class="chip"><input type="checkbox" name="svc" value="Laptop friendly" /><span class="chip-lbl">Laptop friendly</span></label>
             <label class="chip"><input type="checkbox" name="svc" value="Cowork" /><span class="chip-lbl">Cowork</span></label>
           </div>
         </div>
@@ -668,7 +492,6 @@
       </div>
     </div><!-- /step-1 -->
 
-    <!-- ── STEP 2: Plan (oculto en modo simple, código intacto) ─── -->
     <div class="step" id="step-2">
       <div class="step-header">
         <h1>Elegí tu plan</h1>
@@ -677,7 +500,6 @@
 
       <div class="plans-stack">
 
-        <!-- Básico -->
         <label class="plan-card" id="card-basico">
           <input type="radio" name="plan" value="basico" id="plan-basico" />
           <div class="plan-tier">Quiero estar en el mapa</div>
@@ -693,7 +515,6 @@
           </div>
         </label>
 
-        <!-- Standard -->
         <label class="plan-card" id="card-standard">
           <input type="radio" name="plan" value="standard" id="plan-standard" />
           <div class="plan-popular">El más elegido</div>
@@ -710,7 +531,6 @@
           </div>
         </label>
 
-        <!-- Premium -->
         <label class="plan-card" id="card-premium">
           <input type="radio" name="plan" value="premium" id="plan-premium" />
           <div class="plan-tier">Quiero ser referente</div>
@@ -732,14 +552,12 @@
       <span class="field-error" id="err-plan" style="margin-top:12px;display:none">Seleccioná un plan para continuar.</span>
     </div><!-- /step-2 -->
 
-    <!-- ── STEP 3: Pago (oculto en modo simple, código intacto) ─── -->
     <div class="step" id="step-3">
       <div class="step-header">
         <h1>Activá tu plan</h1>
         <p>Revisá el resumen de tu suscripción.</p>
       </div>
 
-      <!-- Summary -->
       <div class="pay-summary">
         <div class="pay-summary-label">Plan seleccionado</div>
         <div class="pay-plan-name" id="pay-plan-name">—</div>
@@ -747,7 +565,6 @@
         <div class="pay-price-sub">por mes · sin permanencia</div>
       </div>
 
-      <!-- Payment placeholder -->
       <div class="pay-placeholder">
         <div class="pay-placeholder-icon">
           <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -773,7 +590,6 @@
       </div>
     </div><!-- /step-3 -->
 
-    <!-- ── STEP 4: Confirmación ──────────────────────── -->
     <div class="step" id="step-4">
       <div class="success-wrap">
         <div class="success-icon">
@@ -791,7 +607,6 @@
 
   </div><!-- /steps-wrapper -->
 
-  <!-- Wizard navigation -->
   <div class="wizard-nav" id="wizard-nav">
     <button class="btn-back-wiz" id="btn-back" disabled>← Volver</button>
     <button class="btn-next-wiz" id="btn-next">
@@ -802,7 +617,6 @@
 
 </div><!-- /wizard-page -->
 
-<!-- ── FOOTER ─────────────────────────────────────────── -->
 <footer>
   <div class="footer-inner">
     <span class="footer-copy">© 2026 Buscafé. Todos los derechos reservados.</span>
@@ -814,7 +628,6 @@
   </div>
 </footer>
 
-<!-- Hidden Netlify form (detectado en build time) -->
 <form name="registrar-cafeteria" netlify netlify-honeypot="bot-field" hidden>
   <input name="bot-field" />
   <input name="nombre" />
@@ -823,23 +636,15 @@
   <input name="email" />
   <input name="direccion" />
   <input name="sucursales" />
+  <input name="promos-bancarias" />
   <input name="servicios" />
   <input name="plan" />
   <input name="logo-nombre" />
 </form>
 
 <script>
-  /* ────────────────────────────────────────────────────
-     MODO SIMPLE
-     true  → solo formulario (paso 1) + mensaje de éxito (paso 4).
-             Los pasos de plan (2) y pago (3) quedan en el
-             código pero no se muestran ni se recorren.
-     false → wizard completo (form → plan → pago → éxito).
-     Cuando lancen los packs, cambiar esto a false.
-  ──────────────────────────────────────────────────── */
   const SIMPLE_MODE = true;
 
-  /* ── STATE ─────────────────────────────────────────── */
   const state = {
     currentStep: 1,
     selectedPlan: null,
@@ -848,7 +653,6 @@
     goingBack: false,
   };
 
-  /* ── STEPS CONFIG ──────────────────────────────────── */
   const STEP_NAMES = {
     1: 'Tu cafetería',
     2: 'Elegí un plan',
@@ -862,15 +666,9 @@
     return isPaid ? [1, 2, 3, 4] : [1, 2, 4];
   }
 
-  function getStepPosition(step) {
-    return getVisibleSteps().indexOf(step) + 1;
-  }
+  function getStepPosition(step) { return getVisibleSteps().indexOf(step) + 1; }
+  function getTotalVisible() { return getVisibleSteps().length; }
 
-  function getTotalVisible() {
-    return getVisibleSteps().length;
-  }
-
-  /* ── UI REFS ────────────────────────────────────────── */
   const progressSection = document.getElementById('progress-section');
   const progressLabel = document.getElementById('progress-label');
   const progressName  = document.getElementById('progress-name');
@@ -880,21 +678,12 @@
   const btnLabel      = btnNext.querySelector('.btn-label');
   const wizardNav     = document.getElementById('wizard-nav');
 
-  // En modo simple no mostramos la barra de progreso: es un formulario único.
-  if (SIMPLE_MODE) {
-    progressSection.style.display = 'none';
-  }
+  if (SIMPLE_MODE) { progressSection.style.display = 'none'; }
 
-  /* ── PROGRESS UPDATE ────────────────────────────────── */
   function updateProgress(step) {
-    if (step === 4) {
-      wizardNav.style.display = 'none';
-    } else {
-      wizardNav.style.display = 'flex';
-    }
+    if (step === 4) { wizardNav.style.display = 'none'; } else { wizardNav.style.display = 'flex'; }
 
     if (SIMPLE_MODE) {
-      // Sin barra de progreso ni "paso X de Y"; solo el botón de continuar.
       btnBack.disabled = true;
       if (step !== 4) btnLabel.textContent = 'Enviar registro';
       return;
@@ -909,16 +698,11 @@
 
     btnBack.disabled = pos === 1;
 
-    if (step === 3) {
-      btnLabel.textContent = 'Confirmar solicitud';
-    } else if (step === 2 && state.selectedPlan === 'basico') {
-      btnLabel.textContent = 'Confirmar registro';
-    } else {
-      btnLabel.textContent = 'Continuar';
-    }
+    if (step === 3) { btnLabel.textContent = 'Confirmar solicitud'; }
+    else if (step === 2 && state.selectedPlan === 'basico') { btnLabel.textContent = 'Confirmar registro'; }
+    else { btnLabel.textContent = 'Continuar'; }
   }
 
-  /* ── SHOW STEP ──────────────────────────────────────── */
   function showStep(nextStep, fromBack = false) {
     const currentEl = document.getElementById(`step-${state.currentStep}`);
     const nextEl    = document.getElementById(`step-${nextStep}`);
@@ -941,54 +725,29 @@
     }, 200);
   }
 
-  /* ── STEP 1 VALIDATION ──────────────────────────────── */
   function validateStep1() {
     let ok = true;
 
     const nombre = document.getElementById('nombre');
     const errNombre = document.getElementById('err-nombre');
-    if (!nombre.value.trim()) {
-      nombre.classList.add('invalid');
-      errNombre.classList.add('show');
-      ok = false;
-    } else {
-      nombre.classList.remove('invalid');
-      errNombre.classList.remove('show');
-    }
+    if (!nombre.value.trim()) { nombre.classList.add('invalid'); errNombre.classList.add('show'); ok = false; }
+    else { nombre.classList.remove('invalid'); errNombre.classList.remove('show'); }
 
     const dir = document.getElementById('direccion');
     const errDir = document.getElementById('err-direccion');
-    if (!dir.value.trim()) {
-      dir.classList.add('invalid');
-      errDir.classList.add('show');
-      ok = false;
-    } else {
-      dir.classList.remove('invalid');
-      errDir.classList.remove('show');
-    }
+    if (!dir.value.trim()) { dir.classList.add('invalid'); errDir.classList.add('show'); ok = false; }
+    else { dir.classList.remove('invalid'); errDir.classList.remove('show'); }
 
     const wa = document.getElementById('whatsapp');
     const errWa = document.getElementById('err-whatsapp');
-    if (!wa.value.trim()) {
-      wa.classList.add('invalid');
-      errWa.classList.add('show');
-      ok = false;
-    } else {
-      wa.classList.remove('invalid');
-      errWa.classList.remove('show');
-    }
+    if (!wa.value.trim()) { wa.classList.add('invalid'); errWa.classList.add('show'); ok = false; }
+    else { wa.classList.remove('invalid'); errWa.classList.remove('show'); }
 
     const email = document.getElementById('email');
     const errEmail = document.getElementById('err-email');
     const emailOk = email.value.trim() && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim());
-    if (!emailOk) {
-      email.classList.add('invalid');
-      errEmail.classList.add('show');
-      ok = false;
-    } else {
-      email.classList.remove('invalid');
-      errEmail.classList.remove('show');
-    }
+    if (!emailOk) { email.classList.add('invalid'); errEmail.classList.add('show'); ok = false; }
+    else { email.classList.remove('invalid'); errEmail.classList.remove('show'); }
 
     if (!ok) {
       const firstInvalid = document.querySelector('.invalid');
@@ -998,18 +757,13 @@
     return ok;
   }
 
-  /* ── STEP 2 VALIDATION ──────────────────────────────── */
   function validateStep2() {
     const errPlan = document.getElementById('err-plan');
-    if (!state.selectedPlan) {
-      errPlan.style.display = 'block';
-      return false;
-    }
+    if (!state.selectedPlan) { errPlan.style.display = 'block'; return false; }
     errPlan.style.display = 'none';
     return true;
   }
 
-  /* ── PLAN SELECTION ─────────────────────────────────── */
   const planCards = document.querySelectorAll('.plan-card');
   planCards.forEach(card => {
     card.addEventListener('click', () => {
@@ -1020,27 +774,23 @@
       state.selectedPlan = radio.value;
       document.getElementById('err-plan').style.display = 'none';
 
-      // update payment summary
       const names  = { basico: 'Plan Básico', standard: 'Plan Standard', premium: 'Plan Premium' };
       const prices = { basico: 'Gratis', standard: 'USD 35', premium: 'USD 65' };
       document.getElementById('pay-plan-name').textContent = names[state.selectedPlan];
       document.getElementById('pay-price').textContent     = prices[state.selectedPlan];
 
-      // update next button label live
       if (state.currentStep === 2) {
         btnLabel.textContent = state.selectedPlan === 'basico' ? 'Confirmar registro' : 'Continuar';
       }
     });
   });
 
-  /* ── SUBMIT FORM TO NETLIFY ─────────────────────────── */
   async function submitForm() {
     btnNext.disabled = true;
     btnNext.classList.add('loading');
     btnLabel.textContent = 'Enviando…';
 
-    const servicios = [...document.querySelectorAll('input[name="svc"]:checked')]
-      .map(el => el.value).join(', ');
+    const servicios = [...document.querySelectorAll('input[name="svc"]:checked')].map(el => el.value).join(', ');
 
     const sucursalesData = state.sucursalesList.map((_, i) => {
       const card = document.getElementById(`suc-card-${i}`);
@@ -1058,8 +808,8 @@
       'instagram': document.getElementById('instagram').value.trim(),
       'direccion': document.getElementById('direccion').value.trim(),
       'sucursales': sucursalesData,
+      'promos-bancarias': document.getElementById('promos-bancarias').value.trim(),
       'servicios': servicios,
-      // En modo simple todavía no hay selección de plan: se registra como básico/gratis.
       'plan':      state.selectedPlan || 'basico',
       'logo-nombre': state.logoFile ? state.logoFile.name : '',
     });
@@ -1075,39 +825,28 @@
     }
   }
 
-  /* ── NEXT BUTTON ─────────────────────────────────────── */
   btnNext.addEventListener('click', async () => {
     if (state.currentStep === 1) {
       if (!validateStep1()) return;
 
-      if (SIMPLE_MODE) {
-        // Modo simple: del formulario se salta directo al mensaje de éxito.
-        await submitForm();
-        return;
-      }
+      if (SIMPLE_MODE) { await submitForm(); return; }
       showStep(2);
     } else if (state.currentStep === 2) {
       if (!validateStep2()) return;
-      if (state.selectedPlan === 'basico') {
-        await submitForm();
-      } else {
-        showStep(3);
-      }
+      if (state.selectedPlan === 'basico') { await submitForm(); } else { showStep(3); }
     } else if (state.currentStep === 3) {
       await submitForm();
     }
   });
 
-  /* ── BACK BUTTON ─────────────────────────────────────── */
   btnBack.addEventListener('click', () => {
-    if (SIMPLE_MODE) return; // solo hay un paso visible antes del éxito
+    if (SIMPLE_MODE) return;
     const steps = getVisibleSteps();
     const pos   = getStepPosition(state.currentStep);
     const prev  = steps[pos - 2];
     if (prev) showStep(prev, true);
   });
 
-  /* ── LOGO UPLOAD ─────────────────────────────────────── */
   const logoZone    = document.getElementById('logo-zone');
   const logoInput   = document.getElementById('logo-input');
   const logoContent = document.getElementById('logo-zone-content');
@@ -1149,7 +888,6 @@
     logoContent.style.display = '';
   });
 
-  /* ── SUCURSALES ──────────────────────────────────────── */
   const sucRadios = document.querySelectorAll('input[name="tiene-sucursales"]');
   const sucWrap   = document.getElementById('sucursales-wrap');
   const sucList   = document.getElementById('sucursales-list');
@@ -1186,7 +924,6 @@
 
   btnAddSuc.addEventListener('click', addSucursal);
 
-  /* ── INITIAL PROGRESS ────────────────────────────────── */
   updateProgress(1);
 </script>
 
