@@ -419,21 +419,6 @@
         <img src="./logo-icon.png" alt="Buscafé logo" width="34" height="34" />
         <span>Buscafé</span>
       </a>
-      <div class="nav-actions">
-        <a href="/registrar-cafeteria" class="nav-link-register">Registrar cafetería</a>
-        <a href="#faq" class="nav-link-register">FAQs</a>
-      </div>
-      <button class="nav-hamburger" id="nav-hamburger" aria-label="Abrir menú">
-        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
-          <line x1="3" y1="6" x2="21" y2="6"/>
-          <line x1="3" y1="12" x2="21" y2="12"/>
-          <line x1="3" y1="18" x2="21" y2="18"/>
-        </svg>
-      </button>
-    </div>
-    <div class="nav-mobile-menu" id="nav-mobile-menu">
-      <a href="/registrar-cafeteria" class="nav-mobile-link outline">Registrar cafetería</a>
-      <a href="#faq" class="nav-mobile-link outline">FAQs</a>
     </div>
   </nav>
   <!-- HERO -->
@@ -468,7 +453,7 @@
     </div>
   </section>
   <!-- REGISTER -->
-  <section class="register">
+  <section class="register" style="display:none">
     <div class="register-card">
       <div class="register-inner">
         <h3>¿Tenés una cafetería?</h3>
@@ -587,19 +572,19 @@
       </div>
       <details class="faq-item" open>
         <summary>¿Buscafé es gratis?<span class="faq-plus"></span></summary>
-        <p>Sí, totalmente gratis para quienes buscan café. Se financia con las cafeterías que quieren aparecer destacadas.</p>
+        <p>Sí, es totalmente gratis para usuarios amantes del café que quieren descubrir nuevas experiencias.</p>
       </details>
       <details class="faq-item">
         <summary>¿En qué plataformas está disponible?<span class="faq-plus"></span></summary>
         <p>En iOS a través de App Store y en Android a través de Google Play, ambas gratuitas.</p>
       </details>
       <details class="faq-item">
-        <summary>¿Cómo registro mi cafetería?<span class="faq-plus"></span></summary>
-        <p>Tocá "Registrar mi cafetería", completá un formulario simple y nuestro equipo la revisa antes de publicarla.</p>
+        <summary>¿Qué puedo hacer en Buscafé?<span class="faq-plus"></span></summary>
+        <p>Descubrir cafeterías por barrio, por necesidades, compartir con amigxs, agregar a favoritos y crear colecciones por intereses.</p>
       </details>
       <details class="faq-item">
         <summary>¿En qué ciudades funciona?<span class="faq-plus"></span></summary>
-        <p>Estamos empezando por Montevideo y sumando cafeterías todas las semanas.</p>
+        <p>Actualmente en Montevideo, próximamente en el interior del país.</p>
       </details>
     </div>
   </section>
@@ -642,18 +627,5 @@
       </div>
     </div>
   </footer>
-  <script>
-    const hamburger = document.getElementById('nav-hamburger');
-    const mobileMenu = document.getElementById('nav-mobile-menu');
-    hamburger.addEventListener('click', () => mobileMenu.classList.toggle('open'));
-    mobileMenu.querySelectorAll('a').forEach(link => {
-      link.addEventListener('click', () => mobileMenu.classList.remove('open'));
-    });
-    document.addEventListener('click', (e) => {
-      if (!hamburger.contains(e.target) && !mobileMenu.contains(e.target)) {
-        mobileMenu.classList.remove('open');
-      }
-    });
-  </script>
 </body>
 </html>
