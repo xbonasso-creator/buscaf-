@@ -7,43 +7,37 @@
   <meta name="description" content="Sumá tu cafetería a Buscafé y llegá a más personas." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;0,9..40,900&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
     :root {
-      --primary:          #2C1A0E;
-      --heading:          #4A2C2A;
-      --accent:           #C17A3A;
-      --error:            #D94040;
-      --success:          #1A7A46;
-      --bg:               #FDFAF6;
-      --bg-warm:          #F5EFE6;
-      --field-bg:         #FBF8F4;
-      --white:            #FFFFFF;
-      --text:             #3A2218;
-      --text-light:       #7A6353;
-      --text-placeholder: #B8A89A;
-      --border:           #E8DDD3;
-      --radius:           14px;
-      --radius-sm:        10px;
-      --radius-pill:      50px;
-      --shadow-md:        0 4px 20px rgba(44,26,14,.12);
+      --espresso:   #2A1608;
+      --heading:    #4A2D2A;
+      --accent:     #C2542A;
+      --error:      #D94040;
+      --success:    #1A7A46;
+      --bg:         #FBF6EE;
+      --bg-warm:    #F1E4D0;
+      --field-bg:   #FBF8F4;
+      --white:      #FFFFFF;
+      --text:       #2A1608;
+      --text-light: #8A7360;
+      --text-ph:    #C0AFA0;
+      --border:     #E5D6C0;
+      --radius:     14px;
+      --radius-sm:  10px;
+      --radius-pill:50px;
+      --shadow-md:  0 4px 20px rgba(42,22,8,.12);
+      --font: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     }
-
     html { scroll-behavior: smooth; }
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      min-height: 100vh;
-    }
+    body { font-family: var(--font); background: var(--bg); color: var(--text); min-height: 100vh; }
 
+    /* ── NAV ── */
     nav {
       position: sticky; top: 0; z-index: 100;
-      background: rgba(253,250,246,.92);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
+      background: rgba(251,246,238,.92);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border);
       padding: 0 24px;
     }
@@ -54,39 +48,39 @@
     }
     .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
     .nav-logo img { width: 36px; height: 36px; border-radius: 10px; object-fit: cover; }
-    .nav-logo span { font-size: 18px; font-weight: 800; color: var(--primary); letter-spacing: -.3px; }
-    .nav-back {
-      display: inline-flex; align-items: center; gap: 6px;
-      color: var(--text-light); text-decoration: none;
-      font-size: 14px; font-weight: 500; transition: color .2s;
-    }
-    .nav-back:hover { color: var(--primary); }
+    .nav-logo span { font-size: 18px; font-weight: 800; color: var(--espresso); letter-spacing: -.3px; }
+    .nav-back { display: inline-flex; align-items: center; gap: 6px; color: var(--text-light); text-decoration: none; font-size: 14px; font-weight: 500; transition: color .2s; }
+    .nav-back:hover { color: var(--espresso); }
 
+    /* ── WIZARD ── */
     .wizard-page { max-width: 680px; margin: 0 auto; padding: 48px 24px 100px; }
 
+    /* Progress */
     .progress-section { margin-bottom: 44px; }
     .progress-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
     .progress-label { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text-light); }
-    .progress-step-name { font-size: 12px; font-weight: 600; color: var(--accent); }
+    .progress-name  { font-size: 12px; font-weight: 600; color: var(--accent); }
     .progress-bar-bg { height: 3px; background: var(--border); border-radius: 99px; overflow: hidden; }
     .progress-bar-fill { height: 100%; background: var(--accent); border-radius: 99px; transition: width .5s cubic-bezier(.4,0,.2,1); }
 
+    /* Steps */
     .steps-wrapper { position: relative; }
     .step { display: none; }
     .step.active { display: block; animation: stepIn .32s cubic-bezier(.4,0,.2,1) forwards; }
     .step.active.from-back { animation: stepInBack .32s cubic-bezier(.4,0,.2,1) forwards; }
-    @keyframes stepIn { from { opacity: 0; transform: translateX(28px); } to { opacity: 1; transform: translateX(0); } }
-    @keyframes stepInBack { from { opacity: 0; transform: translateX(-28px); } to { opacity: 1; transform: translateX(0); } }
+    @keyframes stepIn     { from { opacity:0; transform:translateX(28px);  } to { opacity:1; transform:translateX(0); } }
+    @keyframes stepInBack { from { opacity:0; transform:translateX(-28px); } to { opacity:1; transform:translateX(0); } }
 
+    /* Step header */
     .step-header { margin-bottom: 32px; }
-    .step-header h1 { font-size: clamp(26px, 4vw, 38px); font-weight: 900; color: var(--heading); letter-spacing: -.8px; line-height: 1.15; margin-bottom: 10px; }
-    .step-header p { font-size: 16px; color: var(--text-light); line-height: 1.6; }
+    .step-header h1 { font-size: clamp(26px,4vw,38px); font-weight: 900; color: var(--heading); letter-spacing: -.8px; line-height: 1.15; margin-bottom: 10px; }
+    .step-header p  { font-size: 16px; color: var(--text-light); line-height: 1.6; }
 
+    /* Fields */
     .field-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 18px; }
     .field-group:last-of-type { margin-bottom: 0; }
     label { font-size: 13px; font-weight: 600; color: var(--text); letter-spacing: .1px; }
     .label-opt { font-size: 11px; font-weight: 500; color: var(--text-light); margin-left: 4px; }
-
     input[type="text"], input[type="email"], input[type="tel"] {
       width: 100%; background: var(--field-bg);
       border: 1.5px solid var(--border); border-radius: var(--radius-sm);
@@ -95,42 +89,14 @@
       transition: border-color .2s, box-shadow .2s;
       -webkit-appearance: none;
     }
-    input::placeholder { color: var(--text-placeholder); }
-    input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(193,122,58,.12); }
+    input::placeholder { color: var(--text-ph); }
+    input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(194,84,42,.12); }
     input.invalid { border-color: var(--error); background: #FFF8F8; }
     .field-error { font-size: 12px; color: var(--error); font-weight: 500; display: none; }
     .field-error.show { display: block; }
-
     .divider { height: 1px; background: var(--border); margin: 28px 0; }
 
-    .logo-zone {
-      border: 2px dashed var(--border); border-radius: var(--radius);
-      padding: 28px 20px; text-align: center;
-      cursor: pointer; background: var(--field-bg);
-      transition: border-color .2s, background .2s;
-      position: relative; overflow: hidden;
-    }
-    .logo-zone:hover, .logo-zone.over { border-color: var(--accent); background: rgba(193,122,58,.04); }
-    .logo-zone input[type="file"] { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
-    .logo-zone-content { pointer-events: none; }
-    .logo-zone-icon { font-size: 28px; margin-bottom: 8px; }
-    .logo-zone-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
-    .logo-zone-sub { font-size: 12px; color: var(--text-light); }
-    .logo-zone-sub span { color: var(--accent); font-weight: 600; }
-
-    .logo-preview { display: none; flex-direction: column; align-items: center; gap: 10px; }
-    .logo-preview.show { display: flex; }
-    .logo-preview img { width: 72px; height: 72px; border-radius: 14px; object-fit: cover; box-shadow: var(--shadow-md); }
-    .logo-preview-name { font-size: 13px; font-weight: 600; color: var(--text); }
-    .logo-remove {
-      font-size: 12px; color: var(--text-light);
-      background: none; border: 1px solid var(--border);
-      border-radius: 20px; padding: 3px 12px;
-      cursor: pointer; font-family: inherit;
-      transition: all .15s; pointer-events: all;
-    }
-    .logo-remove:hover { color: var(--error); border-color: var(--error); }
-
+    /* Radio */
     .radio-row { display: flex; gap: 10px; }
     .radio-opt { flex: 1; }
     .radio-opt input { display: none; }
@@ -138,172 +104,203 @@
       display: flex; align-items: center; justify-content: center;
       padding: 11px 16px; border: 1.5px solid var(--border);
       border-radius: var(--radius-sm); font-size: 14px; font-weight: 600;
-      color: var(--text-light); cursor: pointer;
-      transition: all .15s; background: var(--field-bg);
+      color: var(--text-light); cursor: pointer; transition: all .15s; background: var(--field-bg);
     }
-    .radio-opt input:checked + .radio-opt-label { border-color: var(--primary); color: var(--primary); background: rgba(44,26,14,.06); }
+    .radio-opt input:checked + .radio-opt-label { border-color: var(--espresso); color: var(--espresso); background: rgba(42,22,8,.06); }
 
-    .sucursales-wrap { display: none; flex-direction: column; gap: 12px; margin-top: 16px; padding-top: 4px; }
+    /* Sucursales */
+    .sucursales-wrap { display: none; flex-direction: column; gap: 12px; margin-top: 16px; }
     .sucursales-wrap.show { display: flex; }
-    .sucursal-card {
-      background: var(--bg-warm); border: 1px solid var(--border);
-      border-radius: var(--radius); padding: 16px;
-      display: flex; flex-direction: column; gap: 10px;
-      position: relative;
-    }
-    .sucursal-num { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--text-light); }
-    .sucursal-remove {
-      position: absolute; top: 12px; right: 12px;
-      width: 26px; height: 26px; border: none;
-      background: rgba(217,64,64,.1); color: var(--error);
-      border-radius: 50%; cursor: pointer; font-size: 14px;
-      display: flex; align-items: center; justify-content: center;
-      transition: background .15s; font-family: inherit;
-    }
+    .sucursal-card { background: var(--bg-warm); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; display: flex; flex-direction: column; gap: 10px; position: relative; }
+    .sucursal-num  { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--text-light); }
+    .sucursal-remove { position: absolute; top: 12px; right: 12px; width: 26px; height: 26px; border: none; background: rgba(217,64,64,.1); color: var(--error); border-radius: 50%; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: background .15s; }
     .sucursal-remove:hover { background: rgba(217,64,64,.2); }
-    .btn-add-sucursal {
-      display: flex; align-items: center; justify-content: center; gap: 7px;
-      background: none; border: 1.5px dashed var(--border);
-      border-radius: var(--radius-sm); padding: 11px 16px;
-      font-size: 14px; font-weight: 600; color: var(--text-light);
-      cursor: pointer; font-family: inherit; transition: all .15s; width: 100%;
-    }
-    .btn-add-sucursal:hover { border-color: var(--accent); color: var(--accent); background: rgba(193,122,58,.04); }
+    .btn-add-sucursal { display: flex; align-items: center; justify-content: center; gap: 7px; background: none; border: 1.5px dashed var(--border); border-radius: var(--radius-sm); padding: 11px 16px; font-size: 14px; font-weight: 600; color: var(--text-light); cursor: pointer; font-family: inherit; transition: all .15s; width: 100%; }
+    .btn-add-sucursal:hover { border-color: var(--accent); color: var(--accent); background: rgba(194,84,42,.04); }
 
-    .services-block { display: flex; flex-direction: column; gap: 22px; }
-    .svc-group { display: flex; flex-direction: column; gap: 10px; }
+    /* Upload zones */
+    .upload-zone {
+      border: 2px dashed var(--border); border-radius: var(--radius);
+      padding: 28px 20px; text-align: center;
+      cursor: pointer; background: var(--field-bg);
+      transition: border-color .2s, background .2s;
+      position: relative; overflow: hidden;
+    }
+    .upload-zone:hover, .upload-zone.over { border-color: var(--accent); background: rgba(194,84,42,.04); }
+    .upload-zone input[type="file"] { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+    .upload-zone-content { pointer-events: none; }
+    .upload-icon { font-size: 28px; margin-bottom: 8px; }
+    .upload-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+    .upload-sub   { font-size: 12px; color: var(--text-light); }
+    .upload-sub span { color: var(--accent); font-weight: 600; }
+
+    /* Logo preview */
+    .logo-preview { display: none; flex-direction: column; align-items: center; gap: 10px; }
+    .logo-preview.show { display: flex; }
+    .logo-preview img { width: 72px; height: 72px; border-radius: 14px; object-fit: cover; box-shadow: var(--shadow-md); }
+    .logo-preview-name { font-size: 13px; font-weight: 600; color: var(--text); }
+    .logo-remove { font-size: 12px; color: var(--text-light); background: none; border: 1px solid var(--border); border-radius: 20px; padding: 3px 12px; cursor: pointer; font-family: inherit; transition: all .15s; pointer-events: all; }
+    .logo-remove:hover { color: var(--error); border-color: var(--error); }
+
+    /* Photos grid */
+    .photos-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 14px; }
+    .photo-thumb { position: relative; aspect-ratio: 1; border-radius: var(--radius-sm); overflow: hidden; background: var(--bg-warm); }
+    .photo-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .photo-thumb-remove { position: absolute; top: 5px; right: 5px; width: 22px; height: 22px; background: rgba(42,22,8,.7); color: #fff; border: none; border-radius: 50%; cursor: pointer; font-size: 12px; display: flex; align-items: center; justify-content: center; transition: background .15s; }
+    .photo-thumb-remove:hover { background: rgba(217,64,64,.9); }
+    .photos-count { font-size: 13px; color: var(--text-light); margin-top: 10px; }
+    .photos-count .ok  { color: var(--success); font-weight: 600; }
+    .photos-count .bad { color: var(--error); font-weight: 600; }
+
+    /* Chips */
+    .svc-group { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
     .svc-group-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--text-light); }
     .chips-row { display: flex; flex-wrap: wrap; gap: 8px; }
     .chip input[type="checkbox"] { display: none; }
-    .chip-lbl {
-      display: inline-flex; align-items: center;
-      padding: 8px 14px; border-radius: var(--radius-pill);
-      border: 1.5px solid var(--border); background: var(--field-bg);
-      font-size: 13px; font-weight: 500; color: var(--text);
-      cursor: pointer; transition: all .15s; user-select: none;
-    }
-    .chip input:checked + .chip-lbl { background: var(--primary); border-color: var(--primary); color: #fff; }
+    .chip-lbl { display: inline-flex; align-items: center; padding: 8px 14px; border-radius: var(--radius-pill); border: 1.5px solid var(--border); background: var(--field-bg); font-size: 13px; font-weight: 500; color: var(--text); cursor: pointer; transition: all .15s; user-select: none; }
+    .chip input:checked + .chip-lbl { background: var(--espresso); border-color: var(--espresso); color: #fff; }
 
-    .plans-stack { display: flex; flex-direction: column; gap: 12px; }
-    .plan-card {
-      border: 2px solid var(--border); border-radius: var(--radius);
-      padding: 22px 22px 20px; cursor: pointer;
-      background: var(--white); transition: all .2s; position: relative;
-    }
-    .plan-card:hover { border-color: #c9a07a; box-shadow: 0 2px 12px rgba(44,26,14,.08); }
-    .plan-card.selected { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(44,26,14,.07); }
+    /* Plans */
+    .plans-header { margin-bottom: 8px; }
+    .plans-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(194,84,42,.1); border: 1px solid rgba(194,84,42,.25); border-radius: var(--radius-pill); padding: 5px 14px; font-size: 12px; font-weight: 700; color: var(--accent); margin-bottom: 20px; }
+    .plans-stack { display: flex; flex-direction: column; gap: 14px; }
+    .plan-card { border: 2px solid var(--border); border-radius: var(--radius); padding: 24px; cursor: pointer; background: var(--white); transition: all .2s; position: relative; }
+    .plan-card:hover { border-color: #c9a07a; box-shadow: 0 2px 12px rgba(42,22,8,.08); }
+    .plan-card.selected { border-color: var(--espresso); box-shadow: 0 0 0 4px rgba(42,22,8,.07); }
+    .plan-card.plan-dark { background: var(--espresso); border-color: var(--espresso); }
+    .plan-card.plan-dark:hover { border-color: var(--espresso); box-shadow: 0 4px 20px rgba(42,22,8,.25); }
+    .plan-card.plan-dark.selected { box-shadow: 0 0 0 4px rgba(42,22,8,.2); }
     .plan-card input[type="radio"] { display: none; }
-    .plan-popular {
-      position: absolute; top: 18px; right: 18px;
-      font-size: 9px; font-weight: 800; text-transform: uppercase;
-      letter-spacing: .08em; background: var(--accent); color: #fff;
-      padding: 3px 10px; border-radius: 100px;
-    }
-    .plan-tier { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: var(--accent); margin-bottom: 4px; }
-    .plan-title { font-size: 22px; font-weight: 900; color: var(--heading); letter-spacing: -.5px; margin-bottom: 3px; }
-    .plan-price { font-size: 14px; font-weight: 700; color: var(--text-light); margin-bottom: 12px; }
-    .plan-price b { font-size: 17px; color: var(--primary); }
-    .plan-tagline { font-size: 14px; color: var(--text-light); margin-bottom: 14px; line-height: 1.5; }
-    .plan-feats { display: flex; flex-direction: column; gap: 7px; }
-    .plan-feat { font-size: 13px; color: var(--text); display: flex; gap: 9px; align-items: flex-start; line-height: 1.45; }
+    .plan-badge { position: absolute; top: 20px; right: 20px; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; background: var(--accent); color: #fff; padding: 3px 10px; border-radius: 100px; }
+    .plan-tier  { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: var(--accent); margin-bottom: 4px; }
+    .plan-dark .plan-tier  { color: rgba(255,255,255,.55); }
+    .plan-title { font-size: 24px; font-weight: 900; color: var(--heading); letter-spacing: -.5px; margin-bottom: 6px; }
+    .plan-dark .plan-title { color: #fff; }
+    .plan-tagline { font-size: 15px; font-weight: 700; color: var(--heading); margin-bottom: 14px; line-height: 1.45; }
+    .plan-dark .plan-tagline { color: rgba(255,255,255,.9); }
+    .plan-price { font-size: 28px; font-weight: 900; color: var(--espresso); letter-spacing: -1px; margin-bottom: 4px; }
+    .plan-dark .plan-price { color: #fff; }
+    .plan-price-sub { font-size: 12px; color: var(--text-light); margin-bottom: 16px; }
+    .plan-dark .plan-price-sub { color: rgba(255,255,255,.5); }
+    .plan-divider { height: 1px; background: var(--border); margin-bottom: 14px; }
+    .plan-dark .plan-divider { background: rgba(255,255,255,.15); }
+    .plan-feats { display: flex; flex-direction: column; gap: 8px; }
+    .plan-feat  { font-size: 13px; color: var(--text); display: flex; gap: 9px; align-items: flex-start; line-height: 1.45; }
+    .plan-dark .plan-feat { color: rgba(255,255,255,.85); }
     .plan-feat::before { content: "✓"; font-size: 11px; font-weight: 800; color: var(--accent); flex-shrink: 0; margin-top: 2px; }
-    .plan-feat-inc { font-size: 12px; font-weight: 600; color: var(--accent); margin-bottom: 5px; padding-bottom: 8px; border-bottom: 1px solid var(--border); }
+    .plan-dark .plan-feat::before { color: rgba(255,255,255,.6); }
+    .plan-feat-inc { font-size: 12px; font-weight: 600; color: var(--text-light); margin-bottom: 4px; }
+    .plan-dark .plan-feat-inc { color: rgba(255,255,255,.45); }
+    .err-plan { font-size: 12px; color: var(--error); font-weight: 500; margin-top: 8px; display: none; }
 
-    .pay-summary { background: var(--bg-warm); border: 1px solid var(--border); border-radius: var(--radius); padding: 22px; margin-bottom: 22px; }
-    .pay-summary-label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--text-light); margin-bottom: 8px; }
-    .pay-plan-name { font-size: 20px; font-weight: 900; color: var(--heading); margin-bottom: 4px; }
-    .pay-price { font-size: 34px; font-weight: 900; color: var(--primary); letter-spacing: -1px; }
-    .pay-price-sub { font-size: 13px; color: var(--text-light); margin-top: 2px; }
-    .pay-placeholder { border: 2px dashed var(--border); border-radius: var(--radius); padding: 28px 20px; text-align: center; margin-bottom: 20px; }
-    .pay-placeholder-icon { font-size: 28px; margin-bottom: 10px; }
-    .pay-placeholder-title { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 6px; }
-    .pay-placeholder-sub { font-size: 13px; color: var(--text-light); line-height: 1.6; max-width: 400px; margin: 0 auto; }
-    .providers { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
-    .provider { font-size: 11px; font-weight: 700; color: var(--text-light); background: var(--bg-warm); border: 1px solid var(--border); border-radius: 8px; padding: 5px 12px; }
-    .pay-note { background: rgba(193,122,58,.07); border: 1px solid rgba(193,122,58,.25); border-radius: var(--radius-sm); padding: 14px 16px; font-size: 13px; color: var(--text); line-height: 1.55; }
+    /* Payment (MP mock) */
+    .pay-free-banner {
+      background: #4A7C59;
+      border-radius: var(--radius); padding: 18px 20px; margin-bottom: 24px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .pay-free-icon { flex-shrink: 0; display: flex; align-items: center; }
+    .pay-free-text { color: #fff; }
+    .pay-free-text strong { display: block; font-size: 15px; font-weight: 800; margin-bottom: 2px; }
+    .pay-free-text span { font-size: 13px; opacity: .85; line-height: 1.5; }
+
+    .pay-summary { background: var(--bg-warm); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; }
+    .pay-summary-plan { font-size: 15px; font-weight: 800; color: var(--heading); }
+    .pay-summary-price { font-size: 13px; color: var(--text-light); }
+    .pay-summary-price b { color: var(--espresso); }
+
+    .mp-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 20px; }
+    .mp-header { background: #009EE3; padding: 14px 20px; display: flex; align-items: center; gap: 10px; }
+    .mp-header-logo { font-size: 13px; font-weight: 900; color: #fff; letter-spacing: -.3px; }
+    .mp-header-logo span { color: rgba(255,255,255,.7); }
+    .mp-body { padding: 22px 20px; display: flex; flex-direction: column; gap: 16px; }
+    .mp-card-visual {
+      background: linear-gradient(135deg, #2A1608 0%, #5C3020 100%);
+      border-radius: 12px; padding: 20px; height: 140px;
+      display: flex; flex-direction: column; justify-content: space-between;
+      box-shadow: 0 8px 24px rgba(42,22,8,.2);
+    }
+    .mp-card-chip { width: 32px; height: 24px; background: rgba(255,255,255,.2); border-radius: 4px; border: 1px solid rgba(255,255,255,.3); }
+    .mp-card-number-display { font-size: 17px; font-weight: 700; color: rgba(255,255,255,.9); letter-spacing: 3px; font-family: var(--font); }
+    .mp-card-bottom { display: flex; justify-content: space-between; align-items: flex-end; }
+    .mp-card-holder { font-size: 11px; color: rgba(255,255,255,.6); text-transform: uppercase; letter-spacing: .05em; }
+    .mp-card-holder-name { font-size: 13px; font-weight: 700; color: rgba(255,255,255,.9); text-transform: uppercase; letter-spacing: .05em; margin-top: 2px; }
+    .mp-card-expiry-label { font-size: 10px; color: rgba(255,255,255,.6); text-align: right; }
+    .mp-card-expiry-val   { font-size: 13px; font-weight: 700; color: rgba(255,255,255,.9); text-align: right; margin-top: 2px; }
+    .mp-field-group { display: flex; flex-direction: column; gap: 6px; }
+    .mp-field-group label { font-size: 12px; font-weight: 700; color: var(--text-light); text-transform: uppercase; letter-spacing: .08em; }
+    .mp-row { display: flex; gap: 12px; }
+    .mp-row .mp-field-group { flex: 1; }
+    .mp-field-group input {
+      width: 100%; background: var(--field-bg); border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm); padding: 12px 14px;
+      font-size: 16px; font-family: var(--font); color: var(--text); outline: none;
+      transition: border-color .2s, box-shadow .2s; letter-spacing: .5px;
+    }
+    .mp-field-group input:focus { border-color: #009EE3; box-shadow: 0 0 0 3px rgba(0,158,227,.12); }
+    .mp-field-group input.invalid { border-color: var(--error); background: #FFF8F8; }
+    .mp-field-group .field-error { font-size: 12px; color: var(--error); font-weight: 500; display: none; }
+    .mp-field-group .field-error.show { display: block; }
+
+    .pay-note { background: rgba(194,84,42,.06); border: 1px solid rgba(194,84,42,.2); border-radius: var(--radius-sm); padding: 14px 16px; font-size: 13px; color: var(--text); line-height: 1.6; }
     .pay-note strong { color: var(--accent); }
 
-    .success-wrap { text-align: center; padding: 16px 0 32px; }
-    .success-icon {
-      width: 80px; height: 80px;
-      background: var(--bg-warm);
-      border: 1.5px solid var(--border); border-radius: 20px;
-      display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 24px;
-      animation: pop .5s cubic-bezier(.34,1.56,.64,1) both;
-      box-shadow: 0 4px 20px rgba(44,26,14,.1);
-      overflow: hidden;
-    }
-    @keyframes pop { from { transform: scale(.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-    .success-title { font-size: 30px; font-weight: 900; color: var(--heading); letter-spacing: -.8px; line-height: 1.2; margin-bottom: 14px; }
-    .success-body { font-size: 16px; color: var(--text-light); line-height: 1.7; max-width: 500px; margin: 0 auto 28px; }
-    .success-steps { background: var(--bg-warm); border: 1px solid var(--border); border-radius: var(--radius); padding: 6px 0; text-align: left; margin-bottom: 32px; }
-    .success-step { display: flex; gap: 14px; align-items: flex-start; padding: 14px 20px; border-bottom: 1px solid var(--border); }
-    .success-step:last-child { border-bottom: none; }
-    .ss-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
-    .ss-text { font-size: 14px; color: var(--text); line-height: 1.5; }
-    .ss-text strong { color: var(--primary); }
-    .btn-home {
-      display: inline-flex; align-items: center; justify-content: center;
-      gap: 8px; padding: 15px 36px;
-      background: var(--primary); color: #fff;
-      border: none; border-radius: var(--radius-pill);
-      font-size: 15px; font-weight: 700; font-family: inherit;
-      text-decoration: none; cursor: pointer;
-      transition: opacity .2s, transform .15s;
-      box-shadow: var(--shadow-md);
-    }
-    .btn-home:hover { opacity: .88; transform: translateY(-1px); }
-
+    /* Nav buttons */
     .wizard-nav { margin-top: 40px; display: flex; align-items: center; gap: 12px; }
     .btn-back-wiz {
       display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-      padding: 14px 20px; background: none;
-      border: 1.5px solid var(--border); border-radius: var(--radius-pill);
-      font-size: 15px; font-weight: 600; color: var(--text-light);
-      cursor: pointer; font-family: inherit; transition: all .2s;
-      white-space: nowrap;
+      padding: 14px 20px; background: none; border: 1.5px solid var(--border);
+      border-radius: var(--radius-pill); font-size: 15px; font-weight: 600;
+      color: var(--text-light); cursor: pointer; font-family: inherit; transition: all .2s;
     }
-    .btn-back-wiz:hover { border-color: var(--primary); color: var(--primary); }
+    .btn-back-wiz:hover { border-color: var(--espresso); color: var(--espresso); }
     .btn-back-wiz:disabled { opacity: .3; cursor: not-allowed; }
-
     .btn-next-wiz {
-      flex: 1; display: flex; align-items: center;
-      justify-content: center; gap: 8px;
-      padding: 16px 28px; background: var(--primary);
-      border: none; border-radius: var(--radius-pill);
-      font-size: 15px; font-weight: 700; color: #fff;
-      cursor: pointer; font-family: inherit;
-      transition: opacity .2s, transform .15s;
+      flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 16px 28px; background: var(--espresso); border: none;
+      border-radius: var(--radius-pill); font-size: 15px; font-weight: 700; color: #fff;
+      cursor: pointer; font-family: inherit; transition: opacity .2s, transform .15s;
       box-shadow: var(--shadow-md);
     }
     .btn-next-wiz:hover { opacity: .88; transform: translateY(-1px); }
     .btn-next-wiz:disabled { opacity: .5; cursor: not-allowed; transform: none; }
-    .btn-next-wiz .spinner {
-      display: none; width: 16px; height: 16px;
-      border: 2px solid rgba(255,255,255,.4);
-      border-top-color: #fff; border-radius: 50%;
-      animation: spin .6s linear infinite;
-    }
+    .btn-next-wiz .spinner { display: none; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,.4); border-top-color: #fff; border-radius: 50%; animation: spin .6s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .btn-next-wiz.loading .spinner { display: block; }
-    .btn-next-wiz.loading .btn-label { opacity: .6; }
+    .btn-next-wiz.loading .spinner  { display: block; }
+    .btn-next-wiz.loading .btn-label{ opacity: .6; }
 
+    /* Success */
+    .success-wrap { text-align: center; padding: 16px 0 32px; }
+    .success-icon { width: 80px; height: 80px; background: var(--bg-warm); border: 1.5px solid var(--border); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; animation: pop .5s cubic-bezier(.34,1.56,.64,1) both; box-shadow: 0 4px 20px rgba(42,22,8,.1); overflow: hidden; }
+    @keyframes pop { from { transform: scale(.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+    .success-title { font-size: 30px; font-weight: 900; color: var(--heading); letter-spacing: -.8px; line-height: 1.2; margin-bottom: 14px; }
+    .success-body  { font-size: 16px; color: var(--text-light); line-height: 1.7; max-width: 500px; margin: 0 auto 28px; }
+    .success-steps { background: var(--bg-warm); border: 1px solid var(--border); border-radius: var(--radius); padding: 6px 0; text-align: left; margin-bottom: 32px; }
+    .success-step  { display: flex; gap: 14px; align-items: flex-start; padding: 14px 20px; border-bottom: 1px solid var(--border); }
+    .success-step:last-child { border-bottom: none; }
+    .ss-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+    .ss-text { font-size: 14px; color: var(--text); line-height: 1.5; }
+    .ss-text strong { color: var(--espresso); }
+    .btn-home { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 15px 36px; background: var(--espresso); color: #fff; border: none; border-radius: var(--radius-pill); font-size: 15px; font-weight: 700; font-family: inherit; text-decoration: none; cursor: pointer; transition: opacity .2s, transform .15s; box-shadow: var(--shadow-md); }
+    .btn-home:hover { opacity: .88; transform: translateY(-1px); }
+
+    /* Footer */
     footer { border-top: 1px solid var(--border); padding: 32px 24px; }
     .footer-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
-    .footer-copy { font-size: 13px; color: var(--text-light); }
+    .footer-copy  { font-size: 13px; color: var(--text-light); }
     .footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
     .footer-links a { font-size: 13px; color: var(--text-light); text-decoration: none; transition: color .2s; }
-    .footer-links a:hover { color: var(--primary); }
+    .footer-links a:hover { color: var(--espresso); }
     .footer-studio { font-size: 13px; color: var(--text-light); }
 
     @media (max-width: 520px) {
       .wizard-page { padding: 32px 16px 80px; }
-      .plan-card { padding: 18px 16px 16px; }
       .wizard-nav { flex-direction: column-reverse; }
       .btn-back-wiz, .btn-next-wiz { width: 100%; }
       .footer-inner { flex-direction: column; align-items: flex-start; gap: 12px; }
       .success-title { font-size: 24px; }
+      .photos-grid { grid-template-columns: repeat(2, 1fr); }
+      .mp-row { flex-direction: column; }
     }
   </style>
 </head>
@@ -312,7 +309,7 @@
 <nav>
   <div class="nav-inner">
     <a href="/" class="nav-logo">
-      <img src="https://framerusercontent.com/images/MTy73UWUcLJSl0QND7bov2kJJKM.png" alt="Buscafé" width="36" height="36" />
+      <img src="./logo-icon.png" alt="Buscafé" width="36" height="36" />
       <span>Buscafé</span>
     </a>
     <a href="/" class="nav-back">← Volver</a>
@@ -321,47 +318,25 @@
 
 <div class="wizard-page">
 
+  <!-- Progress -->
   <div class="progress-section" id="progress-section">
     <div class="progress-meta">
-      <span class="progress-label" id="progress-label">Paso 1 de 3</span>
-      <span class="progress-step-name" id="progress-name">Tu cafetería</span>
+      <span class="progress-label" id="progress-label">Paso 1 de 4</span>
+      <span class="progress-name"  id="progress-name">Tu cafetería</span>
     </div>
     <div class="progress-bar-bg">
-      <div class="progress-bar-fill" id="progress-fill" style="width:33%"></div>
+      <div class="progress-bar-fill" id="progress-fill" style="width:25%"></div>
     </div>
   </div>
 
   <div class="steps-wrapper">
 
+    <!-- ── PASO 1: Info básica ── -->
     <div class="step active" id="step-1">
       <div class="step-header">
         <h1>Registrá tu cafetería</h1>
         <p>Completá los datos de tu local para sumarte a Buscafé.</p>
       </div>
-
-      <div class="field-group">
-        <label>Logo de la cafetería <span class="label-opt">— opcional</span></label>
-        <div class="logo-zone" id="logo-zone">
-          <input type="file" id="logo-input" accept="image/*" />
-          <div class="logo-zone-content" id="logo-zone-content">
-            <div class="logo-zone-icon">
-              <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M10 22H22M16 18V10M16 10L12.5 13.5M16 10L19.5 13.5" stroke="#B8A89A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-                <rect x="1.5" y="1.5" width="29" height="29" rx="8.5" stroke="#E8DDD3" stroke-width="1.5" stroke-dasharray="4 3"/>
-              </svg>
-            </div>
-            <div class="logo-zone-title">Arrastrá tu logo aquí</div>
-            <div class="logo-zone-sub">o <span>hacé clic para buscarlo</span> · PNG, JPG, SVG</div>
-          </div>
-          <div class="logo-preview" id="logo-preview">
-            <img id="logo-preview-img" src="" alt="Logo preview" />
-            <div class="logo-preview-name" id="logo-preview-name"></div>
-            <button type="button" class="logo-remove" id="logo-remove">Quitar</button>
-          </div>
-        </div>
-      </div>
-
-      <div class="divider"></div>
 
       <div class="field-group">
         <label for="nombre">Nombre de la cafetería *</label>
@@ -387,12 +362,9 @@
             <span class="radio-opt-label">Sí</span>
           </label>
         </div>
-
         <div class="sucursales-wrap" id="sucursales-wrap">
           <div id="sucursales-list"></div>
-          <button type="button" class="btn-add-sucursal" id="btn-add-sucursal">
-            + Agregar sucursal
-          </button>
+          <button type="button" class="btn-add-sucursal" id="btn-add-sucursal">+ Agregar sucursal</button>
         </div>
       </div>
 
@@ -414,10 +386,14 @@
         <label for="instagram">Instagram <span class="label-opt">— opcional</span></label>
         <input type="text" id="instagram" name="instagram" placeholder="@micafeteria" />
       </div>
+    </div><!-- /step-1 -->
 
-      <div class="divider"></div>
+    <!-- ── PASO 2: Detalles + fotos + logo ── -->
+    <div class="step" id="step-2">
+      <div class="step-header">
+        <h1>Tu espacio</h1>
+      </div>
 
-      <!-- Promociones bancarias — ahora es campo de texto libre, ubicado antes de Servicios -->
       <div class="field-group">
         <label for="promos-bancarias">Promociones bancarias <span class="label-opt">— opcional</span></label>
         <input type="text" id="promos-bancarias" name="promos-bancarias" placeholder="Ej: 20% con Itaú los martes, 2x1 con OCA los jueves" />
@@ -426,168 +402,266 @@
       <div class="divider"></div>
 
       <div class="field-group">
-        <label>¿Qué ofrece tu cafetería? <span class="label-opt">— opcional, elegí los que apliquen</span></label>
+        <label>¿Qué ofrece tu cafetería? <span class="label-opt">— elegí los que apliquen</span></label>
       </div>
 
-      <div class="services-block">
-        <div class="svc-group">
-          <div class="chips-row">
-            <label class="chip"><input type="checkbox" name="svc" value="Silencioso" /><span class="chip-lbl">Silencioso</span></label>
-            <label class="chip"><input type="checkbox" name="svc" value="Mesas amplias" /><span class="chip-lbl">Mesas amplias</span></label>
-            <label class="chip"><input type="checkbox" name="svc" value="Cowork" /><span class="chip-lbl">Cowork</span></label>
-            <label class="chip"><input type="checkbox" name="svc" value="Mesas afuera" /><span class="chip-lbl">Mesas afuera</span></label>
-            <label class="chip"><input type="checkbox" name="svc" value="Espacio verde" /><span class="chip-lbl">Espacio verde</span></label>
-            <label class="chip"><input type="checkbox" name="svc" value="Terraza" /><span class="chip-lbl">Terraza</span></label>
-            <label class="chip"><input type="checkbox" name="svc" value="Familiar" /><span class="chip-lbl">Familiar</span></label>
-            <label class="chip"><input type="checkbox" name="svc" value="Cambiador" /><span class="chip-lbl">Cambiador</span></label>
-            <label class="chip"><input type="checkbox" name="svc" value="Sillas para niños" /><span class="chip-lbl">Sillas para niños</span></label>
-            <label class="chip"><input type="checkbox" name="svc" value="Pet friendly" /><span class="chip-lbl">Pet friendly</span></label>
-            <label class="chip"><input type="checkbox" name="svc" value="Bike friendly" /><span class="chip-lbl">Bike friendly</span></label>
-            <label class="chip"><input type="checkbox" name="svc" value="Tienda" /><span class="chip-lbl">Tienda</span></label>
-            <label class="chip"><input type="checkbox" name="svc" value="Para llevar" /><span class="chip-lbl">Para llevar</span></label>
-            <label class="chip"><input type="checkbox" name="svc" value="Eventos" /><span class="chip-lbl">Eventos</span></label>
-            <label class="chip"><input type="checkbox" name="svc" value="Librería" /><span class="chip-lbl">Librería</span></label>
-            <label class="chip"><input type="checkbox" name="svc" value="Accesible" /><span class="chip-lbl">Accesible</span></label>
-          </div>
+      <div class="svc-group">
+        <div class="chips-row">
+          <label class="chip"><input type="checkbox" name="svc" value="Silencioso" /><span class="chip-lbl">Silencioso</span></label>
+          <label class="chip"><input type="checkbox" name="svc" value="Mesas amplias" /><span class="chip-lbl">Mesas amplias</span></label>
+          <label class="chip"><input type="checkbox" name="svc" value="Cowork" /><span class="chip-lbl">Cowork</span></label>
+          <label class="chip"><input type="checkbox" name="svc" value="Mesas afuera" /><span class="chip-lbl">Mesas afuera</span></label>
+          <label class="chip"><input type="checkbox" name="svc" value="Espacio verde" /><span class="chip-lbl">Espacio verde</span></label>
+          <label class="chip"><input type="checkbox" name="svc" value="Terraza" /><span class="chip-lbl">Terraza</span></label>
+          <label class="chip"><input type="checkbox" name="svc" value="Familiar" /><span class="chip-lbl">Familiar</span></label>
+          <label class="chip"><input type="checkbox" name="svc" value="Cambiador" /><span class="chip-lbl">Cambiador</span></label>
+          <label class="chip"><input type="checkbox" name="svc" value="Sillas para niños" /><span class="chip-lbl">Sillas para niños</span></label>
+          <label class="chip"><input type="checkbox" name="svc" value="Pet friendly" /><span class="chip-lbl">Pet friendly</span></label>
+          <label class="chip"><input type="checkbox" name="svc" value="Bike friendly" /><span class="chip-lbl">Bike friendly</span></label>
+          <label class="chip"><input type="checkbox" name="svc" value="Tienda" /><span class="chip-lbl">Tienda</span></label>
+          <label class="chip"><input type="checkbox" name="svc" value="Para llevar" /><span class="chip-lbl">Para llevar</span></label>
+          <label class="chip"><input type="checkbox" name="svc" value="Eventos" /><span class="chip-lbl">Eventos</span></label>
+          <label class="chip"><input type="checkbox" name="svc" value="Librería" /><span class="chip-lbl">Librería</span></label>
+          <label class="chip"><input type="checkbox" name="svc" value="Accesible" /><span class="chip-lbl">Accesible</span></label>
         </div>
-        <div class="svc-group">
-          <div class="svc-group-title">Gastronomía</div>
-          <div class="chips-row">
-            <label class="chip"><input type="checkbox" name="svc" value="Brunch" /><span class="chip-lbl">Brunch</span></label>
-            <label class="chip"><input type="checkbox" name="svc" value="Sin gluten" /><span class="chip-lbl">Sin gluten</span></label>
-            <label class="chip"><input type="checkbox" name="svc" value="Apto celiacos" /><span class="chip-lbl">Apto celiacos</span></label>
-            <label class="chip"><input type="checkbox" name="svc" value="Opciones veggies" /><span class="chip-lbl">Opciones veggies</span></label>
-            <label class="chip"><input type="checkbox" name="svc" value="Almuerzos" /><span class="chip-lbl">Almuerzos</span></label>
-            <label class="chip"><input type="checkbox" name="svc" value="Pastelería" /><span class="chip-lbl">Pastelería</span></label>
-            <label class="chip"><input type="checkbox" name="svc" value="Sándwiches" /><span class="chip-lbl">Sándwiches</span></label>
-          </div>
+      </div>
+
+      <div class="svc-group">
+        <div class="svc-group-title">Gastronomía</div>
+        <div class="chips-row">
+          <label class="chip"><input type="checkbox" name="svc" value="Brunch" /><span class="chip-lbl">Brunch</span></label>
+          <label class="chip"><input type="checkbox" name="svc" value="Sin gluten" /><span class="chip-lbl">Sin gluten</span></label>
+          <label class="chip"><input type="checkbox" name="svc" value="Apto celíacos" /><span class="chip-lbl">Apto celíacos</span></label>
+          <label class="chip"><input type="checkbox" name="svc" value="Opciones veggies" /><span class="chip-lbl">Opciones veggies</span></label>
+          <label class="chip"><input type="checkbox" name="svc" value="Almuerzos" /><span class="chip-lbl">Almuerzos</span></label>
+          <label class="chip"><input type="checkbox" name="svc" value="Pastelería" /><span class="chip-lbl">Pastelería</span></label>
+          <label class="chip"><input type="checkbox" name="svc" value="Sándwiches" /><span class="chip-lbl">Sándwiches</span></label>
         </div>
-        <div class="svc-group">
-          <div class="svc-group-title">Métodos</div>
-          <div class="chips-row">
-            <label class="chip"><input type="checkbox" name="svc" value="Espresso" /><span class="chip-lbl">Espresso</span></label>
-            <label class="chip"><input type="checkbox" name="svc" value="V60" /><span class="chip-lbl">V60</span></label>
-            <label class="chip"><input type="checkbox" name="svc" value="Aeropress" /><span class="chip-lbl">Aeropress</span></label>
-            <label class="chip"><input type="checkbox" name="svc" value="Cold brew" /><span class="chip-lbl">Cold brew</span></label>
-            <label class="chip"><input type="checkbox" name="svc" value="Prensa francesa" /><span class="chip-lbl">Prensa francesa</span></label>
-            <label class="chip"><input type="checkbox" name="svc" value="Chemex" /><span class="chip-lbl">Chemex</span></label>
+      </div>
+
+      <div class="svc-group">
+        <div class="svc-group-title">Métodos</div>
+        <div class="chips-row">
+          <label class="chip"><input type="checkbox" name="svc" value="Espresso" /><span class="chip-lbl">Espresso</span></label>
+          <label class="chip"><input type="checkbox" name="svc" value="V60" /><span class="chip-lbl">V60</span></label>
+          <label class="chip"><input type="checkbox" name="svc" value="Aeropress" /><span class="chip-lbl">Aeropress</span></label>
+          <label class="chip"><input type="checkbox" name="svc" value="Cold brew" /><span class="chip-lbl">Cold brew</span></label>
+          <label class="chip"><input type="checkbox" name="svc" value="Prensa francesa" /><span class="chip-lbl">Prensa francesa</span></label>
+          <label class="chip"><input type="checkbox" name="svc" value="Chemex" /><span class="chip-lbl">Chemex</span></label>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Logo -->
+      <div class="field-group">
+        <label>Logo de la cafetería <span class="label-opt">— opcional</span></label>
+        <div class="upload-zone" id="logo-zone">
+          <input type="file" id="logo-input" accept="image/*" />
+          <div class="upload-zone-content" id="logo-zone-content">
+            <div class="upload-icon">
+              <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><path d="M10 22H22M16 18V10M16 10L12.5 13.5M16 10L19.5 13.5" stroke="#C0AFA0" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/><rect x="1.5" y="1.5" width="29" height="29" rx="8.5" stroke="#E5D6C0" stroke-width="1.5" stroke-dasharray="4 3"/></svg>
+            </div>
+            <div class="upload-title">Arrastrá tu logo aquí</div>
+            <div class="upload-sub">o <span>hacé clic para buscarlo</span> · PNG, JPG, SVG</div>
+          </div>
+          <div class="logo-preview" id="logo-preview">
+            <img id="logo-preview-img" src="" alt="Logo" />
+            <div class="logo-preview-name" id="logo-preview-name"></div>
+            <button type="button" class="logo-remove" id="logo-remove">Quitar</button>
           </div>
         </div>
       </div>
-    </div><!-- /step-1 -->
 
-    <div class="step" id="step-2">
+      <!-- Fotos -->
+      <div class="field-group" style="margin-top: 8px;">
+        <label>Fotos de tu cafetería * <span class="label-opt">— mínimo 6, buena calidad</span></label>
+        <div class="upload-zone" id="photos-zone">
+          <input type="file" id="photos-input" accept="image/png,image/jpeg" multiple />
+          <div class="upload-zone-content">
+            <div class="upload-icon">
+              <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="2" y="6" width="28" height="20" rx="5" stroke="#E5D6C0" stroke-width="1.5" stroke-dasharray="4 3"/><circle cx="10.5" cy="13.5" r="2.5" stroke="#C0AFA0" stroke-width="1.5"/><path d="M2 22l7-6 5 5 4-4 7 6" stroke="#C0AFA0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="upload-title">Agregá fotos de tu local</div>
+            <div class="upload-sub">PNG o JPG · <span>Mínimo 6 fotos</span> · Podés seleccionar varias a la vez</div>
+          </div>
+        </div>
+        <div class="photos-grid" id="photos-grid"></div>
+        <div class="photos-count" id="photos-count"></div>
+        <span class="field-error" id="err-photos">Necesitás al menos 6 fotos.</span>
+      </div>
+    </div><!-- /step-2 -->
+
+    <!-- ── PASO 3: Planes ── -->
+    <div class="step" id="step-3">
       <div class="step-header">
         <h1>Elegí tu plan</h1>
-        <p>Podés empezar gratis y cambiar de plan cuando quieras. Sin permanencia.</p>
+        <p>Primer mes gratuito en ambos planes.</p>
       </div>
 
       <div class="plans-stack">
 
-        <label class="plan-card" id="card-basico">
-          <input type="radio" name="plan" value="basico" id="plan-basico" />
-          <div class="plan-tier">Quiero estar en el mapa</div>
-          <div class="plan-title">Básico</div>
-          <div class="plan-price">Gratis</div>
-          <div class="plan-tagline">Sumate a Buscafé y dejate encontrar.</div>
+        <label class="plan-card" id="card-standard">
+          <input type="radio" name="plan" value="standard" id="plan-standard" />
+          <div class="plan-badge" style="background:var(--accent);">Más elegido</div>
+          <div class="plan-tier">Quiero más visibilidad</div>
+          <div class="plan-title">Standard</div>
+          <div class="plan-price">USD 35<span style="font-size:16px;font-weight:500;opacity:.6">/mes</span></div>
+          <div class="plan-price-sub">Primer mes gratis · luego USD 35/mes</div>
+          <div class="plan-tagline">Llegá a más personas todos los días.</div>
+          <div class="plan-divider"></div>
           <div class="plan-feats">
-            <div class="plan-feat">Ficha completa (fotos, horarios, servicios)</div>
-            <div class="plan-feat">Visibilidad en el listado y el mapa</div>
+            <div class="plan-feat">Perfil completo con fotos, horarios y servicios</div>
+            <div class="plan-feat">Visibilidad en el mapa y el listado</div>
             <div class="plan-feat">Redirección directa a Instagram</div>
-            <div class="plan-feat">Redirección directa a Google Maps</div>
+            <div class="plan-feat">Publicación de eventos y talleres</div>
             <div class="plan-feat">1 cuponera virtual activa</div>
           </div>
         </label>
 
-        <label class="plan-card" id="card-standard">
-          <input type="radio" name="plan" value="standard" id="plan-standard" />
-          <div class="plan-popular">El más elegido</div>
-          <div class="plan-tier">Quiero más visibilidad</div>
-          <div class="plan-title">Standard</div>
-          <div class="plan-price"><b>USD 35</b> / mes</div>
-          <div class="plan-tagline">Llegá a más personas todos los días.</div>
-          <div class="plan-feats">
-            <div class="plan-feat-inc">Incluye todo el Plan Básico, más:</div>
-            <div class="plan-feat">Publicá tus eventos</div>
-            <div class="plan-feat">Menú semanal y promociones activas</div>
-            <div class="plan-feat">Productos destacados en tu perfil</div>
-            <div class="plan-feat">Hasta 2 cuponeras virtuales activas</div>
-          </div>
-        </label>
-
-        <label class="plan-card" id="card-premium">
+        <label class="plan-card plan-dark" id="card-premium">
           <input type="radio" name="plan" value="premium" id="plan-premium" />
           <div class="plan-tier">Quiero ser referente</div>
           <div class="plan-title">Premium</div>
-          <div class="plan-price"><b>USD 65</b> / mes</div>
-          <div class="plan-tagline">Convertite en la cafetería de referencia de tu barrio.</div>
+          <div class="plan-price">USD 60<span style="font-size:16px;font-weight:500;opacity:.5">/mes</span></div>
+          <div class="plan-price-sub">Primer mes gratis · luego USD 60/mes</div>
+          <div class="plan-tagline">Convertite en una cafetería referente de tu ciudad.</div>
+          <div class="plan-divider"></div>
           <div class="plan-feats">
-            <div class="plan-feat-inc">Incluye todo el Plan Standard, más:</div>
-            <div class="plan-feat">Posicionamiento destacado en Inicio</div>
-            <div class="plan-feat">Banner rotativo en Home</div>
-            <div class="plan-feat">Campañas temáticas propias</div>
-            <div class="plan-feat">Flash Café — 2 push notifications mensuales</div>
-            <div class="plan-feat">Contenido dedicado en el Instagram de Buscafé</div>
+            <div class="plan-feat-inc">Todo el Plan Standard, más:</div>
+            <div class="plan-feat">Destacado en Home</div>
+            <div class="plan-feat">Promociones disponibles en perfil</div>
+            <div class="plan-feat">Productos destacados</div>
+            <div class="plan-feat">Destacar eventos en Home</div>
+            <div class="plan-feat">Contenido en el feed de Instagram de Buscafé</div>
             <div class="plan-feat">Hasta 4 cuponeras virtuales activas</div>
           </div>
         </label>
 
       </div>
-      <span class="field-error" id="err-plan" style="margin-top:12px;display:none">Seleccioná un plan para continuar.</span>
-    </div><!-- /step-2 -->
+      <div class="err-plan" id="err-plan">Seleccioná un plan para continuar.</div>
+      <p style="font-size:12px;color:var(--text-light);margin-top:18px;line-height:1.6;">Sin permanencia. Cambiá o cancelá cuando quieras. Por consultas comunicate a <a href="mailto:info@buscafe.app" style="color:var(--accent);text-decoration:none;">info@buscafe.app</a>.</p>
+    </div><!-- /step-3 -->
 
-    <div class="step" id="step-3">
+    <!-- ── PASO 4: Pago ── -->
+    <div class="step" id="step-4">
       <div class="step-header">
-        <h1>Activá tu plan</h1>
-        <p>Revisá el resumen de tu suscripción.</p>
+        <h1>Activá tu suscripción</h1>
+      </div>
+
+      <div class="pay-free-banner">
+        <div class="pay-free-icon">
+          <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="18" cy="18" r="16" stroke="rgba(255,255,255,0.35)" stroke-width="1.5"/>
+            <path d="M10 18L15.5 23.5L26 12.5" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+        <div class="pay-free-text">
+          <strong>Tu primer mes es gratis.</strong>
+          <span>Guardamos tu tarjeta para activar el cobro luego del primer mes.</span>
+        </div>
       </div>
 
       <div class="pay-summary">
-        <div class="pay-summary-label">Plan seleccionado</div>
-        <div class="pay-plan-name" id="pay-plan-name">—</div>
-        <div class="pay-price" id="pay-price">—</div>
-        <div class="pay-price-sub">por mes · sin permanencia</div>
+        <div style="flex:1;min-width:0;">
+          <div class="pay-summary-plan" id="pay-plan-name">—</div>
+          <div style="font-size:11px;color:var(--text-light);margin-top:6px;line-height:1.55;">El cargo se activará automáticamente después del primer mes gratuito. Podés cancelar cuando quieras.</div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px;align-items:flex-end;flex-shrink:0;padding-left:16px;">
+          <div style="text-align:right;">
+            <div style="font-size:10px;color:var(--text-light);text-transform:uppercase;letter-spacing:.07em;font-weight:700;">Hoy pagás</div>
+            <div style="font-size:20px;font-weight:900;color:#4A7C59;line-height:1.1;">USD 0</div>
+          </div>
+          <div style="text-align:right;">
+            <div style="font-size:10px;color:var(--text-light);text-transform:uppercase;letter-spacing:.07em;font-weight:700;">Desde el mes que viene</div>
+            <div style="font-size:20px;font-weight:900;color:var(--espresso);line-height:1.1;"><b id="pay-price-later">—</b>/mes</div>
+          </div>
+        </div>
       </div>
 
-      <div class="pay-placeholder">
-        <div class="pay-placeholder-icon">
-          <svg width="36" height="36" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="7" y="16" width="22" height="15" rx="4" fill="#F5EFE6" stroke="#C17A3A" stroke-width="1.8"/>
-            <path d="M12 16V11C12 7.686 14.686 5 18 5C21.314 5 24 7.686 24 11V16" stroke="#C17A3A" stroke-width="1.8" stroke-linecap="round"/>
-            <circle cx="18" cy="24" r="2.5" fill="#C17A3A"/>
-            <line x1="18" y1="26" x2="18" y2="29" stroke="#C17A3A" stroke-width="1.8" stroke-linecap="round"/>
-          </svg>
+      <div class="mp-card">
+        <div class="mp-header">
+          <svg width="28" height="18" viewBox="0 0 28 18" fill="none"><rect width="28" height="18" rx="4" fill="#009EE3"/><circle cx="10" cy="9" r="5" fill="#fff" opacity=".9"/><circle cx="18" cy="9" r="5" fill="#fff" opacity=".5"/></svg>
+          <div class="mp-header-logo">Mercado<span>Pago</span></div>
         </div>
-        <div class="pay-placeholder-title">Pago seguro — próximamente</div>
-        <div class="pay-placeholder-sub">
-          Estamos integrando los medios de pago. Por ahora, confirmá tu solicitud y nuestro equipo te enviará el link de pago por email.
-        </div>
-        <div class="providers">
-          <span class="provider">Mercado Pago</span>
-          <span class="provider">Stripe</span>
-          <span class="provider">Rebill</span>
+        <div class="mp-body">
+
+          <!-- Visual card -->
+          <div class="mp-card-visual">
+            <div class="mp-card-chip"></div>
+            <div class="mp-card-number-display" id="card-number-display">•••• •••• •••• ••••</div>
+            <div class="mp-card-bottom">
+              <div>
+                <div class="mp-card-holder">Titular</div>
+                <div class="mp-card-holder-name" id="card-name-display">NOMBRE APELLIDO</div>
+              </div>
+              <div>
+                <div class="mp-card-expiry-label">Vence</div>
+                <div class="mp-card-expiry-val" id="card-expiry-display">MM/AA</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="mp-field-group">
+            <label>Número de tarjeta</label>
+            <input type="text" id="card-number" placeholder="1234 5678 9012 3456" maxlength="19" inputmode="numeric" />
+            <span class="field-error" id="err-card-number">Ingresá un número de tarjeta válido.</span>
+          </div>
+
+          <div class="mp-field-group">
+            <label>Nombre del titular</label>
+            <input type="text" id="card-name" placeholder="Como figura en la tarjeta" style="text-transform:uppercase;" />
+            <span class="field-error" id="err-card-name">Este campo es obligatorio.</span>
+          </div>
+
+          <div class="mp-row">
+            <div class="mp-field-group">
+              <label>Vencimiento</label>
+              <input type="text" id="card-expiry" placeholder="MM/AA" maxlength="5" inputmode="numeric" />
+              <span class="field-error" id="err-card-expiry">Fecha inválida.</span>
+            </div>
+            <div class="mp-field-group">
+              <label>CVV</label>
+              <input type="text" id="card-cvv" placeholder="123" maxlength="4" inputmode="numeric" />
+              <span class="field-error" id="err-card-cvv">CVV inválido.</span>
+            </div>
+          </div>
+
         </div>
       </div>
 
       <div class="pay-note">
-        📩 <strong>¿Cómo funciona?</strong> Una vez que confirmés tu solicitud, te contactaremos al mail que dejaste con el link de pago seguro y los próximos pasos para activar tu perfil.
-      </div>
-    </div><!-- /step-3 -->
-
-    <div class="step" id="step-4">
-      <div class="success-wrap">
-        <div class="success-icon">
-          <img src="https://xoddmbesiurqcxftjpqh.supabase.co/storage/v1/object/public/landing/isotipo.png" alt="Buscafé" width="44" height="44" style="object-fit:contain;" />
-        </div>
-        <h1 class="success-title">Recibimos tu solicitud con éxito.</h1>
-        <p class="success-body">
-          Nuestro equipo va a revisar la información que enviaste<br />
-          para asegurarse de que tu cafetería cumpla con los estándares<br />
-          de la guía.
-        </p>
-        <a href="/" class="btn-home">Volver al inicio</a>
+        🔒 <strong>Pago seguro.</strong> Tus datos van cifrados y nunca los almacenamos en nuestros servidores. El cargo de <span id="pay-note-price">—</span>/mes se activará automáticamente después del primer mes gratuito.
       </div>
     </div><!-- /step-4 -->
+
+    <!-- ── PASO 5: Éxito ── -->
+    <div class="step" id="step-5">
+      <div class="success-wrap">
+        <div class="success-icon">
+          <img src="./logo-icon.png" alt="Buscafé" width="44" height="44" style="object-fit:contain;" />
+        </div>
+        <h1 class="success-title">¡Registraste tu cafetería con éxito!</h1>
+        <p class="success-body">
+          Recibimos tu solicitud. Vamos a revisar la información para confirmar que tu cafetería cumple con los estándares de la guía.
+        </p>
+        <div class="success-steps">
+          <div class="success-step">
+            <div class="ss-icon">📋</div>
+            <div class="ss-text"><strong>Revisamos tu ficha</strong><br />Nuestro equipo valida los datos en un plazo de 48 horas hábiles.</div>
+          </div>
+          <div class="success-step">
+            <div class="ss-icon">📩</div>
+            <div class="ss-text"><strong>Te avisamos por email</strong><br />Cuando tu cafetería esté aprobada, recibirás un mail con los próximos pasos.</div>
+          </div>
+          <div class="success-step">
+            <div class="ss-icon">☕</div>
+            <div class="ss-text"><strong>Aparecés en Buscafé</strong><br />Tu primer mes es gratis. El cobro se activa recién después.</div>
+          </div>
+        </div>
+        <a href="/" class="btn-home">Volver al inicio</a>
+      </div>
+    </div><!-- /step-5 -->
 
   </div><!-- /steps-wrapper -->
 
@@ -607,11 +681,16 @@
     <div class="footer-links">
       <a href="/privacy-policy">Políticas de Privacidad</a>
       <a href="/terms-of-service">Términos y Condiciones</a>
+      <a href="https://www.instagram.com/buscafe_app" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:5px;">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+        Seguinos en Instagram
+      </a>
     </div>
     <span class="footer-studio">Diseñado por Studio XB</span>
   </div>
 </footer>
 
+<!-- Netlify hidden form -->
 <form name="registrar-cafeteria" netlify netlify-honeypot="bot-field" hidden>
   <input name="bot-field" />
   <input name="nombre" />
@@ -624,292 +703,314 @@
   <input name="servicios" />
   <input name="plan" />
   <input name="logo-nombre" />
+  <input name="fotos-count" />
 </form>
 
 <script>
-  const SIMPLE_MODE = true;
+const state = {
+  currentStep: 1,
+  totalSteps: 4,
+  selectedPlan: null,
+  sucursalesList: [],
+  logoFile: null,
+  photos: [],
+  goingBack: false,
+};
 
-  const state = {
-    currentStep: 1,
-    selectedPlan: null,
-    sucursalesList: [],
-    logoFile: null,
-    goingBack: false,
+const STEP_NAMES = { 1:'Tu cafetería', 2:'Tu espacio', 3:'Elegí un plan', 4:'Activar suscripción' };
+
+/* ── UI elements ── */
+const progressLabel = document.getElementById('progress-label');
+const progressName  = document.getElementById('progress-name');
+const progressFill  = document.getElementById('progress-fill');
+const btnBack  = document.getElementById('btn-back');
+const btnNext  = document.getElementById('btn-next');
+const btnLabel = btnNext.querySelector('.btn-label');
+const wizNav   = document.getElementById('wizard-nav');
+
+function updateProgress(step) {
+  if (step === 5) { wizNav.style.display = 'none'; return; }
+  wizNav.style.display = 'flex';
+  progressLabel.textContent = `Paso ${step} de ${state.totalSteps}`;
+  progressName.textContent  = STEP_NAMES[step];
+  progressFill.style.width  = (step / state.totalSteps * 100) + '%';
+  btnBack.disabled = step === 1;
+  if (step === 4) btnLabel.textContent = 'Confirmar y activar';
+  else btnLabel.textContent = 'Continuar';
+}
+
+function showStep(next, fromBack = false) {
+  const cur = document.getElementById(`step-${state.currentStep}`);
+  const nxt = document.getElementById(`step-${next}`);
+  cur.classList.remove('active', 'from-back');
+  setTimeout(() => {
+    cur.style.display = 'none';
+    nxt.style.display = 'block';
+    nxt.classList.remove('from-back');
+    if (fromBack) nxt.classList.add('from-back');
+    nxt.classList.add('active');
+    state.currentStep = next;
+    updateProgress(next);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, 200);
+}
+
+/* ── Validation ── */
+function validateStep1() {
+  let ok = true;
+  const fields = [
+    ['nombre',   'err-nombre',   v => v.trim() !== ''],
+    ['direccion','err-direccion',v => v.trim() !== ''],
+    ['whatsapp', 'err-whatsapp', v => v.trim() !== ''],
+    ['email',    'err-email',    v => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim())],
+  ];
+  fields.forEach(([id, errId, test]) => {
+    const inp = document.getElementById(id);
+    const err = document.getElementById(errId);
+    if (!test(inp.value)) { inp.classList.add('invalid'); err.classList.add('show'); ok = false; }
+    else { inp.classList.remove('invalid'); err.classList.remove('show'); }
+  });
+  if (!ok) document.querySelector('.invalid')?.scrollIntoView({ behavior:'smooth', block:'center' });
+  return ok;
+}
+
+function validateStep2() {
+  const errPhotos = document.getElementById('err-photos');
+  if (state.photos.length < 6) { errPhotos.classList.add('show'); return false; }
+  errPhotos.classList.remove('show');
+  return true;
+}
+
+function validateStep3() {
+  const err = document.getElementById('err-plan');
+  if (!state.selectedPlan) { err.style.display = 'block'; return false; }
+  err.style.display = 'none';
+  return true;
+}
+
+function validateStep4() {
+  let ok = true;
+  const cardNum = document.getElementById('card-number').value.replace(/\s/g,'');
+  const errNum  = document.getElementById('err-card-number');
+  if (cardNum.length < 15) { document.getElementById('card-number').classList.add('invalid'); errNum.classList.add('show'); ok = false; }
+  else { document.getElementById('card-number').classList.remove('invalid'); errNum.classList.remove('show'); }
+
+  const name    = document.getElementById('card-name').value.trim();
+  const errName = document.getElementById('err-card-name');
+  if (!name) { document.getElementById('card-name').classList.add('invalid'); errName.classList.add('show'); ok = false; }
+  else { document.getElementById('card-name').classList.remove('invalid'); errName.classList.remove('show'); }
+
+  const expiry   = document.getElementById('card-expiry').value;
+  const errExp   = document.getElementById('err-card-expiry');
+  if (!/^\d{2}\/\d{2}$/.test(expiry)) { document.getElementById('card-expiry').classList.add('invalid'); errExp.classList.add('show'); ok = false; }
+  else { document.getElementById('card-expiry').classList.remove('invalid'); errExp.classList.remove('show'); }
+
+  const cvv    = document.getElementById('card-cvv').value;
+  const errCvv = document.getElementById('err-card-cvv');
+  if (cvv.length < 3) { document.getElementById('card-cvv').classList.add('invalid'); errCvv.classList.add('show'); ok = false; }
+  else { document.getElementById('card-cvv').classList.remove('invalid'); errCvv.classList.remove('show'); }
+  return ok;
+}
+
+/* ── Submit ── */
+async function submitForm() {
+  btnNext.disabled = true;
+  btnNext.classList.add('loading');
+  btnLabel.textContent = 'Enviando…';
+  const servicios = [...document.querySelectorAll('input[name="svc"]:checked')].map(e=>e.value).join(', ');
+  const sucData   = state.sucursalesList.map((_,i) => {
+    const c = document.getElementById(`suc-card-${i}`);
+    if (!c) return null;
+    const n = c.querySelector('.suc-nombre').value.trim();
+    const d = c.querySelector('.suc-dir').value.trim();
+    return n ? `${n} — ${d}` : d;
+  }).filter(Boolean).join(' | ');
+  const body = new URLSearchParams({
+    'form-name':      'registrar-cafeteria',
+    nombre:           document.getElementById('nombre').value.trim(),
+    email:            document.getElementById('email').value.trim(),
+    whatsapp:         document.getElementById('whatsapp').value.trim(),
+    instagram:        document.getElementById('instagram').value.trim(),
+    direccion:        document.getElementById('direccion').value.trim(),
+    sucursales:       sucData,
+    'promos-bancarias': document.getElementById('promos-bancarias').value.trim(),
+    servicios,
+    plan:             state.selectedPlan || '',
+    'logo-nombre':    state.logoFile ? state.logoFile.name : '',
+    'fotos-count':    state.photos.length,
+  });
+  try {
+    await fetch('/', { method:'POST', body, headers:{'Content-Type':'application/x-www-form-urlencoded'} });
+    showStep(5);
+  } catch {
+    btnNext.disabled = false;
+    btnNext.classList.remove('loading');
+    btnLabel.textContent = 'Confirmar y activar';
+    alert('Hubo un error al enviar. Por favor intentá de nuevo.');
+  }
+}
+
+/* ── Navigation ── */
+btnNext.addEventListener('click', async () => {
+  if (state.currentStep === 1 && validateStep1()) showStep(2);
+  else if (state.currentStep === 2 && validateStep2()) showStep(3);
+  else if (state.currentStep === 3 && validateStep3()) showStep(4);
+  else if (state.currentStep === 4 && validateStep4()) await submitForm();
+});
+btnBack.addEventListener('click', () => {
+  if (state.currentStep > 1) showStep(state.currentStep - 1, true);
+});
+
+/* ── Plans ── */
+document.querySelectorAll('.plan-card').forEach(card => {
+  card.addEventListener('click', () => {
+    document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    const radio = card.querySelector('input[type="radio"]');
+    radio.checked = true;
+    state.selectedPlan = radio.value;
+    document.getElementById('err-plan').style.display = 'none';
+    const names  = { standard:'Plan Standard', premium:'Plan Premium' };
+    const prices = { standard:'USD 35', premium:'USD 60' };
+    document.getElementById('pay-plan-name').textContent  = names[state.selectedPlan];
+    document.getElementById('pay-price-later').textContent = prices[state.selectedPlan];
+    document.getElementById('pay-note-price').textContent  = prices[state.selectedPlan];
+  });
+});
+
+/* ── Logo ── */
+const logoZone    = document.getElementById('logo-zone');
+const logoInput   = document.getElementById('logo-input');
+const logoContent = document.getElementById('logo-zone-content');
+const logoPreview = document.getElementById('logo-preview');
+const logoImg     = document.getElementById('logo-preview-img');
+const logoName    = document.getElementById('logo-preview-name');
+const logoRemove  = document.getElementById('logo-remove');
+function handleLogoFile(file) {
+  if (!file || !file.type.startsWith('image/')) return;
+  state.logoFile = file;
+  const reader = new FileReader();
+  reader.onload = e => { logoImg.src = e.target.result; logoName.textContent = file.name; logoContent.style.display = 'none'; logoPreview.classList.add('show'); };
+  reader.readAsDataURL(file);
+}
+logoInput.addEventListener('change', e => handleLogoFile(e.target.files[0]));
+logoZone.addEventListener('dragover',  e => { e.preventDefault(); logoZone.classList.add('over'); });
+logoZone.addEventListener('dragleave', ()=> logoZone.classList.remove('over'));
+logoZone.addEventListener('drop', e => { e.preventDefault(); logoZone.classList.remove('over'); handleLogoFile(e.dataTransfer.files[0]); });
+logoRemove.addEventListener('click', e => {
+  e.preventDefault(); e.stopPropagation();
+  state.logoFile = null; logoInput.value = ''; logoImg.src = '';
+  logoPreview.classList.remove('show'); logoContent.style.display = '';
+});
+
+/* ── Photos ── */
+const photosInput = document.getElementById('photos-input');
+const photosGrid  = document.getElementById('photos-grid');
+const photosCount = document.getElementById('photos-count');
+function updatePhotosCount() {
+  const n = state.photos.length;
+  if (n === 0) { photosCount.innerHTML = ''; return; }
+  const cls = n >= 6 ? 'ok' : 'bad';
+  photosCount.innerHTML = `<span class="${cls}">${n} foto${n !== 1 ? 's' : ''} seleccionada${n !== 1 ? 's' : ''}</span>${n < 6 ? ` — necesitás al menos ${6 - n} más` : ' — ¡listo!'}`;
+}
+function addPhotoPreview(file, idx) {
+  const reader = new FileReader();
+  reader.onload = e => {
+    const thumb = document.createElement('div');
+    thumb.className = 'photo-thumb';
+    thumb.id = `photo-thumb-${idx}`;
+    thumb.innerHTML = `<img src="${e.target.result}" alt="foto" /><button type="button" class="photo-thumb-remove" data-idx="${idx}">✕</button>`;
+    thumb.querySelector('.photo-thumb-remove').addEventListener('click', ev => {
+      ev.stopPropagation();
+      const i = +ev.target.dataset.idx;
+      state.photos = state.photos.filter((_,j) => j !== i);
+      document.getElementById(`photo-thumb-${i}`)?.remove();
+      // re-index remaining thumbs
+      state.photos.forEach((_, j) => {
+        const t = photosGrid.children[j];
+        if (t) t.id = `photo-thumb-${j}`;
+        const btn = t?.querySelector('.photo-thumb-remove');
+        if (btn) btn.dataset.idx = j;
+      });
+      updatePhotosCount();
+      if (state.photos.length >= 6) document.getElementById('err-photos').classList.remove('show');
+    });
+    photosGrid.appendChild(thumb);
   };
-
-  const STEP_NAMES = {
-    1: 'Tu cafetería',
-    2: 'Elegí un plan',
-    3: 'Activar plan',
-    4: 'Confirmación',
-  };
-
-  function getVisibleSteps() {
-    if (SIMPLE_MODE) return [1, 4];
-    const isPaid = state.selectedPlan && state.selectedPlan !== 'basico';
-    return isPaid ? [1, 2, 3, 4] : [1, 2, 4];
-  }
-
-  function getStepPosition(step) { return getVisibleSteps().indexOf(step) + 1; }
-  function getTotalVisible() { return getVisibleSteps().length; }
-
-  const progressSection = document.getElementById('progress-section');
-  const progressLabel = document.getElementById('progress-label');
-  const progressName  = document.getElementById('progress-name');
-  const progressFill  = document.getElementById('progress-fill');
-  const btnBack       = document.getElementById('btn-back');
-  const btnNext       = document.getElementById('btn-next');
-  const btnLabel      = btnNext.querySelector('.btn-label');
-  const wizardNav     = document.getElementById('wizard-nav');
-
-  if (SIMPLE_MODE) { progressSection.style.display = 'none'; }
-
-  function updateProgress(step) {
-    if (step === 4) { wizardNav.style.display = 'none'; } else { wizardNav.style.display = 'flex'; }
-
-    if (SIMPLE_MODE) {
-      btnBack.disabled = true;
-      if (step !== 4) btnLabel.textContent = 'Enviar registro';
-      return;
-    }
-
-    const pos   = getStepPosition(step);
-    const total = getTotalVisible();
-    const pct   = (pos / total) * 100;
-    progressLabel.textContent = `Paso ${pos} de ${total}`;
-    progressName.textContent  = STEP_NAMES[step];
-    progressFill.style.width  = pct + '%';
-
-    btnBack.disabled = pos === 1;
-
-    if (step === 3) { btnLabel.textContent = 'Confirmar solicitud'; }
-    else if (step === 2 && state.selectedPlan === 'basico') { btnLabel.textContent = 'Confirmar registro'; }
-    else { btnLabel.textContent = 'Continuar'; }
-  }
-
-  function showStep(nextStep, fromBack = false) {
-    const currentEl = document.getElementById(`step-${state.currentStep}`);
-    const nextEl    = document.getElementById(`step-${nextStep}`);
-
-    currentEl.classList.remove('active', 'from-back');
-    currentEl.classList.add('exiting');
-
-    setTimeout(() => {
-      currentEl.classList.remove('exiting');
-      currentEl.style.display = 'none';
-
-      nextEl.style.display = 'block';
-      nextEl.classList.remove('from-back');
-      if (fromBack) nextEl.classList.add('from-back');
-      nextEl.classList.add('active');
-
-      state.currentStep = nextStep;
-      updateProgress(nextStep);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }, 200);
-  }
-
-  function validateStep1() {
-    let ok = true;
-
-    const nombre = document.getElementById('nombre');
-    const errNombre = document.getElementById('err-nombre');
-    if (!nombre.value.trim()) { nombre.classList.add('invalid'); errNombre.classList.add('show'); ok = false; }
-    else { nombre.classList.remove('invalid'); errNombre.classList.remove('show'); }
-
-    const dir = document.getElementById('direccion');
-    const errDir = document.getElementById('err-direccion');
-    if (!dir.value.trim()) { dir.classList.add('invalid'); errDir.classList.add('show'); ok = false; }
-    else { dir.classList.remove('invalid'); errDir.classList.remove('show'); }
-
-    const wa = document.getElementById('whatsapp');
-    const errWa = document.getElementById('err-whatsapp');
-    if (!wa.value.trim()) { wa.classList.add('invalid'); errWa.classList.add('show'); ok = false; }
-    else { wa.classList.remove('invalid'); errWa.classList.remove('show'); }
-
-    const email = document.getElementById('email');
-    const errEmail = document.getElementById('err-email');
-    const emailOk = email.value.trim() && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.value.trim());
-    if (!emailOk) { email.classList.add('invalid'); errEmail.classList.add('show'); ok = false; }
-    else { email.classList.remove('invalid'); errEmail.classList.remove('show'); }
-
-    if (!ok) {
-      const firstInvalid = document.querySelector('.invalid');
-      if (firstInvalid) firstInvalid.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    }
-
-    return ok;
-  }
-
-  function validateStep2() {
-    const errPlan = document.getElementById('err-plan');
-    if (!state.selectedPlan) { errPlan.style.display = 'block'; return false; }
-    errPlan.style.display = 'none';
-    return true;
-  }
-
-  const planCards = document.querySelectorAll('.plan-card');
-  planCards.forEach(card => {
-    card.addEventListener('click', () => {
-      planCards.forEach(c => c.classList.remove('selected'));
-      card.classList.add('selected');
-      const radio = card.querySelector('input[type="radio"]');
-      radio.checked = true;
-      state.selectedPlan = radio.value;
-      document.getElementById('err-plan').style.display = 'none';
-
-      const names  = { basico: 'Plan Básico', standard: 'Plan Standard', premium: 'Plan Premium' };
-      const prices = { basico: 'Gratis', standard: 'USD 35', premium: 'USD 65' };
-      document.getElementById('pay-plan-name').textContent = names[state.selectedPlan];
-      document.getElementById('pay-price').textContent     = prices[state.selectedPlan];
-
-      if (state.currentStep === 2) {
-        btnLabel.textContent = state.selectedPlan === 'basico' ? 'Confirmar registro' : 'Continuar';
-      }
-    });
+  reader.readAsDataURL(file);
+}
+const photosZone = document.getElementById('photos-zone');
+photosInput.addEventListener('change', e => {
+  [...e.target.files].filter(f => f.type.startsWith('image/')).forEach(f => {
+    if (state.photos.length >= 20) return;
+    const idx = state.photos.length;
+    state.photos.push(f);
+    addPhotoPreview(f, idx);
   });
-
-  async function submitForm() {
-    btnNext.disabled = true;
-    btnNext.classList.add('loading');
-    btnLabel.textContent = 'Enviando…';
-
-    const servicios = [...document.querySelectorAll('input[name="svc"]:checked')].map(el => el.value).join(', ');
-
-    const sucursalesData = state.sucursalesList.map((_, i) => {
-      const card = document.getElementById(`suc-card-${i}`);
-      if (!card) return null;
-      const nombre = card.querySelector('.suc-nombre').value.trim();
-      const dir    = card.querySelector('.suc-dir').value.trim();
-      return nombre ? `${nombre} — ${dir}` : dir;
-    }).filter(Boolean).join(' | ');
-
-    const body = new URLSearchParams({
-      'form-name': 'registrar-cafeteria',
-      'nombre':    document.getElementById('nombre').value.trim(),
-      'email':     document.getElementById('email').value.trim(),
-      'whatsapp':  document.getElementById('whatsapp').value.trim(),
-      'instagram': document.getElementById('instagram').value.trim(),
-      'direccion': document.getElementById('direccion').value.trim(),
-      'sucursales': sucursalesData,
-      'promos-bancarias': document.getElementById('promos-bancarias').value.trim(),
-      'servicios': servicios,
-      'plan':      state.selectedPlan || 'basico',
-      'logo-nombre': state.logoFile ? state.logoFile.name : '',
-    });
-
-    try {
-      await fetch('/', { method: 'POST', body, headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
-      showStep(4);
-    } catch {
-      btnNext.disabled = false;
-      btnNext.classList.remove('loading');
-      btnLabel.textContent = SIMPLE_MODE ? 'Enviar registro' : 'Continuar';
-      alert('Hubo un error al enviar. Por favor intentá de nuevo.');
-    }
-  }
-
-  btnNext.addEventListener('click', async () => {
-    if (state.currentStep === 1) {
-      if (!validateStep1()) return;
-
-      if (SIMPLE_MODE) { await submitForm(); return; }
-      showStep(2);
-    } else if (state.currentStep === 2) {
-      if (!validateStep2()) return;
-      if (state.selectedPlan === 'basico') { await submitForm(); } else { showStep(3); }
-    } else if (state.currentStep === 3) {
-      await submitForm();
-    }
+  updatePhotosCount();
+  if (state.photos.length >= 6) document.getElementById('err-photos').classList.remove('show');
+  photosInput.value = '';
+});
+photosZone.addEventListener('dragover',  e => { e.preventDefault(); photosZone.classList.add('over'); });
+photosZone.addEventListener('dragleave', ()=> photosZone.classList.remove('over'));
+photosZone.addEventListener('drop', e => {
+  e.preventDefault(); photosZone.classList.remove('over');
+  [...e.dataTransfer.files].filter(f => f.type.startsWith('image/')).forEach(f => {
+    if (state.photos.length >= 20) return;
+    const idx = state.photos.length;
+    state.photos.push(f);
+    addPhotoPreview(f, idx);
   });
+  updatePhotosCount();
+});
 
-  btnBack.addEventListener('click', () => {
-    if (SIMPLE_MODE) return;
-    const steps = getVisibleSteps();
-    const pos   = getStepPosition(state.currentStep);
-    const prev  = steps[pos - 2];
-    if (prev) showStep(prev, true);
-  });
+/* ── Sucursales ── */
+const sucRadios = document.querySelectorAll('input[name="tiene-sucursales"]');
+const sucWrap   = document.getElementById('sucursales-wrap');
+const sucList   = document.getElementById('sucursales-list');
+const btnAddSuc = document.getElementById('btn-add-sucursal');
+let sucCount = 0;
+sucRadios.forEach(r => r.addEventListener('change', () => {
+  if (document.getElementById('suc-si').checked) { sucWrap.classList.add('show'); if (sucCount === 0) addSucursal(); }
+  else sucWrap.classList.remove('show');
+}));
+function addSucursal() {
+  const idx = sucCount++;
+  state.sucursalesList.push(idx);
+  const card = document.createElement('div');
+  card.className = 'sucursal-card'; card.id = `suc-card-${idx}`;
+  card.innerHTML = `<div class="sucursal-num">Sucursal ${idx+1}</div><button type="button" class="sucursal-remove" title="Eliminar">✕</button><input type="text" class="suc-nombre" placeholder="Nombre (opcional)" /><input type="text" class="suc-dir" placeholder="Dirección" />`;
+  card.querySelector('.sucursal-remove').addEventListener('click', () => { card.remove(); state.sucursalesList = state.sucursalesList.filter(i=>i!==idx); });
+  sucList.appendChild(card);
+}
+btnAddSuc.addEventListener('click', addSucursal);
 
-  const logoZone    = document.getElementById('logo-zone');
-  const logoInput   = document.getElementById('logo-input');
-  const logoContent = document.getElementById('logo-zone-content');
-  const logoPreview = document.getElementById('logo-preview');
-  const logoImg     = document.getElementById('logo-preview-img');
-  const logoName    = document.getElementById('logo-preview-name');
-  const logoRemove  = document.getElementById('logo-remove');
+/* ── Card input live preview ── */
+const cardNumberInput = document.getElementById('card-number');
+const cardNameInput   = document.getElementById('card-name');
+const cardExpiryInput = document.getElementById('card-expiry');
+cardNumberInput.addEventListener('input', e => {
+  let v = e.target.value.replace(/\D/g,'').slice(0,16);
+  e.target.value = v.replace(/(.{4})/g,'$1 ').trim();
+  document.getElementById('card-number-display').textContent = e.target.value.padEnd(19,'•').replace(/[^•\d ]/g,'•') || '•••• •••• •••• ••••';
+  const display = e.target.value || '•••• •••• •••• ••••';
+  document.getElementById('card-number-display').textContent = display.length < 19 ? display + '•'.repeat(19-display.length) : display;
+});
+cardNameInput.addEventListener('input', e => {
+  e.target.value = e.target.value.toUpperCase();
+  document.getElementById('card-name-display').textContent = e.target.value || 'NOMBRE APELLIDO';
+});
+cardExpiryInput.addEventListener('input', e => {
+  let v = e.target.value.replace(/\D/g,'').slice(0,4);
+  if (v.length >= 3) v = v.slice(0,2) + '/' + v.slice(2);
+  e.target.value = v;
+  document.getElementById('card-expiry-display').textContent = v || 'MM/AA';
+});
+document.getElementById('card-cvv').addEventListener('input', e => {
+  e.target.value = e.target.value.replace(/\D/g,'').slice(0,4);
+});
 
-  function handleLogoFile(file) {
-    if (!file || !file.type.startsWith('image/')) return;
-    state.logoFile = file;
-    const reader = new FileReader();
-    reader.onload = e => {
-      logoImg.src = e.target.result;
-      logoName.textContent = file.name;
-      logoContent.style.display = 'none';
-      logoPreview.classList.add('show');
-    };
-    reader.readAsDataURL(file);
-  }
-
-  logoInput.addEventListener('change', e => handleLogoFile(e.target.files[0]));
-
-  logoZone.addEventListener('dragover', e => { e.preventDefault(); logoZone.classList.add('over'); });
-  logoZone.addEventListener('dragleave', () => logoZone.classList.remove('over'));
-  logoZone.addEventListener('drop', e => {
-    e.preventDefault();
-    logoZone.classList.remove('over');
-    handleLogoFile(e.dataTransfer.files[0]);
-  });
-
-  logoRemove.addEventListener('click', e => {
-    e.preventDefault();
-    e.stopPropagation();
-    state.logoFile = null;
-    logoInput.value = '';
-    logoImg.src = '';
-    logoPreview.classList.remove('show');
-    logoContent.style.display = '';
-  });
-
-  const sucRadios = document.querySelectorAll('input[name="tiene-sucursales"]');
-  const sucWrap   = document.getElementById('sucursales-wrap');
-  const sucList   = document.getElementById('sucursales-list');
-  const btnAddSuc = document.getElementById('btn-add-sucursal');
-  let   sucCount  = 0;
-
-  sucRadios.forEach(r => r.addEventListener('change', () => {
-    if (document.getElementById('suc-si').checked) {
-      sucWrap.classList.add('show');
-      if (sucCount === 0) addSucursal();
-    } else {
-      sucWrap.classList.remove('show');
-    }
-  }));
-
-  function addSucursal() {
-    const idx = sucCount++;
-    state.sucursalesList.push(idx);
-    const card = document.createElement('div');
-    card.className = 'sucursal-card';
-    card.id = `suc-card-${idx}`;
-    card.innerHTML = `
-      <div class="sucursal-num">Sucursal ${idx + 1}</div>
-      <button type="button" class="sucursal-remove" title="Eliminar">✕</button>
-      <input type="text" class="suc-nombre" placeholder="Nombre de la sucursal (opcional)" />
-      <input type="text" class="suc-dir" placeholder="Dirección" required />
-    `;
-    card.querySelector('.sucursal-remove').addEventListener('click', () => {
-      card.remove();
-      state.sucursalesList = state.sucursalesList.filter(i => i !== idx);
-    });
-    sucList.appendChild(card);
-  }
-
-  btnAddSuc.addEventListener('click', addSucursal);
-
-  updateProgress(1);
+updateProgress(1);
 </script>
-
 </body>
 </html>
