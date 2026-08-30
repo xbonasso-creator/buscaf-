@@ -32,8 +32,6 @@
     }
     html { scroll-behavior: smooth; }
     body { font-family: var(--font); background: var(--bg); color: var(--text); min-height: 100vh; }
-
-    /* ── NAV ── */
     nav {
       position: sticky; top: 0; z-index: 100;
       background: rgba(251,246,238,.92);
@@ -41,42 +39,28 @@
       border-bottom: 1px solid var(--border);
       padding: 0 24px;
     }
-    .nav-inner {
-      max-width: 1100px; margin: 0 auto;
-      display: flex; align-items: center; justify-content: space-between;
-      height: 64px;
-    }
+    .nav-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 64px; }
     .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
     .nav-logo img { width: 36px; height: 36px; border-radius: 10px; object-fit: cover; }
     .nav-logo span { font-size: 18px; font-weight: 800; color: var(--espresso); letter-spacing: -.3px; }
     .nav-back { display: inline-flex; align-items: center; gap: 6px; color: var(--text-light); text-decoration: none; font-size: 14px; font-weight: 500; transition: color .2s; }
     .nav-back:hover { color: var(--espresso); }
-
-    /* ── WIZARD ── */
     .wizard-page { max-width: 680px; margin: 0 auto; padding: 48px 24px 100px; }
-
-    /* Progress */
     .progress-section { margin-bottom: 44px; }
     .progress-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
     .progress-label { font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--text-light); }
     .progress-name  { font-size: 12px; font-weight: 600; color: var(--accent); }
     .progress-bar-bg { height: 3px; background: var(--border); border-radius: 99px; overflow: hidden; }
     .progress-bar-fill { height: 100%; background: var(--accent); border-radius: 99px; transition: width .5s cubic-bezier(.4,0,.2,1); }
-
-    /* Steps */
     .steps-wrapper { position: relative; }
     .step { display: none; }
     .step.active { display: block; animation: stepIn .32s cubic-bezier(.4,0,.2,1) forwards; }
     .step.active.from-back { animation: stepInBack .32s cubic-bezier(.4,0,.2,1) forwards; }
     @keyframes stepIn     { from { opacity:0; transform:translateX(28px);  } to { opacity:1; transform:translateX(0); } }
     @keyframes stepInBack { from { opacity:0; transform:translateX(-28px); } to { opacity:1; transform:translateX(0); } }
-
-    /* Step header */
     .step-header { margin-bottom: 32px; }
     .step-header h1 { font-size: clamp(26px,4vw,38px); font-weight: 900; color: var(--heading); letter-spacing: -.8px; line-height: 1.15; margin-bottom: 10px; }
     .step-header p  { font-size: 16px; color: var(--text-light); line-height: 1.6; }
-
-    /* Fields */
     .field-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 18px; }
     .field-group:last-of-type { margin-bottom: 0; }
     label { font-size: 13px; font-weight: 600; color: var(--text); letter-spacing: .1px; }
@@ -95,30 +79,6 @@
     .field-error { font-size: 12px; color: var(--error); font-weight: 500; display: none; }
     .field-error.show { display: block; }
     .divider { height: 1px; background: var(--border); margin: 28px 0; }
-
-    /* Radio */
-    .radio-row { display: flex; gap: 10px; }
-    .radio-opt { flex: 1; }
-    .radio-opt input { display: none; }
-    .radio-opt-label {
-      display: flex; align-items: center; justify-content: center;
-      padding: 11px 16px; border: 1.5px solid var(--border);
-      border-radius: var(--radius-sm); font-size: 14px; font-weight: 600;
-      color: var(--text-light); cursor: pointer; transition: all .15s; background: var(--field-bg);
-    }
-    .radio-opt input:checked + .radio-opt-label { border-color: var(--espresso); color: var(--espresso); background: rgba(42,22,8,.06); }
-
-    /* Sucursales */
-    .sucursales-wrap { display: none; flex-direction: column; gap: 12px; margin-top: 16px; }
-    .sucursales-wrap.show { display: flex; }
-    .sucursal-card { background: var(--bg-warm); border: 1px solid var(--border); border-radius: var(--radius); padding: 16px; display: flex; flex-direction: column; gap: 10px; position: relative; }
-    .sucursal-num  { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--text-light); }
-    .sucursal-remove { position: absolute; top: 12px; right: 12px; width: 26px; height: 26px; border: none; background: rgba(217,64,64,.1); color: var(--error); border-radius: 50%; cursor: pointer; font-size: 14px; display: flex; align-items: center; justify-content: center; transition: background .15s; }
-    .sucursal-remove:hover { background: rgba(217,64,64,.2); }
-    .btn-add-sucursal { display: flex; align-items: center; justify-content: center; gap: 7px; background: none; border: 1.5px dashed var(--border); border-radius: var(--radius-sm); padding: 11px 16px; font-size: 14px; font-weight: 600; color: var(--text-light); cursor: pointer; font-family: inherit; transition: all .15s; width: 100%; }
-    .btn-add-sucursal:hover { border-color: var(--accent); color: var(--accent); background: rgba(194,84,42,.04); }
-
-    /* Upload zones */
     .upload-zone {
       border: 2px dashed var(--border); border-radius: var(--radius);
       padding: 28px 20px; text-align: center;
@@ -133,16 +93,16 @@
     .upload-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
     .upload-sub   { font-size: 12px; color: var(--text-light); }
     .upload-sub span { color: var(--accent); font-weight: 600; }
-
-    /* Logo preview */
     .logo-preview { display: none; flex-direction: column; align-items: center; gap: 10px; }
     .logo-preview.show { display: flex; }
     .logo-preview img { width: 72px; height: 72px; border-radius: 14px; object-fit: cover; box-shadow: var(--shadow-md); }
     .logo-preview-name { font-size: 13px; font-weight: 600; color: var(--text); }
     .logo-remove { font-size: 12px; color: var(--text-light); background: none; border: 1px solid var(--border); border-radius: 20px; padding: 3px 12px; cursor: pointer; font-family: inherit; transition: all .15s; pointer-events: all; }
     .logo-remove:hover { color: var(--error); border-color: var(--error); }
-
-    /* Photos grid */
+    .cover-preview { display: none; flex-direction: column; align-items: center; gap: 10px; }
+    .cover-preview.show { display: flex; }
+    .cover-preview img { width: 100%; max-width: 320px; height: 140px; border-radius: 14px; object-fit: cover; box-shadow: var(--shadow-md); }
+    .cover-preview-name { font-size: 13px; font-weight: 600; color: var(--text); }
     .photos-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 14px; }
     .photo-thumb { position: relative; aspect-ratio: 1; border-radius: var(--radius-sm); overflow: hidden; background: var(--bg-warm); }
     .photo-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -151,18 +111,12 @@
     .photos-count { font-size: 13px; color: var(--text-light); margin-top: 10px; }
     .photos-count .ok  { color: var(--success); font-weight: 600; }
     .photos-count .bad { color: var(--error); font-weight: 600; }
-
-    /* Chips */
     .svc-group { display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; }
     .svc-group-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: var(--text-light); }
     .chips-row { display: flex; flex-wrap: wrap; gap: 8px; }
     .chip input[type="checkbox"] { display: none; }
     .chip-lbl { display: inline-flex; align-items: center; padding: 8px 14px; border-radius: var(--radius-pill); border: 1.5px solid var(--border); background: var(--field-bg); font-size: 13px; font-weight: 500; color: var(--text); cursor: pointer; transition: all .15s; user-select: none; }
     .chip input:checked + .chip-lbl { background: var(--espresso); border-color: var(--espresso); color: #fff; }
-
-    /* Plans */
-    .plans-header { margin-bottom: 8px; }
-    .plans-badge { display: inline-flex; align-items: center; gap: 6px; background: rgba(194,84,42,.1); border: 1px solid rgba(194,84,42,.25); border-radius: var(--radius-pill); padding: 5px 14px; font-size: 12px; font-weight: 700; color: var(--accent); margin-bottom: 20px; }
     .plans-stack { display: flex; flex-direction: column; gap: 14px; }
     .plan-card { border: 2px solid var(--border); border-radius: var(--radius); padding: 24px; cursor: pointer; background: var(--white); transition: all .2s; position: relative; }
     .plan-card:hover { border-color: #c9a07a; box-shadow: 0 2px 12px rgba(42,22,8,.08); }
@@ -171,7 +125,7 @@
     .plan-card.plan-dark:hover { border-color: var(--espresso); box-shadow: 0 4px 20px rgba(42,22,8,.25); }
     .plan-card.plan-dark.selected { box-shadow: 0 0 0 4px rgba(42,22,8,.2); }
     .plan-card input[type="radio"] { display: none; }
-    .plan-badge { position: absolute; top: 20px; right: 20px; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; background: var(--accent); color: #fff; padding: 3px 10px; border-radius: 100px; }
+    .plan-badge { position: absolute; top: 20px; right: 20px; font-size: 9px; font-weight: 800; text-transform: uppercase; letter-spacing: .08em; background: var(--accent); color: #fff; padding: 4px 12px; border-radius: 100px; }
     .plan-tier  { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: .12em; color: var(--accent); margin-bottom: 4px; }
     .plan-dark .plan-tier  { color: rgba(255,255,255,.55); }
     .plan-title { font-size: 24px; font-weight: 900; color: var(--heading); letter-spacing: -.5px; margin-bottom: 6px; }
@@ -192,34 +146,19 @@
     .plan-feat-inc { font-size: 12px; font-weight: 600; color: var(--text-light); margin-bottom: 4px; }
     .plan-dark .plan-feat-inc { color: rgba(255,255,255,.45); }
     .err-plan { font-size: 12px; color: var(--error); font-weight: 500; margin-top: 8px; display: none; }
-
-    /* Payment (MP mock) */
-    .pay-free-banner {
-      background: #4A7C59;
-      border-radius: var(--radius); padding: 18px 20px; margin-bottom: 24px;
-      display: flex; align-items: center; gap: 14px;
-    }
+    .pay-free-banner { background: #4A7C59; border-radius: var(--radius); padding: 18px 20px; margin-bottom: 24px; display: flex; align-items: center; gap: 14px; }
     .pay-free-icon { flex-shrink: 0; display: flex; align-items: center; }
     .pay-free-text { color: #fff; }
     .pay-free-text strong { display: block; font-size: 15px; font-weight: 800; margin-bottom: 2px; }
     .pay-free-text span { font-size: 13px; opacity: .85; line-height: 1.5; }
-
     .pay-summary { background: var(--bg-warm); border: 1px solid var(--border); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 24px; display: flex; justify-content: space-between; align-items: center; }
     .pay-summary-plan { font-size: 15px; font-weight: 800; color: var(--heading); }
-    .pay-summary-price { font-size: 13px; color: var(--text-light); }
-    .pay-summary-price b { color: var(--espresso); }
-
     .mp-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); overflow: hidden; margin-bottom: 20px; }
     .mp-header { background: #009EE3; padding: 14px 20px; display: flex; align-items: center; gap: 10px; }
     .mp-header-logo { font-size: 13px; font-weight: 900; color: #fff; letter-spacing: -.3px; }
     .mp-header-logo span { color: rgba(255,255,255,.7); }
     .mp-body { padding: 22px 20px; display: flex; flex-direction: column; gap: 16px; }
-    .mp-card-visual {
-      background: linear-gradient(135deg, #2A1608 0%, #5C3020 100%);
-      border-radius: 12px; padding: 20px; height: 140px;
-      display: flex; flex-direction: column; justify-content: space-between;
-      box-shadow: 0 8px 24px rgba(42,22,8,.2);
-    }
+    .mp-card-visual { background: linear-gradient(135deg, #2A1608 0%, #5C3020 100%); border-radius: 12px; padding: 20px; height: 140px; display: flex; flex-direction: column; justify-content: space-between; box-shadow: 0 8px 24px rgba(42,22,8,.2); }
     .mp-card-chip { width: 32px; height: 24px; background: rgba(255,255,255,.2); border-radius: 4px; border: 1px solid rgba(255,255,255,.3); }
     .mp-card-number-display { font-size: 17px; font-weight: 700; color: rgba(255,255,255,.9); letter-spacing: 3px; font-family: var(--font); }
     .mp-card-bottom { display: flex; justify-content: space-between; align-items: flex-end; }
@@ -231,45 +170,24 @@
     .mp-field-group label { font-size: 12px; font-weight: 700; color: var(--text-light); text-transform: uppercase; letter-spacing: .08em; }
     .mp-row { display: flex; gap: 12px; }
     .mp-row .mp-field-group { flex: 1; }
-    .mp-field-group input {
-      width: 100%; background: var(--field-bg); border: 1.5px solid var(--border);
-      border-radius: var(--radius-sm); padding: 12px 14px;
-      font-size: 16px; font-family: var(--font); color: var(--text); outline: none;
-      transition: border-color .2s, box-shadow .2s; letter-spacing: .5px;
-    }
+    .mp-field-group input { width: 100%; background: var(--field-bg); border: 1.5px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; font-size: 16px; font-family: var(--font); color: var(--text); outline: none; transition: border-color .2s, box-shadow .2s; letter-spacing: .5px; }
     .mp-field-group input:focus { border-color: #009EE3; box-shadow: 0 0 0 3px rgba(0,158,227,.12); }
     .mp-field-group input.invalid { border-color: var(--error); background: #FFF8F8; }
     .mp-field-group .field-error { font-size: 12px; color: var(--error); font-weight: 500; display: none; }
     .mp-field-group .field-error.show { display: block; }
-
     .pay-note { background: rgba(194,84,42,.06); border: 1px solid rgba(194,84,42,.2); border-radius: var(--radius-sm); padding: 14px 16px; font-size: 13px; color: var(--text); line-height: 1.6; }
     .pay-note strong { color: var(--accent); }
-
-    /* Nav buttons */
     .wizard-nav { margin-top: 40px; display: flex; align-items: center; gap: 12px; }
-    .btn-back-wiz {
-      display: inline-flex; align-items: center; justify-content: center; gap: 6px;
-      padding: 14px 20px; background: none; border: 1.5px solid var(--border);
-      border-radius: var(--radius-pill); font-size: 15px; font-weight: 600;
-      color: var(--text-light); cursor: pointer; font-family: inherit; transition: all .2s;
-    }
+    .btn-back-wiz { display: inline-flex; align-items: center; justify-content: center; gap: 6px; padding: 14px 20px; background: none; border: 1.5px solid var(--border); border-radius: var(--radius-pill); font-size: 15px; font-weight: 600; color: var(--text-light); cursor: pointer; font-family: inherit; transition: all .2s; }
     .btn-back-wiz:hover { border-color: var(--espresso); color: var(--espresso); }
     .btn-back-wiz:disabled { opacity: .3; cursor: not-allowed; }
-    .btn-next-wiz {
-      flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
-      padding: 16px 28px; background: var(--espresso); border: none;
-      border-radius: var(--radius-pill); font-size: 15px; font-weight: 700; color: #fff;
-      cursor: pointer; font-family: inherit; transition: opacity .2s, transform .15s;
-      box-shadow: var(--shadow-md);
-    }
+    .btn-next-wiz { flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 16px 28px; background: var(--espresso); border: none; border-radius: var(--radius-pill); font-size: 15px; font-weight: 700; color: #fff; cursor: pointer; font-family: inherit; transition: opacity .2s, transform .15s; box-shadow: var(--shadow-md); }
     .btn-next-wiz:hover { opacity: .88; transform: translateY(-1px); }
     .btn-next-wiz:disabled { opacity: .5; cursor: not-allowed; transform: none; }
     .btn-next-wiz .spinner { display: none; width: 16px; height: 16px; border: 2px solid rgba(255,255,255,.4); border-top-color: #fff; border-radius: 50%; animation: spin .6s linear infinite; }
     @keyframes spin { to { transform: rotate(360deg); } }
     .btn-next-wiz.loading .spinner  { display: block; }
     .btn-next-wiz.loading .btn-label{ opacity: .6; }
-
-    /* Success */
     .success-wrap { text-align: center; padding: 16px 0 32px; }
     .success-icon { width: 80px; height: 80px; background: var(--bg-warm); border: 1.5px solid var(--border); border-radius: 20px; display: flex; align-items: center; justify-content: center; margin: 0 auto 24px; animation: pop .5s cubic-bezier(.34,1.56,.64,1) both; box-shadow: 0 4px 20px rgba(42,22,8,.1); overflow: hidden; }
     @keyframes pop { from { transform: scale(.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
@@ -283,8 +201,6 @@
     .ss-text strong { color: var(--espresso); }
     .btn-home { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 15px 36px; background: var(--espresso); color: #fff; border: none; border-radius: var(--radius-pill); font-size: 15px; font-weight: 700; font-family: inherit; text-decoration: none; cursor: pointer; transition: opacity .2s, transform .15s; box-shadow: var(--shadow-md); }
     .btn-home:hover { opacity: .88; transform: translateY(-1px); }
-
-    /* Footer */
     footer { border-top: 1px solid var(--border); padding: 32px 24px; }
     .footer-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
     .footer-copy  { font-size: 13px; color: var(--text-light); }
@@ -292,7 +208,6 @@
     .footer-links a { font-size: 13px; color: var(--text-light); text-decoration: none; transition: color .2s; }
     .footer-links a:hover { color: var(--espresso); }
     .footer-studio { font-size: 13px; color: var(--text-light); }
-
     @media (max-width: 520px) {
       .wizard-page { padding: 32px 16px 80px; }
       .wizard-nav { flex-direction: column-reverse; }
@@ -318,7 +233,6 @@
 
 <div class="wizard-page">
 
-  <!-- Progress -->
   <div class="progress-section" id="progress-section">
     <div class="progress-meta">
       <span class="progress-label" id="progress-label">Paso 1 de 4</span>
@@ -331,7 +245,7 @@
 
   <div class="steps-wrapper">
 
-    <!-- ── PASO 1: Info básica ── -->
+    <!-- ── PASO 1 ── -->
     <div class="step active" id="step-1">
       <div class="step-header">
         <h1>Registrá tu cafetería</h1>
@@ -345,34 +259,16 @@
       </div>
 
       <div class="field-group">
-        <label for="direccion">Dirección principal *</label>
+        <label for="direccion">Dirección *</label>
         <input type="text" id="direccion" name="direccion" placeholder="Ej: Av. Brasil 2786, Pocitos" />
         <span class="field-error" id="err-direccion">Este campo es obligatorio.</span>
-      </div>
-
-      <div class="field-group">
-        <label>¿Tenés sucursales?</label>
-        <div class="radio-row">
-          <label class="radio-opt">
-            <input type="radio" name="tiene-sucursales" id="suc-no" value="no" checked />
-            <span class="radio-opt-label">No</span>
-          </label>
-          <label class="radio-opt">
-            <input type="radio" name="tiene-sucursales" id="suc-si" value="si" />
-            <span class="radio-opt-label">Sí</span>
-          </label>
-        </div>
-        <div class="sucursales-wrap" id="sucursales-wrap">
-          <div id="sucursales-list"></div>
-          <button type="button" class="btn-add-sucursal" id="btn-add-sucursal">+ Agregar sucursal</button>
-        </div>
       </div>
 
       <div class="divider"></div>
 
       <div class="field-group">
-        <label for="whatsapp">WhatsApp / Teléfono de contacto *</label>
-        <input type="tel" id="whatsapp" name="whatsapp" placeholder="+598 99 000 000" />
+        <label for="whatsapp">Contacto comercial *</label>
+        <input type="tel" id="whatsapp" name="whatsapp" placeholder="Número de contacto" />
         <span class="field-error" id="err-whatsapp">Este campo es obligatorio.</span>
       </div>
 
@@ -388,7 +284,7 @@
       </div>
     </div><!-- /step-1 -->
 
-    <!-- ── PASO 2: Detalles + fotos + logo ── -->
+    <!-- ── PASO 2 ── -->
     <div class="step" id="step-2">
       <div class="step-header">
         <h1>Tu espacio</h1>
@@ -448,12 +344,12 @@
           <label class="chip"><input type="checkbox" name="svc" value="Cold brew" /><span class="chip-lbl">Cold brew</span></label>
           <label class="chip"><input type="checkbox" name="svc" value="Prensa francesa" /><span class="chip-lbl">Prensa francesa</span></label>
           <label class="chip"><input type="checkbox" name="svc" value="Chemex" /><span class="chip-lbl">Chemex</span></label>
+          <label class="chip"><input type="checkbox" name="svc" value="Filtrado máquina" /><span class="chip-lbl">Filtrado máquina</span></label>
         </div>
       </div>
 
       <div class="divider"></div>
 
-      <!-- Logo -->
       <div class="field-group">
         <label>Logo de la cafetería <span class="label-opt">— opcional</span></label>
         <div class="upload-zone" id="logo-zone">
@@ -473,9 +369,28 @@
         </div>
       </div>
 
-      <!-- Fotos -->
       <div class="field-group" style="margin-top: 8px;">
-        <label>Fotos de tu cafetería * <span class="label-opt">— mínimo 6, buena calidad</span></label>
+        <label>Foto de portada *</label>
+        <div class="upload-zone" id="cover-zone">
+          <input type="file" id="cover-input" accept="image/*" />
+          <div class="upload-zone-content" id="cover-zone-content">
+            <div class="upload-icon">
+              <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="2" y="6" width="28" height="20" rx="5" stroke="#E5D6C0" stroke-width="1.5" stroke-dasharray="4 3"/><circle cx="10.5" cy="13.5" r="2.5" stroke="#C0AFA0" stroke-width="1.5"/><path d="M2 22l7-6 5 5 4-4 7 6" stroke="#C0AFA0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="upload-title">Subí una foto de portada</div>
+            <div class="upload-sub">Es la primera imagen que van a ver de tu cafetería · <span>hacé clic para buscarla</span></div>
+          </div>
+          <div class="cover-preview" id="cover-preview">
+            <img id="cover-preview-img" src="" alt="Portada" />
+            <div class="cover-preview-name" id="cover-preview-name"></div>
+            <button type="button" class="logo-remove" id="cover-remove">Quitar</button>
+          </div>
+        </div>
+        <span class="field-error" id="err-cover">Necesitás subir una foto de portada.</span>
+      </div>
+
+      <div class="field-group" style="margin-top: 8px;">
+        <label>Fotos de tu cafetería * <span class="label-opt">— 6 fotos de buena calidad</span></label>
         <div class="upload-zone" id="photos-zone">
           <input type="file" id="photos-input" accept="image/png,image/jpeg" multiple />
           <div class="upload-zone-content">
@@ -483,7 +398,7 @@
               <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><rect x="2" y="6" width="28" height="20" rx="5" stroke="#E5D6C0" stroke-width="1.5" stroke-dasharray="4 3"/><circle cx="10.5" cy="13.5" r="2.5" stroke="#C0AFA0" stroke-width="1.5"/><path d="M2 22l7-6 5 5 4-4 7 6" stroke="#C0AFA0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </div>
             <div class="upload-title">Agregá fotos de tu local</div>
-            <div class="upload-sub">PNG o JPG · <span>Mínimo 6 fotos</span> · Podés seleccionar varias a la vez</div>
+            <div class="upload-sub">PNG o JPG · <span>6 fotos de buena calidad</span> · Podés seleccionar varias a la vez</div>
           </div>
         </div>
         <div class="photos-grid" id="photos-grid"></div>
@@ -492,7 +407,7 @@
       </div>
     </div><!-- /step-2 -->
 
-    <!-- ── PASO 3: Planes ── -->
+    <!-- ── PASO 3 ── -->
     <div class="step" id="step-3">
       <div class="step-header">
         <h1>Elegí tu plan</h1>
@@ -503,7 +418,7 @@
 
         <label class="plan-card" id="card-standard">
           <input type="radio" name="plan" value="standard" id="plan-standard" />
-          <div class="plan-badge" style="background:var(--accent);">Más elegido</div>
+          <div class="plan-badge">Más elegido</div>
           <div class="plan-tier">Quiero más visibilidad</div>
           <div class="plan-title">Standard</div>
           <div class="plan-price">USD 35<span style="font-size:16px;font-weight:500;opacity:.6">/mes</span></div>
@@ -511,11 +426,10 @@
           <div class="plan-tagline">Llegá a más personas todos los días.</div>
           <div class="plan-divider"></div>
           <div class="plan-feats">
-            <div class="plan-feat">Perfil completo con fotos, horarios y servicios</div>
-            <div class="plan-feat">Visibilidad en el mapa y el listado</div>
-            <div class="plan-feat">Redirección directa a Instagram</div>
-            <div class="plan-feat">Publicación de eventos y talleres</div>
-            <div class="plan-feat">1 cuponera virtual activa</div>
+            <div class="plan-feat">Perfil completo - horarios, descuentos, características, métodos de café, fotos.</div>
+            <div class="plan-feat">Visibilidad en el Mapa</div>
+            <div class="plan-feat">Redirección al Instagram</div>
+            <div class="plan-feat">Eventos en Perfil</div>
           </div>
         </label>
 
@@ -528,22 +442,22 @@
           <div class="plan-tagline">Convertite en una cafetería referente de tu ciudad.</div>
           <div class="plan-divider"></div>
           <div class="plan-feats">
-            <div class="plan-feat-inc">Todo el Plan Standard, más:</div>
-            <div class="plan-feat">Destacado en Home</div>
-            <div class="plan-feat">Promociones disponibles en perfil</div>
-            <div class="plan-feat">Productos destacados</div>
-            <div class="plan-feat">Destacar eventos en Home</div>
-            <div class="plan-feat">Contenido en el feed de Instagram de Buscafé</div>
-            <div class="plan-feat">Hasta 4 cuponeras virtuales activas</div>
+            <div class="plan-feat-inc">Todo lo del Plan Standard, más:</div>
+            <div class="plan-feat">Cafetería destacada en la Home</div>
+            <div class="plan-feat">Eventos destacados en la Home</div>
+            <div class="plan-feat">Promociones y productos destacados</div>
+            <div class="plan-feat">Contenido en el feed del Instagram de Buscafé</div>
           </div>
         </label>
 
       </div>
       <div class="err-plan" id="err-plan">Seleccioná un plan para continuar.</div>
-      <p style="font-size:12px;color:var(--text-light);margin-top:18px;line-height:1.6;">Sin permanencia. Cambiá o cancelá cuando quieras. Por consultas comunicate a <a href="mailto:info@buscafe.app" style="color:var(--accent);text-decoration:none;">info@buscafe.app</a>.</p>
+      <p style="font-size:12px;color:var(--text-light);margin-top:18px;line-height:1.6;">Sin permanencia. Cambiá o cancelá cuando quieras.</p>
+      <p style="font-size:12px;color:var(--text-light);margin-top:8px;line-height:1.6;">Te contactaremos para contarte cómo sumar a Buscafé tus eventos, talleres, promociones y productos destacados, si aplica para tu cafetería.</p>
+      <p style="font-size:12px;color:var(--text-light);margin-top:8px;line-height:1.6;">Por consultas comunicate a <a href="mailto:info@buscafe.app" style="color:var(--accent);text-decoration:none;">info@buscafe.app</a>.</p>
     </div><!-- /step-3 -->
 
-    <!-- ── PASO 4: Pago ── -->
+    <!-- ── PASO 4 ── -->
     <div class="step" id="step-4">
       <div class="step-header">
         <h1>Activá tu suscripción</h1>
@@ -586,7 +500,6 @@
         </div>
         <div class="mp-body">
 
-          <!-- Visual card -->
           <div class="mp-card-visual">
             <div class="mp-card-chip"></div>
             <div class="mp-card-number-display" id="card-number-display">•••• •••• •••• ••••</div>
@@ -635,7 +548,7 @@
       </div>
     </div><!-- /step-4 -->
 
-    <!-- ── PASO 5: Éxito ── -->
+    <!-- ── PASO 5 ── -->
     <div class="step" id="step-5">
       <div class="success-wrap">
         <div class="success-icon">
@@ -690,7 +603,6 @@
   </div>
 </footer>
 
-<!-- Netlify hidden form -->
 <form name="registrar-cafeteria" netlify netlify-honeypot="bot-field" hidden>
   <input name="bot-field" />
   <input name="nombre" />
@@ -698,11 +610,11 @@
   <input name="whatsapp" />
   <input name="email" />
   <input name="direccion" />
-  <input name="sucursales" />
   <input name="promos-bancarias" />
   <input name="servicios" />
   <input name="plan" />
   <input name="logo-nombre" />
+  <input name="cover-nombre" />
   <input name="fotos-count" />
 </form>
 
@@ -711,15 +623,13 @@ const state = {
   currentStep: 1,
   totalSteps: 4,
   selectedPlan: null,
-  sucursalesList: [],
   logoFile: null,
+  coverFile: null,
   photos: [],
-  goingBack: false,
 };
 
 const STEP_NAMES = { 1:'Tu cafetería', 2:'Tu espacio', 3:'Elegí un plan', 4:'Activar suscripción' };
 
-/* ── UI elements ── */
 const progressLabel = document.getElementById('progress-label');
 const progressName  = document.getElementById('progress-name');
 const progressFill  = document.getElementById('progress-fill');
@@ -755,7 +665,6 @@ function showStep(next, fromBack = false) {
   }, 200);
 }
 
-/* ── Validation ── */
 function validateStep1() {
   let ok = true;
   const fields = [
@@ -775,10 +684,14 @@ function validateStep1() {
 }
 
 function validateStep2() {
+  let ok = true;
+  const errCover = document.getElementById('err-cover');
+  if (!state.coverFile) { errCover.classList.add('show'); ok = false; }
+  else { errCover.classList.remove('show'); }
   const errPhotos = document.getElementById('err-photos');
-  if (state.photos.length < 6) { errPhotos.classList.add('show'); return false; }
-  errPhotos.classList.remove('show');
-  return true;
+  if (state.photos.length < 6) { errPhotos.classList.add('show'); ok = false; }
+  else { errPhotos.classList.remove('show'); }
+  return ok;
 }
 
 function validateStep3() {
@@ -812,19 +725,11 @@ function validateStep4() {
   return ok;
 }
 
-/* ── Submit ── */
 async function submitForm() {
   btnNext.disabled = true;
   btnNext.classList.add('loading');
   btnLabel.textContent = 'Enviando…';
   const servicios = [...document.querySelectorAll('input[name="svc"]:checked')].map(e=>e.value).join(', ');
-  const sucData   = state.sucursalesList.map((_,i) => {
-    const c = document.getElementById(`suc-card-${i}`);
-    if (!c) return null;
-    const n = c.querySelector('.suc-nombre').value.trim();
-    const d = c.querySelector('.suc-dir').value.trim();
-    return n ? `${n} — ${d}` : d;
-  }).filter(Boolean).join(' | ');
   const body = new URLSearchParams({
     'form-name':      'registrar-cafeteria',
     nombre:           document.getElementById('nombre').value.trim(),
@@ -832,11 +737,11 @@ async function submitForm() {
     whatsapp:         document.getElementById('whatsapp').value.trim(),
     instagram:        document.getElementById('instagram').value.trim(),
     direccion:        document.getElementById('direccion').value.trim(),
-    sucursales:       sucData,
     'promos-bancarias': document.getElementById('promos-bancarias').value.trim(),
     servicios,
     plan:             state.selectedPlan || '',
     'logo-nombre':    state.logoFile ? state.logoFile.name : '',
+    'cover-nombre':   state.coverFile ? state.coverFile.name : '',
     'fotos-count':    state.photos.length,
   });
   try {
@@ -850,7 +755,6 @@ async function submitForm() {
   }
 }
 
-/* ── Navigation ── */
 btnNext.addEventListener('click', async () => {
   if (state.currentStep === 1 && validateStep1()) showStep(2);
   else if (state.currentStep === 2 && validateStep2()) showStep(3);
@@ -861,7 +765,6 @@ btnBack.addEventListener('click', () => {
   if (state.currentStep > 1) showStep(state.currentStep - 1, true);
 });
 
-/* ── Plans ── */
 document.querySelectorAll('.plan-card').forEach(card => {
   card.addEventListener('click', () => {
     document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
@@ -878,7 +781,6 @@ document.querySelectorAll('.plan-card').forEach(card => {
   });
 });
 
-/* ── Logo ── */
 const logoZone    = document.getElementById('logo-zone');
 const logoInput   = document.getElementById('logo-input');
 const logoContent = document.getElementById('logo-zone-content');
@@ -903,7 +805,30 @@ logoRemove.addEventListener('click', e => {
   logoPreview.classList.remove('show'); logoContent.style.display = '';
 });
 
-/* ── Photos ── */
+const coverZone    = document.getElementById('cover-zone');
+const coverInput   = document.getElementById('cover-input');
+const coverContent = document.getElementById('cover-zone-content');
+const coverPreview = document.getElementById('cover-preview');
+const coverImg     = document.getElementById('cover-preview-img');
+const coverName    = document.getElementById('cover-preview-name');
+const coverRemove  = document.getElementById('cover-remove');
+function handleCoverFile(file) {
+  if (!file || !file.type.startsWith('image/')) return;
+  state.coverFile = file;
+  const reader = new FileReader();
+  reader.onload = e => { coverImg.src = e.target.result; coverName.textContent = file.name; coverContent.style.display = 'none'; coverPreview.classList.add('show'); document.getElementById('err-cover').classList.remove('show'); };
+  reader.readAsDataURL(file);
+}
+coverInput.addEventListener('change', e => handleCoverFile(e.target.files[0]));
+coverZone.addEventListener('dragover',  e => { e.preventDefault(); coverZone.classList.add('over'); });
+coverZone.addEventListener('dragleave', ()=> coverZone.classList.remove('over'));
+coverZone.addEventListener('drop', e => { e.preventDefault(); coverZone.classList.remove('over'); handleCoverFile(e.dataTransfer.files[0]); });
+coverRemove.addEventListener('click', e => {
+  e.preventDefault(); e.stopPropagation();
+  state.coverFile = null; coverInput.value = ''; coverImg.src = '';
+  coverPreview.classList.remove('show'); coverContent.style.display = '';
+});
+
 const photosInput = document.getElementById('photos-input');
 const photosGrid  = document.getElementById('photos-grid');
 const photosCount = document.getElementById('photos-count');
@@ -925,7 +850,6 @@ function addPhotoPreview(file, idx) {
       const i = +ev.target.dataset.idx;
       state.photos = state.photos.filter((_,j) => j !== i);
       document.getElementById(`photo-thumb-${i}`)?.remove();
-      // re-index remaining thumbs
       state.photos.forEach((_, j) => {
         const t = photosGrid.children[j];
         if (t) t.id = `photo-thumb-${j}`;
@@ -964,35 +888,12 @@ photosZone.addEventListener('drop', e => {
   updatePhotosCount();
 });
 
-/* ── Sucursales ── */
-const sucRadios = document.querySelectorAll('input[name="tiene-sucursales"]');
-const sucWrap   = document.getElementById('sucursales-wrap');
-const sucList   = document.getElementById('sucursales-list');
-const btnAddSuc = document.getElementById('btn-add-sucursal');
-let sucCount = 0;
-sucRadios.forEach(r => r.addEventListener('change', () => {
-  if (document.getElementById('suc-si').checked) { sucWrap.classList.add('show'); if (sucCount === 0) addSucursal(); }
-  else sucWrap.classList.remove('show');
-}));
-function addSucursal() {
-  const idx = sucCount++;
-  state.sucursalesList.push(idx);
-  const card = document.createElement('div');
-  card.className = 'sucursal-card'; card.id = `suc-card-${idx}`;
-  card.innerHTML = `<div class="sucursal-num">Sucursal ${idx+1}</div><button type="button" class="sucursal-remove" title="Eliminar">✕</button><input type="text" class="suc-nombre" placeholder="Nombre (opcional)" /><input type="text" class="suc-dir" placeholder="Dirección" />`;
-  card.querySelector('.sucursal-remove').addEventListener('click', () => { card.remove(); state.sucursalesList = state.sucursalesList.filter(i=>i!==idx); });
-  sucList.appendChild(card);
-}
-btnAddSuc.addEventListener('click', addSucursal);
-
-/* ── Card input live preview ── */
 const cardNumberInput = document.getElementById('card-number');
 const cardNameInput   = document.getElementById('card-name');
 const cardExpiryInput = document.getElementById('card-expiry');
 cardNumberInput.addEventListener('input', e => {
   let v = e.target.value.replace(/\D/g,'').slice(0,16);
   e.target.value = v.replace(/(.{4})/g,'$1 ').trim();
-  document.getElementById('card-number-display').textContent = e.target.value.padEnd(19,'•').replace(/[^•\d ]/g,'•') || '•••• •••• •••• ••••';
   const display = e.target.value || '•••• •••• •••• ••••';
   document.getElementById('card-number-display').textContent = display.length < 19 ? display + '•'.repeat(19-display.length) : display;
 });
