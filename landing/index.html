@@ -160,7 +160,7 @@
       align-items: end;
       gap: 48px;
     }
-    .hero-text { display: flex; flex-direction: column; gap: 26px; }
+    .hero-text { display: flex; flex-direction: column; gap: 26px; align-self: center; }
     h1 {
       font-family: var(--font-display);
       font-size: clamp(38px, 5vw, 60px);
@@ -225,7 +225,7 @@
     .btn-outline:hover { background: var(--espresso); color: var(--white); }
     /* ── PHONE + FLOATING TAGS ── */
     .phone-stage { position: relative; display: inline-block; }
-    .phone-wrap { display: flex; justify-content: center; align-items: center; }
+    .phone-wrap { display: flex; justify-content: center; align-items: flex-end; }
     .phone-frame { position: relative; width: 100%; max-width: 460px; }
     .phone-frame img {
       width: 100%;
@@ -570,6 +570,10 @@
       <details class="faq-item" open>
         <summary>¿Buscafé es gratis?<span class="faq-plus"></span></summary>
         <p>Sí, es totalmente gratis para usuarios amantes del café que quieren descubrir nuevas experiencias.</p>
+      </details>
+      <details class="faq-item">
+        <summary>¿Qué beneficios tengo por usar Buscafé?<span class="faq-plus"></span></summary>
+        <p>Accedé a descuentos exclusivos en cafeterías adheridas presentando tu cupón desde la app. Y esto recién empieza: próximamente vas a poder usar Wallet Buscafé para tomar cafecitos, sumar sellos y acceder a nuevos beneficios.</p>
       </details>
       <details class="faq-item">
         <summary>¿En qué plataformas está disponible?<span class="faq-plus"></span></summary>
