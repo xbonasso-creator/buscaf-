@@ -226,15 +226,12 @@
     /* ── PHONE + FLOATING TAGS ── */
     .phone-stage { position: relative; display: inline-block; }
     .phone-wrap { display: flex; justify-content: center; align-items: center; }
-    .phone-frame { position: relative; width: 100%; max-width: 290px; }
+    .phone-frame { position: relative; width: 100%; max-width: 380px; }
     .phone-frame img {
       width: 100%;
       height: auto;
       display: block;
-      border-radius: 38px;
-      border: 6px solid var(--espresso);
-      box-shadow: 0 0 0 1px rgba(255,255,255,0.1) inset, 0 30px 70px rgba(42, 22, 8, 0.28);
-      object-fit: cover;
+      object-fit: contain;
     }
     @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
     @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
@@ -394,7 +391,7 @@
       .hero-sub { text-align: center; }
       .store-btns { justify-content: center; width: 100%; }
       .store-btn { width: auto; flex: 1 1 auto; }
-      .phone-frame { max-width: 220px; }
+      .phone-frame { max-width: 280px; }
       .ticker { padding: 12px 0; }
       .ticker-item { padding: 0 18px; font-size: 12.5px; }
       .ticker-icon { width: 14px; height: 14px; }
