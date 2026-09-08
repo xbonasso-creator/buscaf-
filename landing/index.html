@@ -160,7 +160,7 @@
       align-items: end;
       gap: 48px;
     }
-    .hero-text { display: flex; flex-direction: column; gap: 26px; align-self: center; }
+    .hero-text { display: flex; flex-direction: column; gap: 26px; align-self: center; padding-bottom: 64px; }
     h1 {
       font-family: var(--font-display);
       font-size: clamp(38px, 5vw, 60px);
@@ -175,6 +175,7 @@
       color: var(--text-light);
       line-height: 1.55;
       max-width: 420px;
+      white-space: nowrap;
     }
     /* ── STORE BUTTONS ── */
     .store-btns { display: flex; gap: 12px; flex-wrap: wrap; }
@@ -226,7 +227,7 @@
     /* ── PHONE + FLOATING TAGS ── */
     .phone-stage { position: relative; display: inline-block; }
     .phone-wrap { display: flex; justify-content: center; align-items: flex-end; }
-    .phone-frame { position: relative; width: 100%; max-width: 460px; }
+    .phone-frame { position: relative; width: 100%; max-width: 520px; }
     .phone-frame img {
       width: 100%;
       height: auto;
@@ -386,12 +387,12 @@
     @media (max-width: 768px) {
       .nav-actions { display: none; }
       .nav-hamburger { display: flex; }
-      .hero { grid-template-columns: 1fr; padding: 44px 20px 64px; gap: 56px; text-align: center; }
-      .hero-text { align-items: center; }
-      .hero-sub { text-align: center; }
+      .hero { grid-template-columns: 1fr; padding: 44px 20px 0; gap: 40px; text-align: center; }
+      .hero-text { align-items: center; padding-bottom: 0; }
+      .hero-sub { text-align: center; white-space: normal; }
       .store-btns { justify-content: center; width: 100%; }
       .store-btn { width: auto; flex: 1 1 auto; }
-      .phone-frame { max-width: 280px; }
+      .phone-frame { max-width: 320px; }
       .ticker { padding: 12px 0; }
       .ticker-item { padding: 0 18px; font-size: 12.5px; }
       .ticker-icon { width: 14px; height: 14px; }
@@ -423,8 +424,7 @@
     <div class="hero">
       <div class="hero-text">
         <h1>Buscá cafeterías.<br /><span class="hero-title-accent">Descubrí experiencias.</span></h1>
-        <!-- CAMBIO 1: salto de línea movido después de "trabajar," -->
-        <p class="hero-sub">Encontrá cafeterías<br />según tu plan y tus preferencias.</p>
+        <p class="hero-sub">Encontrá cafeterías según tu plan.</p>
         <div class="store-btns">
           <a href="https://apps.apple.com/us/iphone/today" class="store-btn store-btn--fill">
             <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
