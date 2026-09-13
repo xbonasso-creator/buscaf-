@@ -68,18 +68,14 @@
     }
 
     .path-single {
-      max-width: 1000px; margin: 0 auto;
+      max-width: 700px; margin: 0 auto;
       padding: 8px 24px 24px;
-    }
-    .path-single-grid {
-      display: grid; grid-template-columns: 1fr 1fr;
-      align-items: center; gap: 48px;
     }
     .path-single-card {
       background: var(--white); border: 2px solid var(--border);
       border-radius: var(--radius); padding: 48px 40px;
-      text-align: left;
-      display: flex; flex-direction: column; align-items: flex-start; gap: 18px;
+      text-align: center;
+      display: flex; flex-direction: column; align-items: center; gap: 18px;
       transition: border-color .2s, box-shadow .2s;
     }
     .path-single-card:hover { border-color: var(--accent); box-shadow: var(--shadow-md); }
@@ -101,20 +97,6 @@
       margin-top: 4px;
     }
     .path-single-btn:hover { opacity: .88; transform: translateY(-1px); }
-    .path-single-preview {
-      display: flex; align-items: center; justify-content: center;
-    }
-    .path-single-preview img {
-      width: 100%; max-width: 320px; height: auto;
-      border-radius: 28px;
-      box-shadow: 0 20px 60px rgba(42,22,8,.18);
-    }
-    @media (max-width: 720px) {
-      .path-single-grid { grid-template-columns: 1fr; }
-      .path-single-preview { order: -1; }
-      .path-single-preview img { max-width: 240px; }
-      .path-single-card { text-align: center; align-items: center; }
-    }
 
     .section-title-wrap {
       max-width: 800px; margin: 0 auto;
@@ -252,18 +234,13 @@
 </section>
 
 <section class="path-single">
-  <div class="path-single-grid">
-    <div class="path-single-card">
-      <div class="path-single-icon">
-        <img src="https://xoddmbesiurqcxftjpqh.supabase.co/storage/v1/object/public/landing/isotipo.png" alt="Buscafé" width="36" height="36" style="object-fit:contain;" />
-      </div>
-      <h2>Sumate a Buscafé</h2>
-      <p>Conectá con una comunidad que siempre está buscando su próximo café. Sumá tu cafetería, elegí tu plan y disfrutá el primer mes gratis.</p>
-      <a href="/registrar-cafeteria" class="path-single-btn">Registrar cafetería →</a>
+  <div class="path-single-card">
+    <div class="path-single-icon">
+      <img src="https://xoddmbesiurqcxftjpqh.supabase.co/storage/v1/object/public/landing/isotipo.png" alt="Buscafé" width="36" height="36" style="object-fit:contain;" />
     </div>
-    <div class="path-single-preview">
-      <img src="https://xoddmbesiurqcxftjpqh.supabase.co/storage/v1/object/public/landing/sumate.png" alt="Vista previa de la app Buscafé" />
-    </div>
+    <h2>Sumate a Buscafé</h2>
+    <p>Conectá con una comunidad que siempre está buscando su próximo café. Sumá tu cafetería, elegí tu plan y disfrutá el primer mes gratis.</p>
+    <a href="/registrar-cafeteria" class="path-single-btn">Registrar cafetería →</a>
   </div>
 </section>
 
