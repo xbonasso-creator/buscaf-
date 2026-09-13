@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/png" href="./favicon.png" />
+  <title>Buscafé — Próximamente</title>
+  <meta name="description" content="Buscafé está por llegar. Descubrí tu próximo café de especialidad." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --espresso: #2A1608;
+      --heading: #4A2D2A;
+      --terracotta: #C2542A;
+      --bg: #FBF6EE;
+      --text-light: #8A7360;
+      --border: #E5D6C0;
+      --font: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    html, body {
+      height: 100%;
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--espresso);
+    }
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* subtle background texture */
+    body::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at 15% 20%, rgba(194,84,42,.06) 0%, transparent 45%),
+        radial-gradient(circle at 85% 80%, rgba(194,84,42,.05) 0%, transparent 45%);
+      pointer-events: none;
+    }
+
+    .wrap {
+      text-align: center;
+      max-width: 460px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .isotipo {
+      width: 84px;
+      height: 84px;
+      object-fit: contain;
+      margin-bottom: 28px;
+      animation: float 3.5s ease-in-out infinite;
+    }
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .eyebrow {
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: var(--terracotta);
+      margin-bottom: 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .eyebrow::before, .eyebrow::after {
+      content: '';
+      width: 16px;
+      height: 1.5px;
+      background: var(--terracotta);
+      display: inline-block;
+    }
+
+    h1 {
+      font-size: clamp(36px, 8vw, 52px);
+      font-weight: 800;
+      letter-spacing: -1px;
+      line-height: 1.1;
+      color: var(--heading);
+      margin-bottom: 18px;
+    }
+
+    p.sub {
+      font-size: 16px;
+      color: var(--text-light);
+      line-height: 1.6;
+      margin-bottom: 36px;
+    }
+
+    .ig-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px 28px;
+      border-radius: 50px;
+      background: var(--espresso);
+      color: #FBF6EE;
+      text-decoration: none;
+      font-size: 14.5px;
+      font-weight: 700;
+      box-shadow: 0 4px 20px rgba(42,22,8,.18);
+      transition: opacity .2s, transform .15s;
+    }
+    .ig-link:hover { opacity: .88; transform: translateY(-1px); }
+    .ig-link svg { width: 18px; height: 18px; }
+
+    @media (max-width: 420px) {
+      h1 { font-size: 32px; }
+      .isotipo { width: 68px; height: 68px; margin-bottom: 22px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="wrap">
+    <img
+      class="isotipo"
+      src="https://xoddmbesiurqcxftjpqh.supabase.co/storage/v1/object/public/landing/isotipo.png"
+      alt="Buscafé"
+    />
+    <div class="eyebrow">Muy pronto</div>
+    <h1>Próximamente</h1>
+    <p class="sub">Estamos preparando algo rico. Mientras tanto, seguinos para no perderte nada del lanzamiento.</p>
+    <a
+      href="https://www.instagram.com/buscafe_app"
+      target="_blank"
+      rel="noopener noreferrer"
+      class="ig-link"
+    >
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+        <circle cx="12" cy="12" r="4"/>
+        <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
+      </svg>
+      Seguinos en Instagram
+    </a>
+  </div>
+
+</body>
+</html>
