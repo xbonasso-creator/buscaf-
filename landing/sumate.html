@@ -43,7 +43,7 @@
     .nav-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 64px; }
     .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
     .nav-logo img { width: 36px; height: 36px; border-radius: 10px; object-fit: cover; }
-    .nav-logo span { font-size: 18px; font-weight: 800; color: var(--espresso); letter-spacing: -.3px; }
+    .nav-logo span { font-size: 18px; font-weight: 600; color: var(--espresso); letter-spacing: -.3px; }
     .nav-back { display: inline-flex; align-items: center; gap: 6px; color: var(--text-light); text-decoration: none; font-size: 14px; font-weight: 500; transition: color .2s; }
     .nav-back:hover { color: var(--espresso); }
 
@@ -59,7 +59,7 @@
     }
     .hero h1 {
       font-size: clamp(30px, 5vw, 46px);
-      font-weight: 900; letter-spacing: -1px; line-height: 1.15;
+      font-weight: 700; letter-spacing: -1px; line-height: 1.15;
       color: var(--heading); margin-bottom: 16px;
     }
     .hero p {
@@ -69,7 +69,7 @@
 
     .path-single {
       max-width: 1000px; margin: 0 auto;
-      padding: 8px 24px 64px;
+      padding: 8px 24px 24px;
     }
     .path-single-grid {
       display: grid; grid-template-columns: 1fr 1fr;
@@ -89,7 +89,7 @@
       display: flex; align-items: center; justify-content: center;
       font-size: 32px;
     }
-    .path-single-card h2 { font-size: 26px; font-weight: 900; color: var(--heading); letter-spacing: -.5px; }
+    .path-single-card h2 { font-size: 26px; font-weight: 700; color: var(--heading); letter-spacing: -.5px; }
     .path-single-card p { font-size: 15.5px; color: var(--text-light); line-height: 1.6; max-width: 460px; }
     .path-single-btn {
       display: inline-flex; align-items: center; justify-content: center; gap: 8px;
@@ -118,9 +118,9 @@
 
     .section-title-wrap {
       max-width: 800px; margin: 0 auto;
-      padding: 40px 24px 8px; text-align: center;
+      padding: 8px 24px 8px; text-align: center;
     }
-    .section-title-wrap p { font-size: 19px; font-weight: 700; color: var(--heading); line-height: 1.5; max-width: 520px; margin: 0 auto; }
+    .section-title-wrap p { font-size: 26px; font-weight: 700; color: var(--heading); line-height: 1.4; max-width: 560px; margin: 0 auto; }
 
     .services-wrap { max-width: 800px; margin: 0 auto; padding: 32px 24px 40px; }
     .service-item {
@@ -144,7 +144,7 @@
     .service-body { flex: 1; }
     .service-top { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 4px; }
     .service-name { font-size: 15.5px; font-weight: 700; color: var(--heading); }
-    .service-price { font-size: 16px; font-weight: 800; color: var(--accent); white-space: nowrap; }
+    .service-price { font-size: 16px; font-weight: 700; color: var(--accent); white-space: nowrap; }
     .service-desc { font-size: 13px; color: var(--text-light); line-height: 1.55; }
     .service-item input[type="checkbox"] { display: none; }
 
@@ -158,7 +158,7 @@
     }
     .cart-info { color: #fff; }
     .cart-count { font-size: 12px; color: rgba(255,255,255,.6); text-transform: uppercase; letter-spacing: .06em; font-weight: 700; margin-bottom: 2px; }
-    .cart-total { font-size: 24px; font-weight: 900; }
+    .cart-total { font-size: 24px; font-weight: 700; }
     .cart-total span { font-size: 14px; font-weight: 500; opacity: .6; }
     .cart-btn {
       display: inline-flex; align-items: center; justify-content: center; gap: 8px;
@@ -186,7 +186,7 @@
       width: 56px; height: 56px; border-radius: 16px; background: var(--bg-warm);
       display: flex; align-items: center; justify-content: center; font-size: 26px; margin-bottom: 18px;
     }
-    .modal-box h3 { font-size: 20px; font-weight: 900; color: var(--heading); margin-bottom: 10px; letter-spacing: -.3px; }
+    .modal-box h3 { font-size: 20px; font-weight: 700; color: var(--heading); margin-bottom: 10px; letter-spacing: -.3px; }
     .modal-box p { font-size: 14px; color: var(--text-light); line-height: 1.6; margin-bottom: 20px; }
     .modal-summary {
       background: var(--field-bg); border: 1px solid var(--border); border-radius: var(--radius-sm);
@@ -248,9 +248,7 @@
 </nav>
 
 <section class="hero">
-  <div class="hero-eyebrow">Para cafeterías</div>
   <h1>Potenciá tu presencia</h1>
-  <p>Sumá tu cafetería a la comunidad de Buscafé y llegá a más personas.</p>
 </section>
 
 <section class="path-single">
@@ -260,8 +258,8 @@
         <img src="https://xoddmbesiurqcxftjpqh.supabase.co/storage/v1/object/public/landing/isotipo.png" alt="Buscafé" width="36" height="36" style="object-fit:contain;" />
       </div>
       <h2>Sumate a Buscafé</h2>
-      <p>Conectá con una comunidad que siempre está buscando su próximo café. Completá el formulario, elegí tu plan y disfrutá el primer mes gratis.</p>
-      <a href="/registrar-cafeteria" class="path-single-btn">Registrar mi cafetería →</a>
+      <p>Conectá con una comunidad que siempre está buscando su próximo café. Sumá tu cafetería, elegí tu plan y disfrutá el primer mes gratis.</p>
+      <a href="/registrar-cafeteria" class="path-single-btn">Registrar cafetería →</a>
     </div>
     <div class="path-single-preview">
       <img src="https://xoddmbesiurqcxftjpqh.supabase.co/storage/v1/object/public/landing/Sumate.png" alt="Vista previa de la app Buscafé" />
@@ -270,7 +268,7 @@
 </section>
 
 <section class="section-title-wrap">
-  <p>Elegí lo que necesites, cuando lo necesites.</p>
+  <p>Elegí lo que necesites,<br />cuando lo necesites.</p>
 </section>
 
 <section class="services-wrap">
@@ -285,7 +283,7 @@
         <span class="service-name">Banner en Home</span>
         <span class="service-price">USD 50</span>
       </div>
-      <p class="service-desc">Banner rotativo destacado en la Home de Buscafé durante 1 semana, con redirección directa a tu cafetería, promoción, evento o contenido destacado.</p>
+      <p class="service-desc">Destacate en la Home durante 1 semana con contenido personalizado.</p>
     </div>
   </label>
 
@@ -299,7 +297,7 @@
         <span class="service-name">Evento destacado en Home</span>
         <span class="service-price">USD 25</span>
       </div>
-      <p class="service-desc">Destacá tu evento o taller en la Home de Buscafé durante 1 o 2 semanas, aumentando su visibilidad entre la comunidad cafetera.</p>
+      <p class="service-desc">Promocioná tu evento en la Home durante 1 o 2 semanas, con acceso directo a contacto.</p>
     </div>
   </label>
 
@@ -313,11 +311,11 @@
         <span class="service-name">Lanzamiento de sucursal</span>
         <span class="service-price">USD 30</span>
       </div>
-      <p class="service-desc">Dale visibilidad a la apertura de una nueva sucursal con 1 story en el Instagram de Buscafé + etiqueta "Nuevo" en la Home durante 2 semanas.</p>
+      <p class="service-desc">Impulsá la apertura con una historia en Instagram Buscafé + Tag "Nuevo" en la app.</p>
     </div>
   </label>
 
-  <label class="service-item" data-price="50">
+  <label class="service-item" data-price="80">
     <input type="checkbox" />
     <div class="service-checkbox">
       <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
@@ -325,23 +323,9 @@
     <div class="service-body">
       <div class="service-top">
         <span class="service-name">Sesión de fotografía</span>
-        <span class="service-price">USD 50</span>
+        <span class="service-price">USD 80</span>
       </div>
-      <p class="service-desc">Sesión de fotos de tu cafetería para renovar y potenciar tu ficha en Buscafé. Las fotografías también podrán ser utilizadas por la cafetería en redes sociales y otras plataformas digitales.</p>
-    </div>
-  </label>
-
-  <label class="service-item" data-price="15">
-    <input type="checkbox" />
-    <div class="service-checkbox">
-      <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-    </div>
-    <div class="service-body">
-      <div class="service-top">
-        <span class="service-name">Reporte mensual</span>
-        <span class="service-price">USD 15</span>
-      </div>
-      <p class="service-desc">Recibí un reporte mensual con las principales métricas de tu presencia en Buscafé: visitas y clics en la ficha, aparición en búsquedas y filtros, interacciones y otros datos relevantes.</p>
+      <p class="service-desc">Renová la imagen de tu local con fotos para la app, redes y plataformas digitales.</p>
     </div>
   </label>
 
@@ -355,7 +339,7 @@
         <span class="service-name">Push a usuarios cercanos</span>
         <span class="service-price">USD 50</span>
       </div>
-      <p class="service-desc">Enviá una notificación puntual a usuarios de Buscafé que se encuentren cerca de tu zona para comunicar una promoción, evento, lanzamiento o novedad. Incluye 1 envío.</p>
+      <p class="service-desc">Llegá a personas cerca de tu zona con un mensaje personalizado.</p>
     </div>
   </label>
 
