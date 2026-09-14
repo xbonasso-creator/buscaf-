@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Cargá tu promoción — Buscafé</title>
+  <meta name="description" content="Compartí tus promociones para que aparezcan en tu perfil de Buscafé." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --espresso:   #2A1608;
+      --heading:    #4A2D2A;
+      --accent:     #C2542A;
+      --error:      #D94040;
+      --success:    #1A7A46;
+      --bg:         #FBF6EE;
+      --bg-warm:    #F1E4D0;
+      --field-bg:   #FBF8F4;
+      --white:      #FFFFFF;
+      --text:       #2A1608;
+      --text-light: #8A7360;
+      --text-ph:    #C0AFA0;
+      --border:     #E5D6C0;
+      --radius:     14px;
+      --radius-sm:  10px;
+      --radius-pill:50px;
+      --shadow-md:  0 4px 20px rgba(42,22,8,.12);
+      --font: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: var(--font); background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(251,246,238,.92);
+      backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
+    }
+    .nav-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; height: 64px; }
+    .nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+    .nav-logo img { width: 36px; height: 36px; border-radius: 10px; object-fit: cover; }
+    .nav-logo span { font-size: 18px; font-weight: 600; color: var(--espresso); letter-spacing: -.3px; }
+    .nav-back { display: inline-flex; align-items: center; gap: 6px; color: var(--text-light); text-decoration: none; font-size: 14px; font-weight: 500; transition: color .2s; }
+    .nav-back:hover { color: var(--espresso); }
+
+    .page { max-width: 640px; margin: 0 auto; padding: 48px 24px 100px; }
+
+    .page-header { margin-bottom: 32px; }
+    .page-header h1 {
+      font-size: clamp(26px, 4vw, 36px); font-weight: 700; letter-spacing: -.7px;
+      line-height: 1.15; color: var(--heading); margin-bottom: 10px;
+    }
+    .page-header p { font-size: 16px; color: var(--text-light); line-height: 1.6; }
+
+    .field-group { display: flex; flex-direction: column; gap: 6px; margin-bottom: 18px; }
+    .field-group:last-of-type { margin-bottom: 0; }
+    label { font-size: 13px; font-weight: 600; color: var(--text); letter-spacing: .1px; }
+    .label-opt { font-size: 11px; font-weight: 500; color: var(--text-light); margin-left: 4px; }
+    .label-sub { font-weight: 400; font-size: 12px; color: var(--text-light); }
+
+    input[type="text"], input[type="email"], input[type="tel"], input[type="date"], select {
+      width: 100%; background: var(--field-bg);
+      border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+      padding: 13px 15px; font-size: 15px; font-family: inherit;
+      color: var(--text); outline: none;
+      transition: border-color .2s, box-shadow .2s;
+      -webkit-appearance: none;
+    }
+    select {
+      cursor: pointer;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16' fill='none'%3E%3Cpath d='M4 6l4 4 4-4' stroke='%238A7360' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 15px center;
+      padding-right: 40px;
+    }
+    select:invalid { color: var(--text-ph); }
+    input::placeholder { color: var(--text-ph); }
+    input:focus, select:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(194,84,42,.12); }
+    input.invalid, select.invalid { border-color: var(--error); background: #FFF8F8; }
+    .field-error { font-size: 12px; color: var(--error); font-weight: 500; display: none; }
+    .field-error.show { display: block; }
+
+    .divider { height: 1px; background: var(--border); margin: 28px 0; }
+
+    .row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+    .upload-zone {
+      border: 2px dashed var(--border); border-radius: var(--radius);
+      padding: 26px 20px; text-align: center;
+      cursor: pointer; background: var(--field-bg);
+      transition: border-color .2s, background .2s;
+      position: relative; overflow: hidden;
+    }
+    .upload-zone:hover, .upload-zone.over { border-color: var(--accent); background: rgba(194,84,42,.04); }
+    .upload-zone input[type="file"] { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
+    .upload-zone-content { pointer-events: none; }
+    .upload-icon { font-size: 26px; margin-bottom: 8px; }
+    .upload-title { font-size: 14px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+    .upload-sub { font-size: 12px; color: var(--text-light); }
+    .upload-sub span { color: var(--accent); font-weight: 600; }
+    .cover-preview { display: none; flex-direction: column; align-items: center; gap: 10px; }
+    .cover-preview.show { display: flex; }
+    .cover-preview img { width: 100%; max-width: 280px; height: 140px; border-radius: 12px; object-fit: cover; box-shadow: var(--shadow-md); }
+    .cover-preview-name { font-size: 13px; font-weight: 600; color: var(--text); }
+    .cover-remove {
+      font-size: 12px; color: var(--text-light);
+      background: none; border: 1px solid var(--border);
+      border-radius: 20px; padding: 3px 12px;
+      cursor: pointer; font-family: inherit;
+      transition: all .15s; pointer-events: all;
+    }
+    .cover-remove:hover { color: var(--error); border-color: var(--error); }
+
+    /* ── Promo card (bloque repetible) ── */
+    .promo-card {
+      background: var(--white); border: 1.5px solid var(--border);
+      border-radius: var(--radius); padding: 24px; margin-bottom: 16px;
+      position: relative;
+    }
+    .promo-card-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 18px;
+    }
+    .promo-card-title {
+      font-size: 13px; font-weight: 700; color: var(--accent);
+      text-transform: uppercase; letter-spacing: .06em;
+    }
+    .promo-remove-btn {
+      display: flex; align-items: center; gap: 5px;
+      background: none; border: none; cursor: pointer;
+      font-size: 12px; font-weight: 600; color: var(--text-light);
+      font-family: inherit; padding: 4px 8px; border-radius: 6px;
+      transition: color .15s, background .15s;
+    }
+    .promo-remove-btn:hover { color: var(--error); background: #FFF0F0; }
+
+    .add-promo-btn {
+      width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 14px; border-radius: var(--radius-sm);
+      background: var(--bg-warm); border: 1.5px dashed var(--accent);
+      color: var(--accent); font-size: 14px; font-weight: 700; font-family: inherit;
+      cursor: pointer; transition: opacity .15s; margin-bottom: 32px;
+    }
+    .add-promo-btn:hover { opacity: .8; }
+
+    .submit-btn {
+      width: 100%; margin-top: 8px;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 16px 28px; border-radius: var(--radius-pill);
+      background: var(--espresso); border: none; color: #fff;
+      font-size: 15px; font-weight: 700; font-family: inherit;
+      cursor: pointer; transition: opacity .2s, transform .15s;
+      box-shadow: var(--shadow-md);
+    }
+    .submit-btn:hover { opacity: .88; transform: translateY(-1px); }
+    .submit-btn:disabled { opacity: .5; cursor: not-allowed; transform: none; }
+    .submit-btn .spinner {
+      display: none; width: 16px; height: 16px;
+      border: 2px solid rgba(255,255,255,.4); border-top-color: #fff;
+      border-radius: 50%; animation: spin .6s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .submit-btn.loading .spinner { display: block; }
+    .submit-btn.loading .btn-label { opacity: .6; }
+
+    .success-wrap { display: none; text-align: center; padding: 40px 0; }
+    .success-wrap.show { display: block; }
+    .success-icon {
+      width: 72px; height: 72px; background: var(--bg-warm);
+      border: 1.5px solid var(--border); border-radius: 18px;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 22px; font-size: 30px;
+    }
+    .success-wrap h2 { font-size: 24px; font-weight: 700; color: var(--heading); margin-bottom: 12px; }
+    .success-wrap p { font-size: 15px; color: var(--text-light); line-height: 1.6; max-width: 420px; margin: 0 auto; }
+
+    footer { border-top: 1px solid var(--border); padding: 32px 24px; margin-top: 40px; }
+    .footer-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: center; }
+    .footer-copy { font-size: 13px; color: var(--text-light); }
+
+    @media (max-width: 520px) {
+      .row-2 { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a href="/" class="nav-logo">
+      <img src="https://xoddmbesiurqcxftjpqh.supabase.co/storage/v1/object/public/landing/isotipo.png" alt="Buscafé" width="36" height="36" />
+      <span>Buscafé</span>
+    </a>
+    <a href="/" class="nav-back">← Volver</a>
+  </div>
+</nav>
+
+<div class="page">
+
+  <div id="form-view">
+    <div class="page-header">
+      <h1>Cargá tu promoción</h1>
+      <p>Compartí tus promociones para que aparezcan en tu perfil de Buscafé.</p>
+    </div>
+
+    <form id="promos-form">
+
+      <div class="field-group">
+        <label for="cafe-nombre">Nombre de tu cafetería *</label>
+        <input type="text" id="cafe-nombre" placeholder="Ej: La Sede Café" />
+        <span class="field-error" id="err-cafe-nombre">Este campo es obligatorio.</span>
+      </div>
+
+      <div class="divider"></div>
+
+      <div id="promos-list"></div>
+
+      <button type="button" class="add-promo-btn" id="btn-add-promo">
+        + Agregar otra promoción
+      </button>
+
+      <button type="submit" class="submit-btn" id="submit-btn">
+        <span class="spinner"></span>
+        <span class="btn-label">Enviar promociones</span>
+      </button>
+
+    </form>
+  </div>
+
+  <div class="success-wrap" id="success-view">
+    <div class="success-icon">🎉</div>
+    <h2>¡Recibimos tus promociones!</h2>
+    <p>Las vamos a revisar y publicar en tu perfil de Buscafé en breve. Cualquier duda, escribinos a info@buscafe.app.</p>
+  </div>
+
+</div>
+
+<footer>
+  <div class="footer-inner">
+    <span class="footer-copy">© 2026 Buscafé. Todos los derechos reservados.</span>
+  </div>
+</footer>
+
+<form name="cargar-promocion" netlify netlify-honeypot="bot-field" hidden>
+  <input name="bot-field" />
+  <input name="cafe-nombre" />
+  <input name="promociones" />
+</form>
+
+<script>
+  let promoCount = 0;
+  const promosList = document.getElementById('promos-list');
+  const coverFiles = {};
+
+  const TIPO_OPTIONS = ['2x1', '% OFF', 'Precio fijo', 'Otro'];
+
+  function addPromoCard() {
+    const idx = promoCount++;
+    const card = document.createElement('div');
+    card.className = 'promo-card';
+    card.id = `promo-card-${idx}`;
+    card.innerHTML = `
+      <div class="promo-card-header">
+        <span class="promo-card-title">Promoción ${idx + 1}</span>
+        <button type="button" class="promo-remove-btn" data-idx="${idx}" style="${idx === 0 ? 'display:none;' : ''}">✕ Eliminar</button>
+      </div>
+
+      <div class="field-group">
+        <label>Nombre de la promoción *</label>
+        <input type="text" class="promo-nombre" placeholder="Ej: Medialuna y café, Chipá de queso" />
+        <span class="field-error promo-err-nombre">Este campo es obligatorio.</span>
+      </div>
+
+      <div class="field-group">
+        <label>Tipo de promoción *</label>
+        <select class="promo-tipo">
+          <option value="" disabled selected hidden>Seleccioná una opción</option>
+          ${TIPO_OPTIONS.map(t => `<option value="${t}">${t}</option>`).join('')}
+        </select>
+        <span class="field-error promo-err-tipo">Seleccioná un tipo.</span>
+      </div>
+
+      <div class="field-group promo-tipo-porcentaje-wrap" style="display:none;">
+        <label>¿Qué porcentaje? *</label>
+        <input type="text" class="promo-tipo-porcentaje" placeholder="Ej: 20%" />
+      </div>
+
+      <div class="field-group promo-tipo-precio-wrap" style="display:none;">
+        <label>¿Cuál es el precio fijo? *</label>
+        <input type="text" class="promo-tipo-precio" placeholder="Ej: $250" />
+      </div>
+
+      <div class="field-group promo-tipo-otro-wrap" style="display:none;">
+        <label>Contanos cuál *</label>
+        <input type="text" class="promo-tipo-otro" placeholder="Ej: 3x2, combo especial" />
+      </div>
+
+      <div class="field-group">
+        <label>¿Tiene fecha límite? <span class="label-opt">— opcional</span></label>
+        <div class="row-2">
+          <div class="field-group">
+            <label class="label-sub">Válida desde</label>
+            <input type="date" class="promo-desde" />
+          </div>
+          <div class="field-group">
+            <label class="label-sub">Válida hasta</label>
+            <input type="date" class="promo-hasta" />
+          </div>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label>Foto de la promoción *</label>
+        <div class="upload-zone promo-cover-zone">
+          <input type="file" class="promo-cover-input" accept="image/*" />
+          <div class="upload-zone-content promo-cover-content">
+            <div class="upload-icon">
+              <svg width="28" height="28" viewBox="0 0 32 32" fill="none"><rect x="2" y="6" width="28" height="20" rx="5" stroke="#E5D6C0" stroke-width="1.5" stroke-dasharray="4 3"/><circle cx="10.5" cy="13.5" r="2.5" stroke="#C0AFA0" stroke-width="1.5"/><path d="M2 22l7-6 5 5 4-4 7 6" stroke="#C0AFA0" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </div>
+            <div class="upload-title">Subí una imagen de la promo</div>
+            <div class="upload-sub"><span>Hacé clic para buscarla</span> · PNG o JPG</div>
+          </div>
+          <div class="cover-preview promo-cover-preview">
+            <img class="promo-cover-img" src="" alt="Foto promo" />
+            <div class="cover-preview-name promo-cover-name"></div>
+            <button type="button" class="cover-remove promo-cover-remove">Quitar</button>
+          </div>
+        </div>
+        <span class="field-error promo-err-cover">Necesitás subir una foto de la promoción.</span>
+      </div>
+    `;
+    promosList.appendChild(card);
+    wireCard(card, idx);
+    updateRemoveButtons();
+  }
+
+  function wireCard(card, idx) {
+    const tipoSelect     = card.querySelector('.promo-tipo');
+    const porcentajeWrap = card.querySelector('.promo-tipo-porcentaje-wrap');
+    const porcentajeInput= card.querySelector('.promo-tipo-porcentaje');
+    const precioWrap     = card.querySelector('.promo-tipo-precio-wrap');
+    const precioInput    = card.querySelector('.promo-tipo-precio');
+    const otroWrap       = card.querySelector('.promo-tipo-otro-wrap');
+    const otroInput      = card.querySelector('.promo-tipo-otro');
+
+    tipoSelect.addEventListener('change', () => {
+      tipoSelect.classList.remove('invalid');
+      card.querySelector('.promo-err-tipo').classList.remove('show');
+
+      porcentajeWrap.style.display = 'none';
+      precioWrap.style.display     = 'none';
+      otroWrap.style.display       = 'none';
+      porcentajeInput.value = '';
+      precioInput.value     = '';
+      otroInput.value       = '';
+
+      if (tipoSelect.value === '% OFF') {
+        porcentajeWrap.style.display = 'flex';
+      } else if (tipoSelect.value === 'Precio fijo') {
+        precioWrap.style.display = 'flex';
+      } else if (tipoSelect.value === 'Otro') {
+        otroWrap.style.display = 'flex';
+      }
+    });
+
+    const coverZone    = card.querySelector('.promo-cover-zone');
+    const coverInput   = card.querySelector('.promo-cover-input');
+    const coverContent = card.querySelector('.promo-cover-content');
+    const coverPreview = card.querySelector('.promo-cover-preview');
+    const coverImg     = card.querySelector('.promo-cover-img');
+    const coverName    = card.querySelector('.promo-cover-name');
+    const coverRemove  = card.querySelector('.promo-cover-remove');
+
+    function handleFile(file) {
+      if (!file || !file.type.startsWith('image/')) return;
+      coverFiles[idx] = file;
+      const reader = new FileReader();
+      reader.onload = e => {
+        coverImg.src = e.target.result;
+        coverName.textContent = file.name;
+        coverContent.style.display = 'none';
+        coverPreview.classList.add('show');
+        card.querySelector('.promo-err-cover').classList.remove('show');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    coverInput.addEventListener('change', e => handleFile(e.target.files[0]));
+    coverZone.addEventListener('dragover', e => { e.preventDefault(); coverZone.classList.add('over'); });
+    coverZone.addEventListener('dragleave', () => coverZone.classList.remove('over'));
+    coverZone.addEventListener('drop', e => {
+      e.preventDefault(); coverZone.classList.remove('over');
+      handleFile(e.dataTransfer.files[0]);
+    });
+    coverRemove.addEventListener('click', e => {
+      e.preventDefault(); e.stopPropagation();
+      delete coverFiles[idx];
+      coverInput.value = ''; coverImg.src = '';
+      coverPreview.classList.remove('show'); coverContent.style.display = '';
+    });
+
+    card.querySelector('.promo-remove-btn').addEventListener('click', () => {
+      card.remove();
+      delete coverFiles[idx];
+      renumberCards();
+    });
+  }
+
+  function renumberCards() {
+    const cards = [...promosList.querySelectorAll('.promo-card')];
+    cards.forEach((card, i) => {
+      card.querySelector('.promo-card-title').textContent = `Promoción ${i + 1}`;
+    });
+    updateRemoveButtons();
+  }
+
+  function updateRemoveButtons() {
+    const cards = [...promosList.querySelectorAll('.promo-card')];
+    cards.forEach((card, i) => {
+      const btn = card.querySelector('.promo-remove-btn');
+      btn.style.display = cards.length > 1 ? 'flex' : 'none';
+    });
+  }
+
+  document.getElementById('btn-add-promo').addEventListener('click', addPromoCard);
+
+  // primera promo, siempre presente
+  addPromoCard();
+
+  function validateForm() {
+    let ok = true;
+
+    const cafeInput = document.getElementById('cafe-nombre');
+    const cafeErr = document.getElementById('err-cafe-nombre');
+    if (!cafeInput.value.trim()) {
+      cafeInput.classList.add('invalid');
+      cafeErr.classList.add('show');
+      ok = false;
+    } else {
+      cafeInput.classList.remove('invalid');
+      cafeErr.classList.remove('show');
+    }
+
+    document.querySelectorAll('.promo-card').forEach(card => {
+      const nombreInput = card.querySelector('.promo-nombre');
+      const nombreErr = card.querySelector('.promo-err-nombre');
+      if (!nombreInput.value.trim()) {
+        nombreInput.classList.add('invalid');
+        nombreErr.classList.add('show');
+        ok = false;
+      } else {
+        nombreInput.classList.remove('invalid');
+        nombreErr.classList.remove('show');
+      }
+
+      const tipoSelect = card.querySelector('.promo-tipo');
+      const tipoErr = card.querySelector('.promo-err-tipo');
+      if (!tipoSelect.value) {
+        tipoSelect.classList.add('invalid');
+        tipoErr.classList.add('show');
+        ok = false;
+      } else {
+        tipoSelect.classList.remove('invalid');
+        tipoErr.classList.remove('show');
+
+        if (tipoSelect.value === '% OFF') {
+          const porcentajeInput = card.querySelector('.promo-tipo-porcentaje');
+          if (!porcentajeInput.value.trim()) {
+            porcentajeInput.classList.add('invalid');
+            ok = false;
+          } else {
+            porcentajeInput.classList.remove('invalid');
+          }
+        } else if (tipoSelect.value === 'Precio fijo') {
+          const precioInput = card.querySelector('.promo-tipo-precio');
+          if (!precioInput.value.trim()) {
+            precioInput.classList.add('invalid');
+            ok = false;
+          } else {
+            precioInput.classList.remove('invalid');
+          }
+        } else if (tipoSelect.value === 'Otro') {
+          const otroInput = card.querySelector('.promo-tipo-otro');
+          if (!otroInput.value.trim()) {
+            otroInput.classList.add('invalid');
+            ok = false;
+          } else {
+            otroInput.classList.remove('invalid');
+          }
+        }
+      }
+
+      const cardIdx = card.id.replace('promo-card-', '');
+      const coverErr = card.querySelector('.promo-err-cover');
+      if (!coverFiles[cardIdx]) {
+        coverErr.classList.add('show');
+        ok = false;
+      } else {
+        coverErr.classList.remove('show');
+      }
+    });
+
+    if (!ok) {
+      document.querySelector('.invalid')?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    return ok;
+  }
+
+  const form = document.getElementById('promos-form');
+  const submitBtn = document.getElementById('submit-btn');
+  const btnLabel = submitBtn.querySelector('.btn-label');
+
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+    if (!validateForm()) return;
+
+    submitBtn.disabled = true;
+    submitBtn.classList.add('loading');
+    btnLabel.textContent = 'Enviando…';
+
+    const promociones = [...document.querySelectorAll('.promo-card')].map((card, i) => {
+      const nombre        = card.querySelector('.promo-nombre').value.trim();
+      const tipoSel        = card.querySelector('.promo-tipo').value;
+      const porcentajeVal  = card.querySelector('.promo-tipo-porcentaje').value.trim();
+      const precioVal      = card.querySelector('.promo-tipo-precio').value.trim();
+      const tipoOtro        = card.querySelector('.promo-tipo-otro').value.trim();
+
+      let tipo = tipoSel;
+      if (tipoSel === '% OFF' && porcentajeVal)      tipo = `${porcentajeVal} OFF`;
+      else if (tipoSel === 'Precio fijo' && precioVal) tipo = `Precio fijo: ${precioVal}`;
+      else if (tipoSel === 'Otro' && tipoOtro)          tipo = `Otro: ${tipoOtro}`;
+
+      const desde     = card.querySelector('.promo-desde').value;
+      const hasta     = card.querySelector('.promo-hasta').value;
+      const coverName = coverFiles[card.id.replace('promo-card-', '')] ? coverFiles[card.id.replace('promo-card-', '')].name : '';
+
+      let linea = `${nombre} — ${tipo}`;
+      if (desde || hasta) linea += ` (${desde || '?'} a ${hasta || '?'})`;
+      if (coverName) linea += ` [foto: ${coverName}]`;
+      return linea;
+    }).join(' | ');
+
+    const body = new URLSearchParams({
+      'form-name': 'cargar-promocion',
+      'cafe-nombre':  document.getElementById('cafe-nombre').value.trim(),
+      'promociones':  promociones,
+    });
+
+    try {
+      await fetch('/', { method: 'POST', body, headers: { 'Content-Type': 'application/x-www-form-urlencoded' } });
+      document.getElementById('form-view').style.display = 'none';
+      document.getElementById('success-view').classList.add('show');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch {
+      submitBtn.disabled = false;
+      submitBtn.classList.remove('loading');
+      btnLabel.textContent = 'Enviar promociones';
+      alert('Hubo un error al enviar. Por favor intentá de nuevo.');
+    }
+  });
+</script>
+
+</body>
+</html>
