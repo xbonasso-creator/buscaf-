@@ -117,6 +117,46 @@
     .chip input[type="checkbox"] { display: none; }
     .chip-lbl { display: inline-flex; align-items: center; padding: 8px 14px; border-radius: var(--radius-pill); border: 1.5px solid var(--border); background: var(--field-bg); font-size: 13px; font-weight: 500; color: var(--text); cursor: pointer; transition: all .15s; user-select: none; }
     .chip input:checked + .chip-lbl { background: var(--espresso); border-color: var(--espresso); color: #fff; }
+
+    /* ── MULTI-SELECT DROPDOWN ── */
+    .ms-dropdown { position: relative; }
+    .ms-trigger {
+      width: 100%; display: flex; align-items: center; justify-content: space-between;
+      background: var(--field-bg); border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+      padding: 13px 15px; font-size: 15px; font-family: inherit; color: var(--text-ph);
+      cursor: pointer; transition: border-color .2s;
+    }
+    .ms-trigger.has-selection { color: var(--text); }
+    .ms-dropdown.open .ms-trigger { border-color: var(--accent); }
+    .ms-chevron { flex-shrink: 0; transition: transform .2s; margin-left: 10px; }
+    .ms-dropdown.open .ms-chevron { transform: rotate(180deg); }
+    .ms-panel {
+      display: none; position: absolute; top: calc(100% + 6px); left: 0; right: 0; z-index: 20;
+      background: var(--white); border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+      box-shadow: 0 8px 28px rgba(42,22,8,.14); padding: 6px; max-height: 280px; overflow-y: auto;
+    }
+    .ms-dropdown.open .ms-panel { display: block; }
+    .ms-option {
+      display: flex; align-items: center; gap: 12px; padding: 11px 10px; border-radius: 8px;
+      cursor: pointer; transition: background .15s;
+    }
+    .ms-option:hover { background: var(--field-bg); }
+    .ms-option input[type="checkbox"] { display: none; }
+    .ms-check {
+      flex-shrink: 0; width: 20px; height: 20px; border-radius: 5px;
+      border: 1.5px solid var(--border); background: var(--white);
+      display: flex; align-items: center; justify-content: center; transition: all .15s;
+    }
+    .ms-check svg { width: 12px; height: 12px; opacity: 0; transition: opacity .15s; }
+    .ms-option input:checked ~ .ms-check { background: var(--espresso); border-color: var(--espresso); }
+    .ms-option input:checked ~ .ms-check svg { opacity: 1; }
+    .ms-option-text { font-size: 14.5px; color: var(--text); }
+    .ms-otro-input {
+      width: 100%; background: var(--field-bg); border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+      padding: 13px 15px; font-size: 15px; font-family: inherit; color: var(--text); outline: none;
+      transition: border-color .2s, box-shadow .2s;
+    }
+    .ms-otro-input:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(194,84,42,.12); }
     .plans-stack { display: flex; flex-direction: column; gap: 14px; }
     .plan-card { border: 2px solid var(--border); border-radius: var(--radius); padding: 24px; cursor: pointer; background: var(--white); transition: all .2s; position: relative; }
     .plan-card:hover { border-color: #c9a07a; box-shadow: 0 2px 12px rgba(42,22,8,.08); }
@@ -291,8 +331,51 @@
       </div>
 
       <div class="field-group">
-        <label for="promos-bancarias">Promociones bancarias <span class="label-opt">— opcional</span></label>
-        <input type="text" id="promos-bancarias" name="promos-bancarias" placeholder="Ej: 20% con Itaú los martes, 2x1 con OCA los jueves" />
+        <label>Promociones bancarias <span class="label-opt">— opcional</span></label>
+        <div class="ms-dropdown" id="promos-dropdown">
+          <button type="button" class="ms-trigger" id="promos-trigger">
+            <span id="promos-trigger-label">Seleccioná una o más opciones</span>
+            <svg class="ms-chevron" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="#8A7360" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
+          <div class="ms-panel" id="promos-panel">
+            <label class="ms-option">
+              <input type="checkbox" name="promos" value="Itaú — 15 y 25 todos los días" />
+              <span class="ms-check"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+              <span class="ms-option-text">Itaú — 15 y 25 todos los días</span>
+            </label>
+            <label class="ms-option">
+              <input type="checkbox" name="promos" value="Santander — 15 y 25 todos los días" />
+              <span class="ms-check"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+              <span class="ms-option-text">Santander — 15 y 25 todos los días</span>
+            </label>
+            <label class="ms-option">
+              <input type="checkbox" name="promos" value="Scotiabank — 15 y 25 todos los días" />
+              <span class="ms-check"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+              <span class="ms-option-text">Scotiabank — 15 y 25 todos los días</span>
+            </label>
+            <label class="ms-option">
+              <input type="checkbox" name="promos" value="BBVA — 20 y 30 todos los días" />
+              <span class="ms-check"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+              <span class="ms-option-text">BBVA — 20 y 30 todos los días</span>
+            </label>
+            <label class="ms-option">
+              <input type="checkbox" name="promos" value="Pago en efectivo" />
+              <span class="ms-check"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+              <span class="ms-option-text">Pago en efectivo</span>
+            </label>
+            <label class="ms-option">
+              <input type="checkbox" name="promos" value="Transferencia bancaria" />
+              <span class="ms-check"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+              <span class="ms-option-text">Transferencia bancaria</span>
+            </label>
+            <label class="ms-option" id="promos-otro-option">
+              <input type="checkbox" name="promos" value="Otro" id="promos-otro-check" />
+              <span class="ms-check"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></span>
+              <span class="ms-option-text">Otro</span>
+            </label>
+          </div>
+        </div>
+        <input type="text" id="promos-otro-texto" class="ms-otro-input" placeholder="Contanos cuál" style="display:none; margin-top:10px;" />
       </div>
 
       <div class="divider"></div>
@@ -410,8 +493,8 @@
     <!-- ── PASO 3 ── -->
     <div class="step" id="step-3">
       <div class="step-header">
-        <h1>Elegí tu plan</h1>
-        <p>Primer mes gratuito en ambos planes.</p>
+        <h1>Sumate a Buscafé</h1>
+        <p>Elegí cómo querés potenciar tu cafetería. <strong>El primer mes es gratis.</strong></p>
       </div>
 
       <div class="plans-stack">
@@ -419,8 +502,7 @@
         <label class="plan-card" id="card-standard">
           <input type="radio" name="plan" value="standard" id="plan-standard" />
           <div class="plan-badge">Más elegido</div>
-          <div class="plan-tier">Quiero más visibilidad</div>
-          <div class="plan-title">Standard</div>
+          <div class="plan-title">Plan Standard</div>
           <div class="plan-price">USD 35<span style="font-size:16px;font-weight:500;opacity:.6">/mes</span></div>
           <div class="plan-price-sub">Primer mes gratis · luego USD 35/mes</div>
           <div class="plan-tagline">Llegá a más personas todos los días.</div>
@@ -429,30 +511,28 @@
             <div class="plan-feat">Perfil completo - horarios, descuentos, características, métodos de café, fotos.</div>
             <div class="plan-feat">Visibilidad en el Mapa</div>
             <div class="plan-feat">Redirección al Instagram</div>
-            <div class="plan-feat">Eventos en Perfil</div>
+            <div class="plan-feat">Promociones del local</div>
           </div>
         </label>
 
         <label class="plan-card plan-dark" id="card-premium">
           <input type="radio" name="plan" value="premium" id="plan-premium" />
-          <div class="plan-tier">Quiero ser referente</div>
-          <div class="plan-title">Premium</div>
+          <div class="plan-title">Plan Premium</div>
           <div class="plan-price">USD 60<span style="font-size:16px;font-weight:500;opacity:.5">/mes</span></div>
           <div class="plan-price-sub">Primer mes gratis · luego USD 60/mes</div>
           <div class="plan-tagline">Convertite en una cafetería referente de tu ciudad.</div>
           <div class="plan-divider"></div>
           <div class="plan-feats">
             <div class="plan-feat-inc">Todo lo del Plan Standard, más:</div>
-            <div class="plan-feat">Cafetería destacada en la Home</div>
-            <div class="plan-feat">Eventos destacados en la Home</div>
-            <div class="plan-feat">Promociones y productos destacados</div>
+            <div class="plan-feat">Perfil destacado en la Home</div>
+            <div class="plan-feat">Compartir eventos/talleres en Perfil</div>
             <div class="plan-feat">Contenido en el feed del Instagram de Buscafé</div>
           </div>
         </label>
 
       </div>
       <div class="err-plan" id="err-plan">Seleccioná un plan para continuar.</div>
-      <p style="font-size:12px;color:var(--text-light);margin-top:18px;line-height:1.6;">Sin permanencia. Cambiá o cancelá cuando quieras.</p>
+      <p style="font-size:12px;color:var(--text-light);margin-top:18px;line-height:1.6;">Primer mes gratis. Luego, el plan requiere un mínimo de 1 mes pago. Después, podés cambiarlo o cancelarlo cuando quieras.</p>
       <p style="font-size:12px;color:var(--text-light);margin-top:8px;line-height:1.6;">Te contactaremos para contarte cómo sumar a Buscafé tus eventos, talleres, promociones y productos destacados, si aplica para tu cafetería.</p>
       <p style="font-size:12px;color:var(--text-light);margin-top:8px;line-height:1.6;">Por consultas comunicate a <a href="mailto:info@buscafe.app" style="color:var(--accent);text-decoration:none;">info@buscafe.app</a>.</p>
     </div><!-- /step-3 -->
@@ -730,6 +810,16 @@ async function submitForm() {
   btnNext.classList.add('loading');
   btnLabel.textContent = 'Enviando…';
   const servicios = [...document.querySelectorAll('input[name="svc"]:checked')].map(e=>e.value).join(', ');
+
+  const promosSelected = [...document.querySelectorAll('input[name="promos"]:checked')].map(e => {
+    if (e.value === 'Otro') {
+      const otroTexto = document.getElementById('promos-otro-texto').value.trim();
+      return otroTexto ? `Otro: ${otroTexto}` : 'Otro';
+    }
+    return e.value;
+  });
+  const promosBancarias = promosSelected.join(' | ');
+
   const body = new URLSearchParams({
     'form-name':      'registrar-cafeteria',
     nombre:           document.getElementById('nombre').value.trim(),
@@ -737,7 +827,7 @@ async function submitForm() {
     whatsapp:         document.getElementById('whatsapp').value.trim(),
     instagram:        document.getElementById('instagram').value.trim(),
     direccion:        document.getElementById('direccion').value.trim(),
-    'promos-bancarias': document.getElementById('promos-bancarias').value.trim(),
+    'promos-bancarias': promosBancarias,
     servicios,
     plan:             state.selectedPlan || '',
     'logo-nombre':    state.logoFile ? state.logoFile.name : '',
@@ -779,6 +869,44 @@ document.querySelectorAll('.plan-card').forEach(card => {
     document.getElementById('pay-price-later').textContent = prices[state.selectedPlan];
     document.getElementById('pay-note-price').textContent  = prices[state.selectedPlan];
   });
+});
+
+/* ── Promociones bancarias — multi-select dropdown ── */
+const promosDropdown = document.getElementById('promos-dropdown');
+const promosTrigger   = document.getElementById('promos-trigger');
+const promosTriggerLbl= document.getElementById('promos-trigger-label');
+const promosPanel     = document.getElementById('promos-panel');
+const promosOtroCheck = document.getElementById('promos-otro-check');
+const promosOtroInput = document.getElementById('promos-otro-texto');
+
+promosTrigger.addEventListener('click', () => {
+  promosDropdown.classList.toggle('open');
+});
+
+document.addEventListener('click', e => {
+  if (!promosDropdown.contains(e.target)) {
+    promosDropdown.classList.remove('open');
+  }
+});
+
+function updatePromosLabel() {
+  const checked = [...document.querySelectorAll('input[name="promos"]:checked')];
+  if (checked.length === 0) {
+    promosTriggerLbl.textContent = 'Seleccioná una o más opciones';
+    promosTrigger.classList.remove('has-selection');
+  } else {
+    promosTriggerLbl.textContent = `${checked.length} opción${checked.length !== 1 ? 'es' : ''} seleccionada${checked.length !== 1 ? 's' : ''}`;
+    promosTrigger.classList.add('has-selection');
+  }
+}
+
+document.querySelectorAll('input[name="promos"]').forEach(cb => {
+  cb.addEventListener('change', updatePromosLabel);
+});
+
+promosOtroCheck.addEventListener('change', () => {
+  promosOtroInput.style.display = promosOtroCheck.checked ? 'block' : 'none';
+  if (!promosOtroCheck.checked) promosOtroInput.value = '';
 });
 
 const logoZone    = document.getElementById('logo-zone');
