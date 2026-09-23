@@ -326,9 +326,7 @@
 // no dice nada de lo desplegado.
 // ═══════════════════════════════════════════════════════════════
 const ENVIRONMENTS = {
-  // TODO: verificar. Este host hoy da NXDOMAIN — no está caído, no existe —
-  // así que o el proyecto se borró o el valor quedó de relleno. Sale de
-  // buscafe/configurations/production.json, donde la app Flutter lee el mismo.
+  // Sale de buscafe/configurations/production.json, donde la app Flutter lee el mismo.
   prod: {
     label: null,
     url: "https://fqofnoslymfedkzgbvup.supabase.co",
@@ -343,13 +341,8 @@ const ENVIRONMENTS = {
 
 // Los hostnames donde esta página es la de verdad.
 //
-// Vacío a propósito por ahora: hasta que se confirme el dominio de producción,
-// la página corre contra dev en todas partes. Adivinar el dominio sería peor
-// que no ponerlo — si el adivinado resulta ser el real, producción empieza a
-// hablarle a un proyecto Supabase que hoy ni siquiera resuelve.
-//
-// TODO: agregar el dominio real acá. Es el único cambio que hace falta para
-// que producción se comporte como producción.
+// TODO: agregar el dominio real acá cuando la clienta lo confirme. Es el único
+// cambio que hace falta para que producción se comporte como producción.
 const PROD_HOSTS = [];
 
 // Producción solo en un host de producción. Todo lo demás — un branch deploy
