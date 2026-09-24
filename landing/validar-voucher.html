@@ -81,7 +81,7 @@
     letter-spacing: 0.04em;
     margin-bottom: 8px;
   }
-  input[type=text], select {
+  input[type=text], input[type=password], select {
     width: 100%;
     border: 1.5px solid var(--g200);
     border-radius: 12px;
@@ -95,9 +95,13 @@
     text-transform: uppercase;
     letter-spacing: 0.05em;
   }
-  input[type=text]:focus, select:focus {
+  input[type=text]:focus, input[type=password]:focus, select:focus {
     border-color: var(--brand);
     background: var(--white);
+  }
+  input[type=password] {
+    text-transform: none;
+    letter-spacing: 0.35em;
   }
   select {
     text-transform: none;
@@ -185,6 +189,42 @@
     line-height: 1.5;
   }
 
+  .session-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding: 12px 14px;
+    background: var(--bg);
+    border-radius: 12px;
+  }
+  .session-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--g500);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .session-cafe {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--dark);
+  }
+  .session-logout {
+    flex-shrink: 0;
+    padding: 8px 12px;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--dark);
+    background: var(--white);
+    border: 1px solid var(--g200);
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  .session-logout:hover { border-color: var(--brand); color: var(--brand); }
+
   .stats-link {
     text-align: center;
     margin-top: 24px;
@@ -196,6 +236,23 @@
     color: var(--g500);
     text-decoration: underline;
   }
+
+  .env-banner {
+    display: none;
+    margin: -8px 0 20px;
+    padding: 10px 14px;
+    border-radius: 10px;
+    background: repeating-linear-gradient(
+      -45deg, #FEF3C7, #FEF3C7 10px, #FDE68A 10px, #FDE68A 20px
+    );
+    border: 1.5px solid #F59E0B;
+    color: #78350F;
+    font-size: 13px;
+    font-weight: 700;
+    text-align: center;
+    letter-spacing: 0.01em;
+  }
+  .env-banner.show { display: block; }
 
   .config-warning {
     background: #FEF3E2;
@@ -233,6 +290,8 @@
 
 <div class="card">
 
+  <div class="env-banner" id="envBanner"></div>
+
   <div class="header">
     <div class="header-icon"><img src="data:image/png;base64,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" alt="Buscafé"/></div>
     <div class="header-title">Validar voucher de bienvenida</div>
@@ -240,14 +299,40 @@
   </div>
 
   <div class="config-warning" id="configWarning">
-    ⚠️ Faltan las credenciales de Supabase. Completá <code>SUPABASE_URL</code> y <code>SUPABASE_ANON_KEY</code> al inicio del script antes de usar esta pantalla.
+    ⚠️ No pudimos conectar con Buscafé. Revisá la conexión y recargá la página.
   </div>
 
-  <!-- Step 1: buscar código -->
-  <div id="searchStep">
+  <!-- Paso 0: identificar el local. Se pide una sola vez por dispositivo. -->
+  <div id="sessionStep" style="display:none;">
+    <div class="field">
+      <label class="field-label">Tu cafetería</label>
+      <select id="cafeSelect">
+        <option value="">Cargando locales…</option>
+      </select>
+    </div>
+    <div class="field">
+      <label class="field-label">PIN del local</label>
+      <input type="password" id="pinInput" placeholder="••••••" autocomplete="off"
+             inputmode="numeric" />
+    </div>
+    <button class="btn btn-primary" id="sessionBtn" onclick="saveSession()">
+      Entrar
+    </button>
+    <div class="result" id="sessionError"></div>
+  </div>
+
+  <!-- Paso 1: buscar código -->
+  <div id="searchStep" style="display:none;">
+    <div class="session-bar">
+      <div>
+        <div class="session-label">Local</div>
+        <div class="session-cafe" id="currentCafe"></div>
+      </div>
+      <button type="button" class="session-logout" onclick="logout()">Cerrar sesión</button>
+    </div>
     <div class="field">
       <label class="field-label">Código del cliente</label>
-      <input type="text" id="codeInput" placeholder="BC-7K2M" maxlength="8" autocomplete="off" />
+      <input type="text" id="codeInput" placeholder="BC-7K2M4" maxlength="10" autocomplete="off" />
     </div>
     <button class="btn btn-primary" id="searchBtn" onclick="searchVoucher()">
       Buscar código
@@ -267,27 +352,73 @@
 
 <script>
 // ═══════════════════════════════════════════════════════════════
-// CONFIGURACIÓN — completar antes de publicar
+// ENTORNOS
+//
+// Los dos proyectos Supabase de la app Buscafé — el código que valida esta
+// página sale de la misma base en la que lo generó la app, así que apuntar a
+// otro proyecto hace que ningún código exista.
+//
+// Un solo archivo para los dos, y no dos copias: la página que se usa para
+// probar tiene que ser la misma que la que atiende al mostrador, o lo probado
+// no dice nada de lo desplegado.
 // ═══════════════════════════════════════════════════════════════
-const SUPABASE_URL      = "https://xoddmbesiurqcxftjpqh.supabase.co";
-const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhvZGRtYmVzaXVycWN4ZnRqcHFoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI3MzQ0MjksImV4cCI6MjA5ODMxMDQyOX0.c88uRsW-64-XOeDPEZOHhJ6tDiXsomt8CPOPCDQ7s2I";
+const ENVIRONMENTS = {
+  // Sale de buscafe/configurations/production.json, donde la app Flutter lee el mismo.
+  prod: {
+    label: null,
+    url: "https://fqofnoslymfedkzgbvup.supabase.co",
+    anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZxb2Zub3NseW1mZWRremdidnVwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc4NTcyMjksImV4cCI6MjEwMzQzMzIyOX0.FI0UCfKD9Q1z0s1k5bkDYcv3QAh2dEc7cNgzUn0RHOU",
+  },
+  dev: {
+    label: "Entorno de prueba — los canjes no son reales",
+    url: "https://pwwxwfdyktriylhoukyb.supabase.co",
+    anonKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InB3d3h3ZmR5a3RyaXlsaG91a3liIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc5MjI0NDIsImV4cCI6MjEwMzQ5ODQ0Mn0.3tYIw7S2d-MfYgXlhiM1-iE0RQFkCZJTDkr1o5sKNL4",
+  },
+};
 
-// Lista de cafeterías — completar con las founders que participen de esta promo
-// id: el id real de la cafetería en la tabla cafes (es tipo texto, no uuid)
-const CAFETERIAS = [
-  // Ejemplo de cómo agregar una:
-  // { id: "cafe_001", name: "Nombre de la cafetería" },
-];
+// Los hostnames donde esta página es la de verdad.
+//
+// TODO: agregar el dominio real acá cuando la clienta lo confirme. Es el único
+// cambio que hace falta para que producción se comporte como producción.
+const PROD_HOSTS = [];
 
-// ═══════════════════════════════════════════════════════════════
+// Producción solo en un host de producción. Todo lo demás — un branch deploy
+// de Netlify, un preview de PR, localhost, el archivo abierto a mano — cae en
+// dev. El default se elige en esa dirección a propósito: un host que nadie
+// previó puede terminar mostrando datos de prueba, que es molesto, y nunca
+// quemando el cupón real de un cliente, que no tiene vuelta atrás.
+//
+// `?env=prod` / `?env=dev` fuerza uno de los dos, para probar el otro entorno
+// sin desplegar nada.
+function pickEnvironment() {
+  const forced = new URLSearchParams(location.search).get("env");
+  if (forced === "prod" || forced === "dev") return forced;
+  return PROD_HOSTS.includes(location.hostname) ? "prod" : "dev";
+}
 
+const ENV    = pickEnvironment();
+const CONFIG = ENVIRONMENTS[ENV];
+
+const SUPABASE_URL      = CONFIG.url;
+const SUPABASE_ANON_KEY = CONFIG.anonKey;
+
+// La anon key es pública por diseño: lo que autoriza un canje es el PIN del
+// local, que se verifica dentro de check_voucher / redeem_voucher. Sin PIN
+// correcto ninguna de las dos funciones revela ni cambia nada.
+//
+// El PIN queda guardado en este dispositivo para no tipearlo en cada cliente.
+// Es la misma decisión que dejar la caja abierta durante el turno: sirve para
+// el equipo detrás del mostrador, no para un teléfono personal.
+//
+// La clave lleva el entorno: los ids de café y los PINs de dev no son los de
+// producción, así que una sesión guardada probando no puede reaparecer en el
+// mostrador como un local que no es.
+const STORE_KEY = `buscafe.validar.sesion.${ENV}`;
+
+let session    = null;  // { cafeId, cafeName, pin }
 let currentCode = null;
 
-// Mostrar warning si faltan credenciales
-if (SUPABASE_URL.includes("TU_SUPABASE") || SUPABASE_ANON_KEY.includes("TU_SUPABASE")) {
-  document.getElementById("configWarning").classList.add("show");
-  document.getElementById("searchBtn").disabled = true;
-}
+// ── Supabase REST ──────────────────────────────────────────────
 
 async function supabaseRPC(fnName, params) {
   const res = await fetch(`${SUPABASE_URL}/rest/v1/rpc/${fnName}`, {
@@ -299,30 +430,176 @@ async function supabaseRPC(fnName, params) {
     },
     body: JSON.stringify(params),
   });
+  // PostgREST traduce el 42501 que levantan las funciones a 401 (y a 403 según
+  // versión), así que las dos significan lo mismo acá: el PIN no es el de este
+  // local. La anon key viaja en la misma request, y si fuera ella la inválida
+  // habría fallado ya al cargar la lista de locales.
+  if (res.status === 401 || res.status === 403) {
+    const err = new Error("PIN incorrecto");
+    err.badPin = true;
+    throw err;
+  }
   if (!res.ok) throw new Error(`Error ${res.status}`);
   return res.json();
 }
 
+async function supabaseSelect(path) {
+  const res = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
+    headers: {
+      "apikey": SUPABASE_ANON_KEY,
+      "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+    },
+  });
+  if (!res.ok) throw new Error(`Error ${res.status}`);
+  return res.json();
+}
+
+// ── Sesión del local ───────────────────────────────────────────
+
+// Antes la sesión se guardaba sin entorno en la clave. Esa versión ya no la
+// lee nadie, así que quedaría un PIN olvidado en el dispositivo para siempre.
+try { localStorage.removeItem("buscafe.validar.sesion"); } catch (e) { /* modo privado */ }
+
+function loadSession() {
+  try {
+    const raw = localStorage.getItem(STORE_KEY);
+    return raw ? JSON.parse(raw) : null;
+  } catch (e) {
+    return null;
+  }
+}
+
+// Confirmado: el equipo no suele tener el PIN a mano, y un toque sin querer en
+// el mostrador deja la caja sin poder validar hasta que aparezca.
+function logout() {
+  if (!confirm(`¿Cerrar sesión de ${session.cafeName}? Para volver a entrar vas a necesitar el PIN del local.`)) return;
+  clearSession();
+}
+
+function clearSession() {
+  try { localStorage.removeItem(STORE_KEY); } catch (e) { /* modo privado */ }
+  session = null;
+  document.getElementById("resultBox").classList.remove("show");
+  showSessionStep();
+}
+
+// Los locales salen de la tabla `cafes` — los que tienen el flag
+// is_welcome_coupon_partner. Antes era una lista escrita a mano en este
+// archivo, que se desactualizaba en cuanto entraba una cafetería nueva.
+async function loadCafes() {
+  const select = document.getElementById("cafeSelect");
+  try {
+    const cafes = await supabaseSelect(
+      "cafes?select=id,name,address&is_welcome_coupon_partner=eq.true&order=name.asc,address.asc"
+    );
+    if (!cafes.length) {
+      select.innerHTML = '<option value="">— No hay locales adheridos —</option>';
+      return;
+    }
+    // Cada sucursal es su propio café, con su propio PIN: con solo el nombre,
+    // el equipo de una cadena no puede saber cuál es la suya. La dirección y no
+    // el barrio, porque hay cadenas con dos locales en el mismo.
+    const perName = {};
+    cafes.forEach(c => { perName[c.name] = (perName[c.name] || 0) + 1; });
+    const label = c => perName[c.name] > 1 && c.address ? `${c.name} — ${c.address}` : c.name;
+    select.innerHTML =
+      '<option value="">Seleccioná tu local</option>' +
+      cafes.map(c => `<option value="${c.id}">${escapeHtml(label(c))}</option>`).join("");
+  } catch (err) {
+    document.getElementById("configWarning").classList.add("show");
+    select.innerHTML = '<option value="">— No se pudo cargar —</option>';
+  }
+}
+
+// El PIN se comprueba contra el servidor antes de guardarlo: si no, el error
+// aparecería recién al validar el primer cliente, con alguien esperando.
+async function saveSession() {
+  const select = document.getElementById("cafeSelect");
+  const pin    = document.getElementById("pinInput").value.trim();
+  const errBox = document.getElementById("sessionError");
+  const btn    = document.getElementById("sessionBtn");
+
+  errBox.classList.remove("show");
+  if (!select.value) { select.style.borderColor = "var(--danger)"; return; }
+  if (!pin)          { document.getElementById("pinInput").style.borderColor = "var(--danger)"; return; }
+
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner"></span>Verificando…';
+
+  try {
+    // Un código imposible: la llamada sirve solo para que el servidor diga si
+    // el PIN es el de este local.
+    await supabaseRPC("check_voucher", {
+      p_code: "BC-00000",
+      p_cafe_id: select.value,
+      p_pin: pin,
+    });
+
+    session = {
+      cafeId: select.value,
+      cafeName: select.options[select.selectedIndex].text,
+      pin: pin,
+    };
+    try { localStorage.setItem(STORE_KEY, JSON.stringify(session)); } catch (e) { /* modo privado */ }
+    showSearchStep();
+  } catch (err) {
+    errBox.className = "result result-notfound show";
+    errBox.innerHTML = `
+      <span class="result-icon">🔒</span>
+      <div class="result-title">${err.badPin ? "PIN incorrecto" : "No pudimos verificar"}</div>
+      <div class="result-body">${err.badPin
+        ? "Revisá el PIN de tu local. Si no lo tenés, escribinos."
+        : "Probá de nuevo en un momento."}</div>
+    `;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = "Entrar";
+  }
+}
+
+function showSessionStep() {
+  document.getElementById("searchStep").style.display = "none";
+  document.getElementById("sessionStep").style.display = "";
+  document.getElementById("pinInput").value = "";
+  loadCafes();
+}
+
+function showSearchStep() {
+  document.getElementById("sessionStep").style.display = "none";
+  document.getElementById("searchStep").style.display = "";
+  document.getElementById("currentCafe").textContent = session.cafeName;
+  document.getElementById("codeInput").focus();
+}
+
+// ── Validación ─────────────────────────────────────────────────
+
 async function searchVoucher() {
   const input = document.getElementById("codeInput");
-  let code = input.value.trim().toUpperCase();
+  const code  = input.value.trim().toUpperCase();
   if (!code) return;
-
-  // Auto-agregar prefijo BC- si el usuario solo tipeó el sufijo
-  if (!code.startsWith("BC-") && code.length <= 4) {
-    code = "BC-" + code;
-  }
 
   const btn = document.getElementById("searchBtn");
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span>Buscando...';
 
   try {
-    const data = await supabaseRPC("check_voucher", { code });
+    // El prefijo BC-, las minúsculas y los espacios los normaliza el servidor,
+    // así que acá va tal cual lo tipearon.
+    const data = await supabaseRPC("check_voucher", {
+      p_code: code,
+      p_cafe_id: session.cafeId,
+      p_pin: session.pin,
+    });
     const result = Array.isArray(data) ? data[0] : data;
     renderResult(code, result);
   } catch (err) {
-    renderError();
+    if (err.badPin) {
+      // El PIN cambió desde que se guardó en este dispositivo.
+      clearSession();
+      renderError("El PIN de tu local cambió. Volvé a entrar.");
+    } else {
+      renderError();
+    }
   } finally {
     btn.disabled = false;
     btn.textContent = "Buscar código";
@@ -339,40 +616,42 @@ function renderResult(code, result) {
     box.innerHTML = `
       <span class="result-icon">🔍</span>
       <div class="result-title">Código no encontrado</div>
-      <div class="result-body">Revisá que esté bien escrito. El formato es BC- seguido de 4 caracteres.</div>
+      <div class="result-body">Revisá que esté bien escrito. El formato es BC- seguido de 5 caracteres.</div>
       <button class="btn btn-ghost" onclick="resetForm()">Buscar otro código</button>
     `;
     return;
   }
+
+  const who = result.user_name ? escapeHtml(result.user_name) : "Este cliente";
+  const off = result.discount_percentage ? `${result.discount_percentage}%` : "el descuento";
 
   if (result.used) {
     box.className = "result result-used show";
     box.innerHTML = `
       <span class="result-icon">🚫</span>
       <div class="result-title">Este voucher ya fue usado</div>
-      <div class="result-body">${result.user_name || "Este cliente"} ya canjeó su 15% de bienvenida anteriormente. No puede volver a usarlo.</div>
+      <div class="result-body">${who} ya canjeó su ${off} de bienvenida anteriormente. No puede volver a usarlo.</div>
       <button class="btn btn-ghost" onclick="resetForm()">Buscar otro código</button>
     `;
     return;
   }
 
-  // Disponible — mostrar selector de cafetería y confirmar
-  const cafeOptions = CAFETERIAS.length > 0
-    ? CAFETERIAS.map(c => `<option value="${c.id}">${c.name}</option>`).join("")
-    : `<option value="">— Agregar cafeterías en la config —</option>`;
+  if (!result.offer_active) {
+    box.className = "result result-used show";
+    box.innerHTML = `
+      <span class="result-icon">📅</span>
+      <div class="result-title">La promo no está vigente</div>
+      <div class="result-body">El cupón de bienvenida está pausado o venció. No corresponde aplicarlo.</div>
+      <button class="btn btn-ghost" onclick="resetForm()">Buscar otro código</button>
+    `;
+    return;
+  }
 
   box.className = "result result-available show";
   box.innerHTML = `
     <span class="result-icon">✅</span>
     <div class="result-title">Voucher disponible</div>
-    <div class="result-body">${result.user_name || "Este cliente"} puede usar su 15% OFF en una bebida con café.</div>
-    <div class="field" style="margin-top:14px;">
-      <label class="field-label">Tu cafetería</label>
-      <select id="cafeSelect">
-        <option value="">Seleccioná tu local</option>
-        ${cafeOptions}
-      </select>
-    </div>
+    <div class="result-body">${who} puede usar su ${off} OFF en una bebida con café.</div>
     <button class="btn btn-success" id="confirmBtn" onclick="confirmRedeem()">
       Marcar como usado
     </button>
@@ -381,37 +660,47 @@ function renderResult(code, result) {
 }
 
 async function confirmRedeem() {
-  const cafeSelect = document.getElementById("cafeSelect");
-  const cafeId = cafeSelect.value;
-
-  if (!cafeId) {
-    cafeSelect.style.borderColor = "var(--danger)";
-    return;
-  }
-
   const btn = document.getElementById("confirmBtn");
   btn.disabled = true;
   btn.innerHTML = '<span class="spinner"></span>Confirmando...';
 
   try {
-    const success = await supabaseRPC("redeem_voucher", { code: currentCode, cafe_id: cafeId });
+    const data = await supabaseRPC("redeem_voucher", {
+      p_code: currentCode,
+      p_cafe_id: session.cafeId,
+      p_pin: session.pin,
+    });
+    const result = Array.isArray(data) ? data[0] : data;
 
-    if (success) {
+    if (result && result.redeemed) {
       const box = document.getElementById("resultBox");
       box.className = "result result-confirmed show";
       box.innerHTML = `
         <span class="result-icon">🤎</span>
         <div class="result-title">¡Listo! Voucher canjeado</div>
-        <div class="result-body">Aplicá el 15% de descuento en la bebida con café.</div>
+        <div class="result-body">Aplicá el descuento en la bebida con café.</div>
         <button class="btn btn-primary" style="margin-top:16px;" onclick="resetForm()">
           Validar otro código
         </button>
       `;
-    } else {
-      renderError("Este voucher ya había sido usado justo ahora. No se pudo aplicar dos veces.");
+      return;
     }
+
+    // El canje falla por algo que cambió entre la búsqueda y la confirmación:
+    // otro local lo tomó primero, o la promo se apagó.
+    const reasons = {
+      already_used:   "Este voucher ya había sido usado justo ahora. No se pudo aplicar dos veces.",
+      offer_inactive: "La promo dejó de estar vigente. No corresponde aplicarla.",
+      not_found:      "El código dejó de existir. Volvé a buscarlo.",
+    };
+    renderError(reasons[result && result.reason] || undefined);
   } catch (err) {
-    renderError();
+    if (err.badPin) {
+      clearSession();
+      renderError("El PIN de tu local cambió. Volvé a entrar.");
+    } else {
+      renderError();
+    }
   }
 }
 
@@ -429,13 +718,41 @@ function renderError(msg) {
 function resetForm() {
   document.getElementById("codeInput").value = "";
   document.getElementById("resultBox").classList.remove("show");
-  document.getElementById("codeInput").focus();
+  if (session) document.getElementById("codeInput").focus();
+}
+
+// Los nombres vienen de la base y se insertan con innerHTML.
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({
+    "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;",
+  }[c]));
 }
 
 // Enter para buscar
 document.getElementById("codeInput").addEventListener("keydown", e => {
   if (e.key === "Enter") searchVoucher();
 });
+document.getElementById("pinInput").addEventListener("keydown", e => {
+  if (e.key === "Enter") saveSession();
+});
+
+// Fuera de producción la página lo dice en la cara: las dos son idénticas, y
+// canjear a un cliente real contra la base de prueba se ve exactamente igual
+// que hacerlo bien hasta que el cliente vuelve.
+if (CONFIG.label) {
+  const banner = document.getElementById("envBanner");
+  banner.textContent = CONFIG.label;
+  banner.classList.add("show");
+}
+
+// Arranque: con el local ya elegido en este dispositivo se va directo al
+// buscador; si no, se pide local y PIN.
+session = loadSession();
+if (session && session.cafeId && session.pin) {
+  showSearchStep();
+} else {
+  showSessionStep();
+}
 </script>
 </body>
 </html>
