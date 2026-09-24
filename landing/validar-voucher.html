@@ -189,6 +189,42 @@
     line-height: 1.5;
   }
 
+  .session-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 20px;
+    padding: 12px 14px;
+    background: var(--bg);
+    border-radius: 12px;
+  }
+  .session-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--g500);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+  .session-cafe {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--dark);
+  }
+  .session-logout {
+    flex-shrink: 0;
+    padding: 8px 12px;
+    font: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--dark);
+    background: var(--white);
+    border: 1px solid var(--g200);
+    border-radius: 10px;
+    cursor: pointer;
+  }
+  .session-logout:hover { border-color: var(--brand); color: var(--brand); }
+
   .stats-link {
     text-align: center;
     margin-top: 24px;
@@ -287,11 +323,12 @@
 
   <!-- Paso 1: buscar código -->
   <div id="searchStep" style="display:none;">
-    <div class="field">
-      <label class="field-label">
-        <span id="currentCafe"></span> ·
-        <a href="#" onclick="clearSession(); return false;">cambiar local</a>
-      </label>
+    <div class="session-bar">
+      <div>
+        <div class="session-label">Local</div>
+        <div class="session-cafe" id="currentCafe"></div>
+      </div>
+      <button type="button" class="session-logout" onclick="logout()">Cerrar sesión</button>
     </div>
     <div class="field">
       <label class="field-label">Código del cliente</label>
@@ -430,6 +467,13 @@ function loadSession() {
   } catch (e) {
     return null;
   }
+}
+
+// Confirmado: el equipo no suele tener el PIN a mano, y un toque sin querer en
+// el mostrador deja la caja sin poder validar hasta que aparezca.
+function logout() {
+  if (!confirm(`¿Cerrar sesión de ${session.cafeName}? Para volver a entrar vas a necesitar el PIN del local.`)) return;
+  clearSession();
 }
 
 function clearSession() {
