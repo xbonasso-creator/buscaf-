@@ -2,6 +2,14 @@
   command = ""
   publish = "landing"
 
+# Antes del comodín: Netlify aplica la primera regla que coincide. Una
+# reescritura y no un 301, así lo que queda en favoritos del mostrador es la
+# dirección corta.
+[[redirects]]
+  from   = "/validar"
+  to     = "/validar-voucher.html"
+  status = 200
+
 [[redirects]]
   from   = "/*"
   to     = "/index.html"
