@@ -376,11 +376,9 @@ const ENVIRONMENTS = {
   },
 };
 
-// Los hostnames donde esta página es la de verdad.
-//
-// TODO: agregar el dominio real acá cuando la clienta lo confirme. Es el único
-// cambio que hace falta para que producción se comporte como producción.
-const PROD_HOSTS = [];
+// Los hostnames donde esta página es la de verdad: los del deploy de `main` en
+// Netlify. `www` hoy redirige al apex, pero se lista por si deja de hacerlo.
+const PROD_HOSTS = ["buscafe.app", "www.buscafe.app", "buscafe-mvp.netlify.app"];
 
 // Producción solo en un host de producción. Todo lo demás — un branch deploy
 // de Netlify, un preview de PR, localhost, el archivo abierto a mano — cae en
