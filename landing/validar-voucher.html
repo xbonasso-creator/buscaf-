@@ -490,15 +490,21 @@ async function loadCafes() {
   const select = document.getElementById("cafeSelect");
   try {
     const cafes = await supabaseSelect(
-      "cafes?select=id,name&is_welcome_coupon_partner=eq.true&order=name.asc"
+      "cafes?select=id,name,address&is_welcome_coupon_partner=eq.true&order=name.asc,address.asc"
     );
     if (!cafes.length) {
       select.innerHTML = '<option value="">— No hay locales adheridos —</option>';
       return;
     }
+    // Cada sucursal es su propio café, con su propio PIN: con solo el nombre,
+    // el equipo de una cadena no puede saber cuál es la suya. La dirección y no
+    // el barrio, porque hay cadenas con dos locales en el mismo.
+    const perName = {};
+    cafes.forEach(c => { perName[c.name] = (perName[c.name] || 0) + 1; });
+    const label = c => perName[c.name] > 1 && c.address ? `${c.name} — ${c.address}` : c.name;
     select.innerHTML =
       '<option value="">Seleccioná tu local</option>' +
-      cafes.map(c => `<option value="${c.id}">${escapeHtml(c.name)}</option>`).join("");
+      cafes.map(c => `<option value="${c.id}">${escapeHtml(label(c))}</option>`).join("");
   } catch (err) {
     document.getElementById("configWarning").classList.add("show");
     select.innerHTML = '<option value="">— No se pudo cargar —</option>';
