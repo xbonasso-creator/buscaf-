@@ -121,7 +121,14 @@
     transition: opacity .15s;
     font-family: inherit;
   }
-  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .btn:disabled { cursor: not-allowed; }
+  /* Gris por falta de datos; mientras carga conserva su color, porque el
+     spinner es blanco y sobre gris no se ve. */
+  .btn-primary:disabled:not(.loading) {
+    background: var(--g200);
+    color: var(--g400);
+  }
+  .btn.loading:disabled { opacity: 0.7; }
   .btn-primary {
     background: var(--dark);
     color: var(--white);
@@ -315,7 +322,7 @@
       <input type="password" id="pinInput" placeholder="••••••" autocomplete="off"
              inputmode="numeric" />
     </div>
-    <button class="btn btn-primary" id="sessionBtn" onclick="saveSession()">
+    <button class="btn btn-primary" id="sessionBtn" disabled onclick="saveSession()">
       Entrar
     </button>
     <div class="result" id="sessionError"></div>
@@ -334,7 +341,7 @@
       <label class="field-label">Código del cliente</label>
       <input type="text" id="codeInput" placeholder="BC-7K2M4" maxlength="10" autocomplete="off" />
     </div>
-    <button class="btn btn-primary" id="searchBtn" onclick="searchVoucher()">
+    <button class="btn btn-primary" id="searchBtn" disabled onclick="searchVoucher()">
       Buscar código
     </button>
   </div>
@@ -518,10 +525,11 @@ async function saveSession() {
   const btn    = document.getElementById("sessionBtn");
 
   errBox.classList.remove("show");
-  if (!select.value) { select.style.borderColor = "var(--danger)"; return; }
-  if (!pin)          { document.getElementById("pinInput").style.borderColor = "var(--danger)"; return; }
+  // El botón ya está apagado sin local o PIN, pero Enter en el PIN llega igual.
+  if (!select.value || !pin || btn.disabled) return;
 
   btn.disabled = true;
+  btn.classList.add("loading");
   btn.innerHTML = '<span class="spinner"></span>Verificando…';
 
   try {
@@ -550,15 +558,28 @@ async function saveSession() {
         : "Probá de nuevo en un momento."}</div>
     `;
   } finally {
-    btn.disabled = false;
+    btn.classList.remove("loading");
     btn.textContent = "Entrar";
+    updateSessionBtn();
   }
+}
+
+function updateSessionBtn() {
+  const cafe = document.getElementById("cafeSelect").value;
+  const pin  = document.getElementById("pinInput").value.trim();
+  document.getElementById("sessionBtn").disabled = !cafe || !pin;
+}
+
+function updateSearchBtn() {
+  const code = document.getElementById("codeInput").value.trim();
+  document.getElementById("searchBtn").disabled = !code;
 }
 
 function showSessionStep() {
   document.getElementById("searchStep").style.display = "none";
   document.getElementById("sessionStep").style.display = "";
   document.getElementById("pinInput").value = "";
+  updateSessionBtn();
   loadCafes();
 }
 
@@ -566,6 +587,7 @@ function showSearchStep() {
   document.getElementById("sessionStep").style.display = "none";
   document.getElementById("searchStep").style.display = "";
   document.getElementById("currentCafe").textContent = session.cafeName;
+  updateSearchBtn();
   document.getElementById("codeInput").focus();
 }
 
@@ -574,10 +596,11 @@ function showSearchStep() {
 async function searchVoucher() {
   const input = document.getElementById("codeInput");
   const code  = input.value.trim().toUpperCase();
-  if (!code) return;
+  const btn   = document.getElementById("searchBtn");
+  if (!code || btn.disabled) return;
 
-  const btn = document.getElementById("searchBtn");
   btn.disabled = true;
+  btn.classList.add("loading");
   btn.innerHTML = '<span class="spinner"></span>Buscando...';
 
   try {
@@ -599,8 +622,9 @@ async function searchVoucher() {
       renderError();
     }
   } finally {
-    btn.disabled = false;
+    btn.classList.remove("loading");
     btn.textContent = "Buscar código";
+    updateSearchBtn();
   }
 }
 
@@ -715,6 +739,7 @@ function renderError(msg) {
 
 function resetForm() {
   document.getElementById("codeInput").value = "";
+  updateSearchBtn();
   document.getElementById("resultBox").classList.remove("show");
   if (session) document.getElementById("codeInput").focus();
 }
@@ -733,6 +758,9 @@ document.getElementById("codeInput").addEventListener("keydown", e => {
 document.getElementById("pinInput").addEventListener("keydown", e => {
   if (e.key === "Enter") saveSession();
 });
+document.getElementById("codeInput").addEventListener("input", updateSearchBtn);
+document.getElementById("pinInput").addEventListener("input", updateSessionBtn);
+document.getElementById("cafeSelect").addEventListener("change", updateSessionBtn);
 
 // Fuera de producción la página lo dice en la cara: las dos son idénticas, y
 // canjear a un cliente real contra la base de prueba se ve exactamente igual
