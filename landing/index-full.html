@@ -340,6 +340,14 @@
     .faq-item[open] .faq-plus::before, .faq-item[open] .faq-plus::after { background: var(--white); }
     .faq-item[open] .faq-plus::after { transform: scaleY(0); }
     .faq-item p { padding: 0 4px 22px; font-size: 14.5px; color: var(--text-light); line-height: 1.65; max-width: 640px; }
+    /* ── AUSPICIA ── */
+    .sponsors { background: #FFFFFF; border-top: 1px solid var(--border); padding: 48px 24px 56px; }
+    .sponsors-inner { max-width: 760px; margin: 0 auto; text-align: center; }
+    .sponsors-title { font-family: var(--font-display); font-size: 18px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #4A2D2A; margin-bottom: 28px; }
+    .sponsors-logos { display: flex; align-items: center; justify-content: center; gap: 56px; flex-wrap: wrap; }
+    .sponsors-logos img { height: 44px; width: auto; max-width: 160px; object-fit: contain; display: block; }
+    @media (max-width: 600px) { .sponsors { padding: 36px 20px 44px; } .sponsors-logos { gap: 32px; } .sponsors-logos img { height: 36px; max-width: 110px; } }
+
     /* ── FOOTER ── */
     footer { border-top: 1px solid var(--border); }
     .footer-cta {
@@ -447,7 +455,7 @@
       <div class="phone-wrap">
         <div class="phone-stage">
           <div class="phone-frame">
-            <img src="/Home.png" alt="Buscafé — pantalla inicio" loading="eager" />
+            <img src="https://xoddmbesiurqcxftjpqh.supabase.co/storage/v1/object/public/landing/Home.png" alt="Buscafé — pantalla inicio" loading="eager" />
           </div>
         </div>
       </div>
@@ -589,7 +597,7 @@
       </details>
       <details class="faq-item">
         <summary>¿En qué ciudades funciona?<span class="faq-plus"></span></summary>
-        <p>Actualmente en Montevideo. </p>
+        <p>Actualmente en Montevideo, próximamente en el interior del país.</p>
       </details>
     </div>
   </section>
@@ -620,6 +628,14 @@
         </div>
       </div>
     </div>
+    <!-- AUSPICIA -->
+  <section class="sponsors"><div class="sponsors-inner">
+    <h2 class="sponsors-title">Auspician</h2>
+    <div class="sponsors-logos">
+      <img src="/screenshots/auspicia-1.png" alt="Auspiciante 1" />
+      <img src="/screenshots/auspicia-2.png" alt="Auspiciante 2" />
+      <img src="/screenshots/auspicia-3.png" alt="Auspiciante 3" />
+    </div></div></section>
     <div class="footer-bottom">
       <div class="footer-inner">
         <span class="footer-copy">© 2026 Buscafé. Todos los derechos reservados.</span>
