@@ -154,7 +154,7 @@
     .hero {
       max-width: 1120px;
       margin: 0 auto;
-      padding: 72px 24px 0;
+      padding: 24px 24px 0;
       display: grid;
       grid-template-columns: 1fr 1fr;
       align-items: end;
@@ -228,12 +228,13 @@
     /* ── PHONE + FLOATING TAGS ── */
     .phone-stage { position: relative; display: inline-block; }
     .phone-wrap { display: flex; justify-content: center; align-items: flex-end; }
-    .phone-frame { position: relative; width: 100%; max-width: 620px; }
+    .phone-frame { position: relative; width: 112%; max-width: none; margin-left: -12%; }
     .phone-frame img {
       width: 100%;
       height: auto;
       display: block;
       object-fit: contain;
+      margin-top: -24px;
     }
     @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
     @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
@@ -398,12 +399,13 @@
     @media (max-width: 768px) {
       .nav-actions { display: none; }
       .nav-hamburger { display: flex; }
-      .hero { grid-template-columns: 1fr; padding: 44px 20px 0; gap: 40px; text-align: center; }
+      .hero { grid-template-columns: 1fr; padding: 28px 20px 0; gap: 16px; text-align: center; }
       .hero-text { align-items: center; padding-bottom: 0; }
       .hero-sub { text-align: center; white-space: normal; }
       .store-btns { justify-content: center; width: 100%; }
       .store-btn { width: auto; flex: 1 1 auto; }
-      .phone-frame { max-width: 320px; }
+      .phone-frame { width: 100%; max-width: 440px; margin-left: 0; }
+      .phone-frame img { margin-top: -16px; }
       .ticker { padding: 12px 0; }
       .ticker-item { padding: 0 18px; font-size: 12.5px; }
       .ticker-icon { width: 14px; height: 14px; }
