@@ -399,13 +399,13 @@
     @media (max-width: 768px) {
       .nav-actions { display: none; }
       .nav-hamburger { display: flex; }
-      .hero { grid-template-columns: 1fr; padding: 28px 20px 0; gap: 16px; text-align: center; }
-      .hero-text { align-items: center; padding-bottom: 0; }
+      .hero { grid-template-columns: 1fr; padding: 28px 20px 0; gap: 0; text-align: center; }
+      .hero-text { align-items: center; padding-bottom: 0; position: relative; z-index: 2; }
       .hero-sub { text-align: center; white-space: normal; }
       .store-btns { justify-content: center; width: 100%; }
       .store-btn { width: auto; flex: 1 1 auto; }
       .phone-frame { width: 100%; max-width: 440px; margin-left: 0; }
-      .phone-frame img { margin-top: -16px; }
+      .phone-frame img { margin-top: -32px; }
       .ticker { padding: 12px 0; }
       .ticker-item { padding: 0 18px; font-size: 12.5px; }
       .ticker-icon { width: 14px; height: 14px; }
@@ -436,8 +436,8 @@
   <section id="hero">
     <div class="hero">
       <div class="hero-text">
-        <h1>Buscá cafeterías.<br /><span class="hero-title-accent">Descubrí experiencias.</span></h1>
-        <p class="hero-sub">Encontrá cafeterías según tu plan.</p>
+        <h1>Buscá un cafecito.<br /><span class="hero-title-accent">Descubrí experiencias.</span></h1>
+        <p class="hero-sub">Encontrá el lugar según tu plan.</p>
         <div class="store-btns">
           <a href="https://apps.apple.com/us/iphone/today" class="store-btn store-btn--fill">
             <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
