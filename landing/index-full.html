@@ -154,7 +154,7 @@
     .hero {
       max-width: 1120px;
       margin: 0 auto;
-      padding: 72px 24px 0;
+      padding: 24px 24px 0;
       display: grid;
       grid-template-columns: 1fr 1fr;
       align-items: end;
@@ -228,12 +228,13 @@
     /* ── PHONE + FLOATING TAGS ── */
     .phone-stage { position: relative; display: inline-block; }
     .phone-wrap { display: flex; justify-content: center; align-items: flex-end; }
-    .phone-frame { position: relative; width: 100%; max-width: 620px; }
+    .phone-frame { position: relative; width: 112%; max-width: none; margin-left: -12%; }
     .phone-frame img {
       width: 100%;
       height: auto;
       display: block;
       object-fit: contain;
+      margin-top: -24px;
     }
     @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
     @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
@@ -340,6 +341,16 @@
     .faq-item[open] .faq-plus::before, .faq-item[open] .faq-plus::after { background: var(--white); }
     .faq-item[open] .faq-plus::after { transform: scaleY(0); }
     .faq-item p { padding: 0 4px 22px; font-size: 14.5px; color: var(--text-light); line-height: 1.65; max-width: 640px; }
+    /* ── AUSPICIA ── */
+    .sponsors { background: #FFFFFF; border-top: 1px solid var(--border); padding: 48px 24px 56px; }
+    .sponsors-inner { max-width: 960px; margin: 0 auto; text-align: center; }
+    .sponsors-title { font-family: var(--font-display); font-size: 26px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #4A2D2A; margin-bottom: 36px; }
+    .sponsors-logos { display: flex; align-items: center; justify-content: center; gap: 40px; flex-wrap: nowrap; }
+    .sponsors-logos img { width: 200px; height: 88px; flex: 0 1 200px; min-width: 0; object-fit: contain; display: block; }
+    .sponsors-logos .logo-cultivo { transform: scale(0.72); }
+    .sponsors-logos--row2 { margin-top: 4px; }
+    @media (max-width: 600px) { .sponsors { padding: 36px 20px 44px; } .sponsors-logos { gap: 14px; } .sponsors-logos--row2 { margin-top: 2px; } .sponsors-logos img { width: calc((100vw - 40px - 28px) / 3); flex: 0 0 auto; height: 52px; } }
+
     /* ── FOOTER ── */
     footer { border-top: 1px solid var(--border); }
     .footer-cta {
@@ -388,12 +399,13 @@
     @media (max-width: 768px) {
       .nav-actions { display: none; }
       .nav-hamburger { display: flex; }
-      .hero { grid-template-columns: 1fr; padding: 44px 20px 0; gap: 40px; text-align: center; }
-      .hero-text { align-items: center; padding-bottom: 0; }
+      .hero { grid-template-columns: 1fr; padding: 28px 20px 0; gap: 0; text-align: center; }
+      .hero-text { align-items: center; padding-bottom: 0; position: relative; z-index: 2; }
       .hero-sub { text-align: center; white-space: normal; }
       .store-btns { justify-content: center; width: 100%; }
       .store-btn { width: auto; flex: 1 1 auto; }
-      .phone-frame { max-width: 320px; }
+      .phone-frame { width: 100%; max-width: 440px; margin-left: 0; }
+      .phone-frame img { margin-top: -32px; }
       .ticker { padding: 12px 0; }
       .ticker-item { padding: 0 18px; font-size: 12.5px; }
       .ticker-icon { width: 14px; height: 14px; }
@@ -424,8 +436,8 @@
   <section id="hero">
     <div class="hero">
       <div class="hero-text">
-        <h1>Buscá cafeterías.<br /><span class="hero-title-accent">Descubrí experiencias.</span></h1>
-        <p class="hero-sub">Encontrá cafeterías según tu plan.</p>
+        <h1>Buscá un cafecito.<br /><span class="hero-title-accent">Descubrí experiencias.</span></h1>
+        <p class="hero-sub">Encontrá el lugar según tu plan.</p>
         <div class="store-btns">
           <a href="https://apps.apple.com/us/iphone/today" class="store-btn store-btn--fill">
             <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
@@ -447,7 +459,7 @@
       <div class="phone-wrap">
         <div class="phone-stage">
           <div class="phone-frame">
-            <img src="/Home.png" alt="Buscafé — pantalla inicio" loading="eager" />
+            <img src="/screenshots/HOME.png" alt="Buscafé — pantalla inicio" loading="eager" />
           </div>
         </div>
       </div>
@@ -620,6 +632,18 @@
         </div>
       </div>
     </div>
+    <!-- AUSPICIA -->
+  <section class="sponsors"><div class="sponsors-inner">
+    <h2 class="sponsors-title">Auspician</h2>
+    <div class="sponsors-logos">
+      <img src="/screenshots/auspicia-1.png" alt="Naveia" />
+      <img src="/screenshots/auspicia-2.png" alt="Azucarlito" />
+      <img src="/screenshots/auspicia-4.png" alt="Cardenal" />
+    </div>
+    <div class="sponsors-logos sponsors-logos--row2">
+      <img src="/screenshots/auspicia-3.png" alt="Cultivo Masa Madre" class="logo-cultivo" />
+      <img src="/screenshots/auspicia-6.png" alt="Theo" />
+    </div></div></section>
     <div class="footer-bottom">
       <div class="footer-inner">
         <span class="footer-copy">© 2026 Buscafé. Todos los derechos reservados.</span>

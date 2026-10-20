@@ -21,18 +21,26 @@
       --font: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
     }
     html, body {
-      height: 100%;
+      min-height: 100%;
       font-family: var(--font);
       background: var(--bg);
       color: var(--espresso);
     }
     body {
       display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+    .main {
+      flex: 1;
+      display: flex;
       align-items: center;
       justify-content: center;
       padding: 24px;
-      overflow: hidden;
       position: relative;
+      z-index: 1;
     }
 
     /* subtle background texture */
@@ -117,6 +125,16 @@
     .ig-link:hover { opacity: .88; transform: translateY(-1px); }
     .ig-link svg { width: 18px; height: 18px; }
 
+
+    /* ── FOOTER ── */
+    footer { border-top: 1px solid var(--border); padding: 24px 24px 32px; position: relative; z-index: 1; background: var(--bg); }
+    .footer-inner { max-width: 1120px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+    .footer-copy, .footer-studio { font-size: 13px; color: var(--text-light); }
+    .footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
+    .footer-links a { font-size: 13px; color: var(--text-light); text-decoration: none; transition: color .2s; }
+    .footer-links a:hover { color: var(--espresso); }
+    @media (max-width: 768px) { .footer-inner { flex-direction: column; align-items: flex-start; gap: 12px; } }
+
     @media (max-width: 420px) {
       h1 { font-size: 32px; }
       .isotipo { width: 68px; height: 68px; margin-bottom: 22px; }
@@ -125,10 +143,11 @@
 </head>
 <body>
 
+  <main class="main">
   <div class="wrap">
     <img
       class="isotipo"
-      src="/isotipo.png"
+      src="https://xoddmbesiurqcxftjpqh.supabase.co/storage/v1/object/public/landing/isotipo.png"
       alt="Buscafé"
     />
     <h1>Próximamente</h1>
@@ -147,6 +166,23 @@
       Seguinos en Instagram
     </a>
   </div>
+
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span class="footer-copy">© 2026 Buscafé. Todos los derechos reservados.</span>
+      <div class="footer-links">
+        <a href="/privacy-policy.html">Políticas de Privacidad</a>
+        <a href="/terms-of-service.html">Términos y Condiciones</a>
+        <a href="https://www.instagram.com/buscafe_app" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:5px;">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+          Seguinos en Instagram
+        </a>
+      </div>
+      <span class="footer-studio">Diseñado por Studio XB</span>
+    </div>
+  </footer>
 
 </body>
 </html>
