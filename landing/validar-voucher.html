@@ -435,17 +435,34 @@ async function supabaseRPC(fnName, params) {
     },
     body: JSON.stringify(params),
   });
-  // PostgREST traduce el 42501 que levantan las funciones a 401 (y a 403 según
-  // versión), así que las dos significan lo mismo acá: el PIN no es el de este
-  // local. La anon key viaja en la misma request, y si fuera ella la inválida
-  // habría fallado ya al cargar la lista de locales.
-  if (res.status === 401 || res.status === 403) {
-    const err = new Error("PIN incorrecto");
-    err.badPin = true;
+  if (res.status === 401 || res.status === 403) throw badPinError();
+  if (!res.ok) throw new Error(`Error ${res.status}`);
+
+  const data = await res.json();
+  const row  = Array.isArray(data) ? data[0] : data;
+  const verdict = row && (row.status || row.reason);
+  if (verdict === "invalid_pin") throw badPinError();
+  if (verdict === "locked") {
+    const err = new Error("Local bloqueado");
+    err.locked = true;
+    err.lockedUntil = row.locked_until;
     throw err;
   }
-  if (!res.ok) throw new Error(`Error ${res.status}`);
-  return res.json();
+  return data;
+}
+
+function badPinError() {
+  const err = new Error("PIN incorrecto");
+  err.badPin = true;
+  return err;
+}
+
+function lockedMessage(lockedUntil) {
+  const until = lockedUntil ? new Date(lockedUntil) : null;
+  if (!until || isNaN(until)) return "Demasiados intentos. Probá de nuevo más tarde.";
+  const time = until.toLocaleTimeString("es-UY", { hour: "2-digit", minute: "2-digit", hour12: false });
+  const sameDay = until.toDateString() === new Date().toDateString();
+  return `Demasiados intentos. Probá de nuevo ${sameDay ? "" : "mañana "}a las ${time}.`;
 }
 
 async function supabaseSelect(path) {
@@ -533,10 +550,8 @@ async function saveSession() {
   btn.innerHTML = '<span class="spinner"></span>Verificando…';
 
   try {
-    // Un código imposible: la llamada sirve solo para que el servidor diga si
-    // el PIN es el de este local.
     await supabaseRPC("check_voucher", {
-      p_code: "BC-00000",
+      p_code: "",
       p_cafe_id: select.value,
       p_pin: pin,
     });
@@ -552,9 +567,11 @@ async function saveSession() {
     errBox.className = "result result-notfound show";
     errBox.innerHTML = `
       <span class="result-icon">🔒</span>
-      <div class="result-title">${err.badPin ? "PIN incorrecto" : "No pudimos verificar"}</div>
+      <div class="result-title">${err.badPin ? "PIN incorrecto"
+        : err.locked ? "Local bloqueado" : "No pudimos verificar"}</div>
       <div class="result-body">${err.badPin
         ? "Revisá el PIN de tu local. Si no lo tenés, escribinos."
+        : err.locked ? lockedMessage(err.lockedUntil)
         : "Probá de nuevo en un momento."}</div>
     `;
   } finally {
@@ -618,6 +635,8 @@ async function searchVoucher() {
       // El PIN cambió desde que se guardó en este dispositivo.
       clearSession();
       renderError("El PIN de tu local cambió. Volvé a entrar.");
+    } else if (err.locked) {
+      renderError(lockedMessage(err.lockedUntil), "Local bloqueado");
     } else {
       renderError();
     }
@@ -720,18 +739,20 @@ async function confirmRedeem() {
     if (err.badPin) {
       clearSession();
       renderError("El PIN de tu local cambió. Volvé a entrar.");
+    } else if (err.locked) {
+      renderError(lockedMessage(err.lockedUntil), "Local bloqueado");
     } else {
       renderError();
     }
   }
 }
 
-function renderError(msg) {
+function renderError(msg, title) {
   const box = document.getElementById("resultBox");
   box.className = "result result-notfound show";
   box.innerHTML = `
     <span class="result-icon">⚠️</span>
-    <div class="result-title">Algo salió mal</div>
+    <div class="result-title">${title || "Algo salió mal"}</div>
     <div class="result-body">${msg || "No pudimos conectar. Probá de nuevo en un momento."}</div>
     <button class="btn btn-ghost" onclick="resetForm()">Volver a intentar</button>
   `;
