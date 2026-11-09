@@ -4,185 +4,659 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/png" href="./favicon.png" />
-  <title>Buscafé — Próximamente</title>
-  <meta name="description" content="Buscafé está por llegar. Descubrí tu próximo café de especialidad." />
+  <title>Buscafé — Descubrí tu próximo café</title>
+  <meta name="description" content="Encontrá el lugar ideal para trabajar, brunchear, reunirte o simplemente disfrutar un rico café." />
+  <meta property="og:title" content="Buscafé — Descubrí tu próximo café" />
+  <meta property="og:description" content="Encontrá el lugar ideal para trabajar, brunchear, reunirte o simplemente disfrutar un rico café." />
+  <meta property="og:image" content="https://framerusercontent.com/assets/ziZnxARgEBmNGSiKq2EfJcieJcI.png" />
+  <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;0,9..40,800;1,9..40,500;1,9..40,600&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
       --espresso: #2A1608;
-      --heading: #4A2D2A;
+      --espresso-soft: #4A3221;
       --terracotta: #C2542A;
+      --caramel: #D89A54;
+      --olive: #5C7A4A;
       --bg: #FFFFFF;
+      --bg-warm: #F1E4D0;
+      --white: #FFFFFF;
+      --text: #2A1608;
       --text-light: #8A7360;
       --border: #E5D6C0;
-      --font: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-display: 'DM Sans', sans-serif;
+      --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      --font-mono: 'DM Sans', sans-serif;
     }
-    html, body {
-      min-height: 100%;
-      font-family: var(--font);
-      background: var(--bg);
-      color: var(--espresso);
+    html { scroll-behavior: smooth; }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
     }
     body {
-      display: flex;
-      flex-direction: column;
-      min-height: 100vh;
+      font-family: var(--font-body);
+      background: var(--bg);
+      color: var(--text);
       overflow-x: hidden;
-      position: relative;
     }
-    .main {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      position: relative;
-      z-index: 1;
-    }
-
-    /* subtle background texture */
-    body::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background:
-        radial-gradient(circle at 15% 20%, rgba(194,84,42,.06) 0%, transparent 45%),
-        radial-gradient(circle at 85% 80%, rgba(194,84,42,.05) 0%, transparent 45%);
-      pointer-events: none;
-    }
-
-    .wrap {
-      text-align: center;
-      max-width: 460px;
-      position: relative;
-      z-index: 1;
-    }
-
-    .isotipo {
-      width: 84px;
-      height: 84px;
-      object-fit: contain;
-      margin-bottom: 28px;
-      animation: float 3.5s ease-in-out infinite;
-    }
-    @keyframes float {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
-    }
-
+    a { color: inherit; }
+    :focus-visible { outline: 2.5px solid var(--terracotta); outline-offset: 3px; }
     .eyebrow {
+      font-family: var(--font-mono);
       font-size: 12px;
       font-weight: 700;
-      letter-spacing: .12em;
+      letter-spacing: 1.5px;
       text-transform: uppercase;
       color: var(--terracotta);
-      margin-bottom: 16px;
       display: inline-flex;
       align-items: center;
       gap: 8px;
     }
-    .eyebrow::before, .eyebrow::after {
-      content: '';
-      width: 16px;
-      height: 1.5px;
-      background: var(--terracotta);
-      display: inline-block;
+    .eyebrow::before { content: ''; width: 16px; height: 1.5px; background: var(--terracotta); display: inline-block; }
+    em.accent { font-style: italic; color: var(--terracotta); font-weight: 500; }
+    /* ── NAV ── */
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #FFFFFF;
+      border-bottom: 1px solid var(--border);
+      padding: 0 24px;
     }
-
-    h1 {
-      font-size: clamp(36px, 8vw, 52px);
-      font-weight: 800;
-      letter-spacing: -1px;
-      line-height: 1.1;
-      color: var(--heading);
-      margin-bottom: 18px;
+    .nav-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 68px;
+      gap: 24px;
     }
-
-    p.sub {
-      font-size: 16px;
-      color: var(--text-light);
-      line-height: 1.6;
-      margin-bottom: 36px;
-    }
-
-    .ig-link {
-      display: inline-flex;
+    .nav-logo {
+      display: flex;
       align-items: center;
       gap: 10px;
-      padding: 14px 28px;
-      border-radius: 50px;
-      background: var(--espresso);
-      color: #FBF6EE;
       text-decoration: none;
-      font-size: 14.5px;
-      font-weight: 700;
-      box-shadow: 0 4px 20px rgba(42,22,8,.18);
-      transition: opacity .2s, transform .15s;
+      flex-shrink: 0;
     }
-    .ig-link:hover { opacity: .88; transform: translateY(-1px); }
-    .ig-link svg { width: 18px; height: 18px; }
-
+    .nav-logo img { height: 24px; width: auto; }
+    .nav-logo span {
+      font-family: var(--font-display);
+      font-size: 19px;
+      font-weight: 600;
+      color: var(--espresso);
+      letter-spacing: -0.3px;    }
+    .nav-center {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-light);
+    }
+    .nav-center a { text-decoration: none; transition: color 0.2s; }
+    .nav-center a:hover { color: var(--espresso); }
+    .nav-actions { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+    .nav-link-register {
+      display: inline-flex;
+      align-items: center;
+      color: var(--espresso);
+      text-decoration: none;
+      font-size: 13.5px;
+      font-weight: 700;
+      padding: 10px 18px;
+      border-radius: 50px;
+      border: 1.5px solid var(--border);
+      transition: border-color 0.2s, background 0.2s;
+      white-space: nowrap;
+    }
+    .nav-link-register:hover { border-color: var(--espresso); background: var(--bg-warm); }
+    .nav-hamburger {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      color: var(--espresso);
+      line-height: 0;
+    }
+    .nav-mobile-menu {
+      display: none;
+      position: absolute;
+      top: 68px;
+      left: 0;
+      right: 0;
+      background: var(--bg);
+      border-bottom: 1px solid var(--border);
+      padding: 16px 20px 20px;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 8px 24px rgba(42,22,8,0.1);
+    }
+    .nav-mobile-menu.open { display: flex; }
+    .nav-mobile-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      font-size: 16px;
+      font-weight: 700;
+      padding: 15px;
+      border-radius: 14px;
+    }
+    .nav-mobile-link.outline { border: 1.5px solid var(--border); color: var(--espresso); background: var(--bg-warm); }
+    .nav-mobile-link.ghost { color: var(--text-light); font-weight: 600; font-size: 14.5px; padding: 8px; }
+    /* ── HERO ── */
+    .hero {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 24px 24px 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      align-items: end;
+      gap: 48px;
+    }
+    .hero-text { display: flex; flex-direction: column; gap: 14px; align-self: center; padding-bottom: 64px; }
+    h1 {
+      font-family: var(--font-display);
+      font-size: clamp(38px, 5vw, 60px);
+      font-weight: 700;
+      line-height: 1.12;
+      letter-spacing: -1px;
+      color: var(--espresso);
+    }
+    .hero-title-accent { color: var(--terracotta); }
+    .hero-sub {
+      font-size: 20px;
+      color: var(--text-light);
+      line-height: 1.55;
+      max-width: 420px;
+      white-space: nowrap;
+      margin-bottom: 14px;
+    }
+    /* ── STORE BUTTONS ── */
+    .store-btns { display: flex; gap: 12px; flex-wrap: wrap; }
+    .store-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      width: 226px;
+      padding: 12px 20px;
+      border-radius: 16px;
+      text-decoration: none;
+      transition: opacity 0.2s, transform 0.15s, background 0.2s, border-color 0.2s;
+    }
+    .store-btn:hover { transform: translateY(-1px); }
+    .store-btn svg { width: 26px; height: 26px; flex-shrink: 0; }
+    .store-btn-text { display: flex; flex-direction: column; line-height: 1.2; }
+    .store-btn-text small { font-size: 11px; font-weight: 500; opacity: 0.75; }
+    .store-btn-text strong { font-size: 16.5px; font-weight: 700; letter-spacing: -0.2px; }
+    /* ─ CAMBIO 2: store-btn--fill color → #4A2D2A ─ */
+    .store-btn--fill {
+      background: #4A2D2A;
+      color: var(--white);
+      box-shadow: 0 4px 20px rgba(74, 45, 42, 0.28);
+    }
+    .store-btn--fill:hover { opacity: 0.88; }
+    .store-btn--outline {
+      background: transparent;
+      color: var(--espresso);
+      border: 1.5px solid var(--border);
+    }
+    .store-btn--outline:hover { border-color: var(--espresso); background: var(--bg-warm); }
+    .btn-outline {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      background: transparent;
+      color: var(--espresso);
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 700;
+      padding: 16px 32px;
+      border-radius: 50px;
+      border: 2px solid var(--espresso);
+      transition: background 0.2s, color 0.2s;
+    }
+    .btn-outline:hover { background: var(--espresso); color: var(--white); }
+    /* ── PHONE + FLOATING TAGS ── */
+    .phone-stage { position: relative; display: inline-block; }
+    .phone-wrap { display: flex; justify-content: center; align-items: flex-end; }
+    .phone-frame { position: relative; width: 112%; max-width: none; margin-left: -12%; }
+    .phone-frame img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: contain;
+      margin-top: -24px;
+    }
+    @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+    /* ── REGISTER ─ CAMBIO 2: bg → #4A2D2A ── */
+    .register { background: #4A2D2A; padding: 40px 24px; }
+    .register-card {
+      max-width: 760px;
+      margin: 0 auto;
+      text-align: center;
+      color: var(--espresso);
+    }
+    .register-inner { display: flex; flex-direction: column; align-items: center; gap: 18px; }
+    .register-card h3 {
+      font-family: var(--font-display);
+      font-size: clamp(24px, 3vw, 32px);
+      font-weight: 600;
+      color: #FBF6EE;
+    }
+    .register-card p { font-size: 15px; color: rgba(251,246,238,0.72); line-height: 1.6; max-width: 420px; }
+    /* btn-outline dentro de register → versión clara */
+    .register .btn-outline {
+      color: #FBF6EE;
+      border-color: rgba(251,246,238,0.45);
+    }
+    .register .btn-outline:hover {
+      background: rgba(251,246,238,0.12);
+      color: #FBF6EE;
+      border-color: rgba(251,246,238,0.7);
+    }
+    /* ── TICKER ── */
+    .ticker {
+      background: #4A2C2A;
+      overflow: hidden;
+      padding: 15px 0;
+    }
+    .ticker-track {
+      display: flex;
+      align-items: center;
+      width: max-content;
+      animation: ticker-scroll 48s linear infinite;
+    }
+    .ticker-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 28px;
+      font-family: var(--font-body);
+      font-weight: 400;
+      font-size: 14px;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #FAF7F2;
+      white-space: nowrap;
+    }
+    .ticker-icon { width: 16px; height: 16px; flex-shrink: 0; }
+    @keyframes ticker-scroll {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-33.333%); }
+    }
+    /* ── FAQ ── */
+    .faq { padding: 40px 24px; background: #FFFFFF; }
+    .faq-inner { max-width: 760px; margin: 0 auto; }
+    .section-head { max-width: 560px; margin-bottom: 40px; display: flex; flex-direction: column; gap: 14px; text-align: left; }
+    /* ─ CAMBIO 2: FAQ title → #4A2D2A ─ */
+    .section-head h2 {
+      font-family: var(--font-display);
+      font-size: clamp(28px, 4vw, 38px);
+      font-weight: 600;
+      letter-spacing: -0.5px;
+      color: #4A2D2A;
+      line-height: 1.15;
+    }
+    .faq-item { border-bottom: 1px solid var(--border); }
+    /* ─ CAMBIO 3: FAQ questions → font-weight 400 (regular) ─ */
+    .faq-item summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 22px 4px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      font-size: 16px;
+      font-weight: 400;
+      color: var(--espresso);
+    }
+    .faq-item summary::-webkit-details-marker { display: none; }
+    .faq-plus {
+      flex-shrink: 0;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 1.5px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      transition: transform 0.25s, background 0.25s;
+    }
+    .faq-plus::before, .faq-plus::after { content: ''; position: absolute; background: var(--espresso); }
+    .faq-plus::before { width: 10px; height: 1.5px; }
+    .faq-plus::after { width: 1.5px; height: 10px; transition: transform 0.25s; }
+    .faq-item[open] .faq-plus { background: var(--espresso); }
+    .faq-item[open] .faq-plus::before, .faq-item[open] .faq-plus::after { background: var(--white); }
+    .faq-item[open] .faq-plus::after { transform: scaleY(0); }
+    .faq-item p { padding: 0 4px 22px; font-size: 14.5px; color: var(--text-light); line-height: 1.65; max-width: 640px; }
+    /* ── AUSPICIA ── */
+    .sponsors { background: #FFFFFF; border-top: 1px solid var(--border); padding: 48px 24px 56px; }
+    .sponsors-inner { max-width: 960px; margin: 0 auto; text-align: center; }
+    .sponsors-title { font-family: var(--font-display); font-size: 26px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #4A2D2A; margin-bottom: 36px; }
+    .sponsors-logos { display: flex; align-items: center; justify-content: center; gap: 40px; flex-wrap: nowrap; }
+    .sponsors-logos img { width: 200px; height: 88px; flex: 0 1 200px; min-width: 0; object-fit: contain; display: block; }
+    .sponsors-logos .logo-cultivo { transform: scale(0.72); }
+    .sponsors-logos--row2 { margin-top: 4px; }
+    @media (max-width: 600px) { .sponsors { padding: 36px 20px 44px; } .sponsors-logos { gap: 14px; } .sponsors-logos--row2 { margin-top: 2px; } .sponsors-logos img { width: calc((100vw - 40px - 28px) / 3); flex: 0 0 auto; height: 52px; } }
 
     /* ── FOOTER ── */
-    footer { border-top: 1px solid var(--border); padding: 24px 24px 32px; position: relative; z-index: 1; background: var(--bg); }
-    .footer-inner { max-width: 1120px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
-    .footer-copy, .footer-studio { font-size: 13px; color: var(--text-light); }
+    footer { border-top: 1px solid var(--border); }
+    .footer-cta {
+      padding: 40px 24px 56px;
+      text-align: center;
+      background: #C8A882;
+    }
+    .footer-cta-inner {
+      max-width: 640px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 30px;
+    }
+    /* ─ CAMBIO 2: footer CTA heading → #4A2D2A ─ */
+    .footer-cta h2 {
+      font-family: var(--font-display);
+      font-size: clamp(28px, 4vw, 42px);
+      font-weight: 600;
+      line-height: 1.18;
+      letter-spacing: -0.5px;
+      color: #4A2D2A;
+    }
+    .footer-cta .dl-line { display: block; }
+    .footer-cta .accent { color: #FBF6EE; font-style: normal; }
+    .footer-bottom { padding: 24px 24px 32px; }
+    .footer-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+    .footer-copy { font-size: 13px; color: var(--text-light); }
     .footer-links { display: flex; gap: 24px; flex-wrap: wrap; }
-    .footer-links a { font-size: 13px; color: var(--text-light); text-decoration: none; transition: color .2s; }
+    .footer-links a { font-size: 13px; color: var(--text-light); text-decoration: none; transition: color 0.2s; }
     .footer-links a:hover { color: var(--espresso); }
-    @media (max-width: 768px) { .footer-inner { flex-direction: column; align-items: flex-start; gap: 12px; } }
-
-    @media (max-width: 420px) {
-      h1 { font-size: 32px; }
-      .isotipo { width: 68px; height: 68px; margin-bottom: 22px; }
+    .footer-studio { font-size: 13px; color: var(--text-light); }
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .nav-center { display: none; }
+    }
+    @media (max-width: 768px) {
+      .nav-actions { display: none; }
+      .nav-hamburger { display: flex; }
+      .hero { grid-template-columns: 1fr; padding: 28px 20px 0; gap: 0; text-align: center; }
+      .hero-text { align-items: center; padding-bottom: 0; position: relative; z-index: 2; }
+      .hero-sub { text-align: center; white-space: normal; }
+      .store-btns { justify-content: center; width: 100%; }
+      .store-btn { width: auto; flex: 1 1 auto; }
+      .phone-frame { width: 100%; max-width: 440px; margin-left: 0; }
+      .phone-frame img { margin-top: -32px; }
+      .ticker { padding: 12px 0; }
+      .ticker-item { padding: 0 18px; font-size: 12.5px; }
+      .ticker-icon { width: 14px; height: 14px; }
+      .register-card { padding: 44px 24px; }
+      .register-card::before { left: -14px; }
+      .register-card::after { right: -14px; }
+      .section-head { text-align: center; align-items: center; }
+      .footer-inner { flex-direction: column; align-items: flex-start; gap: 12px; }
+    }
+    @media (max-width: 480px) {
+      nav { padding: 0 16px; }
+      .register, .faq { padding-left: 16px; padding-right: 16px; }
+      .store-btns { flex-direction: column; }
     }
   </style>
 </head>
 <body>
-
-  <main class="main">
-  <div class="wrap">
-    <img
-      class="isotipo"
-      src="/isotipo.png"
-      alt="Buscafé"
-    />
-    <h1>Próximamente</h1>
-    <p class="sub">Algo se está preparando.<br />Seguinos y enterate de lo que se viene.</p>
-    <a
-      href="https://www.instagram.com/buscafe_app"
-      target="_blank"
-      rel="noopener noreferrer"
-      class="ig-link"
-    >
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
-        <circle cx="12" cy="12" r="4"/>
-        <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
-      </svg>
-      Seguinos en Instagram
-    </a>
-  </div>
-
-  </main>
-
-  <footer>
-    <div class="footer-inner">
-      <span class="footer-copy">© 2026 Buscafé. Todos los derechos reservados.</span>
-      <div class="footer-links">
-        <a href="/privacy-policy.html">Políticas de Privacidad</a>
-        <a href="/terms-of-service.html">Términos y Condiciones</a>
-        <a href="https://www.instagram.com/buscafe_app" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:5px;">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
-          Seguinos en Instagram
-        </a>
+  <!-- NAV -->
+  <nav>
+    <div class="nav-inner">
+      <a href="#hero" class="nav-logo">
+        <img src="./logo-icon-nav.png" alt="Buscafé logo" width="18" height="24" />
+        <span>Buscafé</span>
+      </a>
+    </div>
+  </nav>
+  <!-- HERO -->
+  <section id="hero">
+    <div class="hero">
+      <div class="hero-text">
+        <h1>Buscá un cafecito.<br /><span class="hero-title-accent">Descubrí experiencias.</span></h1>
+        <p class="hero-sub">Encontrá el lugar según tu plan.</p>
+        <div class="store-btns">
+          <a href="https://apps.apple.com/app/id6827532952" target="_blank" rel="noopener noreferrer" class="store-btn store-btn--fill">
+            <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+            </svg>
+            <span class="store-btn-text"><small>Disponible en</small><strong>App Store</strong></span>
+          </a>
+          <a href="https://play.google.com/store/apps/details?id=app.buscafe.app" target="_blank" rel="noopener noreferrer" class="store-btn store-btn--outline">
+            <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+              <path d="M99.6 8.6C91 13.3 85 21.8 82.5 33.5v445c2.5 11.7 8.5 20.2 17.1 24.9l3.3 1.6L326 279v-46l-226.4-224.4z" fill="#00d7fe"/>
+              <path d="M401.5 355.6l-75.5-76.6v-46l75.5-76.6 1.6.9 89.4 50.8c25.6 14.6 25.6 38.3 0 52.9l-89.4 50.8-1.6.8z" fill="#ffbc00"/>
+              <path d="M403.1 354.7L326 277.5 99.6 503.4c8.4 8.8 22.3 9.9 37.9 1.2l265.6-149.9" fill="#ff3141"/>
+              <path d="M403.1 200.3L137.5 50.4C121.9 41.7 108 42.8 99.6 51.6L326 277.5l77.1-77.2z" fill="#04f176"/>
+            </svg>
+            <span class="store-btn-text"><small>Disponible en</small><strong>Google Play</strong></span>
+          </a>
+        </div>
       </div>
-      <span class="footer-studio">Diseñado por Studio XB</span>
+      <div class="phone-wrap">
+        <div class="phone-stage">
+          <div class="phone-frame">
+            <img src="/screenshots/HOME.png" alt="Buscafé — pantalla inicio" loading="eager" />
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <!-- REGISTER -->
+  <section class="register" style="display:none">
+    <div class="register-card">
+      <div class="register-inner">
+        <h3>¿Tenés una cafetería?</h3>
+        <p>Sumate a Buscafé y llegá a más personas.</p>
+        <a href="/registrar-cafeteria" class="btn-outline">Registrar mi cafetería</a>
+      </div>
+    </div>
+  </section>
+  <!-- TICKER -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <span class="ticker-item">
+        <svg class="ticker-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 8h13v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8z" fill="#FAF7F2"/>
+          <path d="M17 9h1.3a2.3 2.3 0 0 1 0 4.6H17" stroke="#FAF7F2" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+          <path d="M8 2.5c0 1-1 1-1 2s1 1 1 2M12 2.5c0 1-1 1-1 2s1 1 1 2" stroke="#FAF7F2" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+        </svg>
+        Café de especialidad
+      </span>
+      <span class="ticker-item">
+        <svg class="ticker-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 8h13v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8z" fill="#FAF7F2"/>
+          <path d="M17 9h1.3a2.3 2.3 0 0 1 0 4.6H17" stroke="#FAF7F2" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+          <path d="M8 2.5c0 1-1 1-1 2s1 1 1 2M12 2.5c0 1-1 1-1 2s1 1 1 2" stroke="#FAF7F2" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+        </svg>
+        Explorá por barrio
+      </span>
+      <span class="ticker-item">
+        <svg class="ticker-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 8h13v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8z" fill="#FAF7F2"/>
+          <path d="M17 9h1.3a2.3 2.3 0 0 1 0 4.6H17" stroke="#FAF7F2" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+          <path d="M8 2.5c0 1-1 1-1 2s1 1 1 2M12 2.5c0 1-1 1-1 2s1 1 1 2" stroke="#FAF7F2" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+        </svg>
+        Compartí con amigos
+      </span>
+      <span class="ticker-item">
+        <svg class="ticker-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 8h13v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8z" fill="#FAF7F2"/>
+          <path d="M17 9h1.3a2.3 2.3 0 0 1 0 4.6H17" stroke="#FAF7F2" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+          <path d="M8 2.5c0 1-1 1-1 2s1 1 1 2M12 2.5c0 1-1 1-1 2s1 1 1 2" stroke="#FAF7F2" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+        </svg>
+        Guardá en favoritos
+      </span>
+      <span class="ticker-item">
+        <svg class="ticker-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 8h13v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8z" fill="#FAF7F2"/>
+          <path d="M17 9h1.3a2.3 2.3 0 0 1 0 4.6H17" stroke="#FAF7F2" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+          <path d="M8 2.5c0 1-1 1-1 2s1 1 1 2M12 2.5c0 1-1 1-1 2s1 1 1 2" stroke="#FAF7F2" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+        </svg>
+        Creá colecciones
+      </span>
+      <span class="ticker-item">
+        <svg class="ticker-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 8h13v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8z" fill="#FAF7F2"/>
+          <path d="M17 9h1.3a2.3 2.3 0 0 1 0 4.6H17" stroke="#FAF7F2" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+          <path d="M8 2.5c0 1-1 1-1 2s1 1 1 2M12 2.5c0 1-1 1-1 2s1 1 1 2" stroke="#FAF7F2" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+        </svg>
+        Filtrá por servicios
+      </span>
+      <!-- duplicated set for seamless loop -->
+      <span class="ticker-item">
+        <svg class="ticker-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 8h13v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8z" fill="#FAF7F2"/>
+          <path d="M17 9h1.3a2.3 2.3 0 0 1 0 4.6H17" stroke="#FAF7F2" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+          <path d="M8 2.5c0 1-1 1-1 2s1 1 1 2M12 2.5c0 1-1 1-1 2s1 1 1 2" stroke="#FAF7F2" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+        </svg>
+        Café de especialidad
+      </span>
+      <span class="ticker-item">
+        <svg class="ticker-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 8h13v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8z" fill="#FAF7F2"/>
+          <path d="M17 9h1.3a2.3 2.3 0 0 1 0 4.6H17" stroke="#FAF7F2" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+          <path d="M8 2.5c0 1-1 1-1 2s1 1 1 2M12 2.5c0 1-1 1-1 2s1 1 1 2" stroke="#FAF7F2" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+        </svg>
+        Explorá por barrio
+      </span>
+      <span class="ticker-item">
+        <svg class="ticker-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 8h13v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8z" fill="#FAF7F2"/>
+          <path d="M17 9h1.3a2.3 2.3 0 0 1 0 4.6H17" stroke="#FAF7F2" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+          <path d="M8 2.5c0 1-1 1-1 2s1 1 1 2M12 2.5c0 1-1 1-1 2s1 1 1 2" stroke="#FAF7F2" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+        </svg>
+        Compartí con amigos
+      </span>
+      <span class="ticker-item">
+        <svg class="ticker-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 8h13v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8z" fill="#FAF7F2"/>
+          <path d="M17 9h1.3a2.3 2.3 0 0 1 0 4.6H17" stroke="#FAF7F2" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+          <path d="M8 2.5c0 1-1 1-1 2s1 1 1 2M12 2.5c0 1-1 1-1 2s1 1 1 2" stroke="#FAF7F2" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+        </svg>
+        Guardá en favoritos
+      </span>
+      <span class="ticker-item">
+        <svg class="ticker-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 8h13v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8z" fill="#FAF7F2"/>
+          <path d="M17 9h1.3a2.3 2.3 0 0 1 0 4.6H17" stroke="#FAF7F2" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+          <path d="M8 2.5c0 1-1 1-1 2s1 1 1 2M12 2.5c0 1-1 1-1 2s1 1 1 2" stroke="#FAF7F2" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+        </svg>
+        Creá colecciones
+      </span>
+      <span class="ticker-item">
+        <svg class="ticker-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path d="M4 8h13v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8z" fill="#FAF7F2"/>
+          <path d="M17 9h1.3a2.3 2.3 0 0 1 0 4.6H17" stroke="#FAF7F2" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+          <path d="M8 2.5c0 1-1 1-1 2s1 1 1 2M12 2.5c0 1-1 1-1 2s1 1 1 2" stroke="#FAF7F2" stroke-width="1.3" stroke-linecap="round" fill="none"/>
+        </svg>
+        Filtrá por servicios
+      </span>
+    </div>
+  </div>
+  <!-- FAQ -->
+  <section id="faq" class="faq">
+    <div class="faq-inner">
+      <div class="section-head">
+        <h2>Preguntas Frecuentes</h2>
+      </div>
+      <details class="faq-item" open>
+        <summary>¿Buscafé es gratis?<span class="faq-plus"></span></summary>
+        <p>Sí, es totalmente gratis para usuarios amantes del café que quieren descubrir nuevas experiencias.</p>
+      </details>
+      <details class="faq-item">
+        <summary>¿Qué beneficios tengo por usar Buscafé?<span class="faq-plus"></span></summary>
+        <p>Accedé a descuentos exclusivos en cafeterías adheridas presentando tu cupón desde la app. Para el lanzamiento de la app contamos con un 15% OFF en una bebida con café en locales adheridos.</p>
+      </details>
+      <details class="faq-item">
+        <summary>¿En qué plataformas está disponible?<span class="faq-plus"></span></summary>
+        <p>En iOS a través de App Store y en Android a través de Google Play, ambas gratuitas.</p>
+      </details>
+      <details class="faq-item">
+        <summary>¿Qué puedo hacer en Buscafé?<span class="faq-plus"></span></summary>
+        <p>Descubrir cafeterías por barrio, por necesidades, compartir con amigxs, agregar a favoritos y crear colecciones por intereses.</p>
+      </details>
+      <details class="faq-item">
+        <summary>¿En qué ciudad funciona?<span class="faq-plus"></span></summary>
+        <p>Por ahora, en Montevideo. Y ya tenemos ganas de llegar al interior del país y a toda la región.</p>
+      </details>
+    </div>
+  </section>
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-cta">
+      <div class="footer-cta-inner">
+        <h2>
+          <span class="dl-line">Menos tiempo buscando.</span>
+          <span class="dl-line"><em class="accent">Más tiempo disfrutando.</em></span>
+        </h2>
+        <div class="store-btns">
+          <a href="https://apps.apple.com/app/id6827532952" target="_blank" rel="noopener noreferrer" class="store-btn store-btn--fill">
+            <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+              <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+            </svg>
+            <span class="store-btn-text"><small>Disponible en</small><strong>App Store</strong></span>
+          </a>
+          <a href="https://play.google.com/store/apps/details?id=app.buscafe.app" target="_blank" rel="noopener noreferrer" class="store-btn store-btn--fill">
+            <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+              <path d="M99.6 8.6C91 13.3 85 21.8 82.5 33.5v445c2.5 11.7 8.5 20.2 17.1 24.9l3.3 1.6L326 279v-46l-226.4-224.4z" fill="#00d7fe"/>
+              <path d="M401.5 355.6l-75.5-76.6v-46l75.5-76.6 1.6.9 89.4 50.8c25.6 14.6 25.6 38.3 0 52.9l-89.4 50.8-1.6.8z" fill="#ffbc00"/>
+              <path d="M403.1 354.7L326 277.5 99.6 503.4c8.4 8.8 22.3 9.9 37.9 1.2l265.6-149.9" fill="#ff3141"/>
+              <path d="M403.1 200.3L137.5 50.4C121.9 41.7 108 42.8 99.6 51.6L326 277.5l77.1-77.2z" fill="#04f176"/>
+            </svg>
+            <span class="store-btn-text"><small>Disponible en</small><strong>Google Play</strong></span>
+          </a>
+        </div>
+      </div>
+    </div>
+    <!-- AUSPICIA -->
+  <section class="sponsors"><div class="sponsors-inner">
+    <h2 class="sponsors-title">Auspician</h2>
+    <div class="sponsors-logos">
+      <img src="/screenshots/auspicia-1.png" alt="Naveia" />
+      <img src="/screenshots/auspicia-2.png" alt="Azucarlito" />
+      <img src="/screenshots/auspicia-4.png" alt="Cardenal" />
+    </div>
+    <div class="sponsors-logos sponsors-logos--row2">
+      <img src="/screenshots/auspicia-3.png" alt="Cultivo Masa Madre" class="logo-cultivo" />
+      <img src="/screenshots/auspicia-6.png" alt="Theo" />
+    </div></div></section>
+    <div class="footer-bottom">
+      <div class="footer-inner">
+        <span class="footer-copy">© 2026 Buscafé. Todos los derechos reservados.</span>
+        <div class="footer-links">
+          <a href="/privacy-policy.html">Políticas de Privacidad</a>
+          <a href="/terms-of-service.html">Términos y Condiciones</a>
+          <a href="https://www.instagram.com/buscafe_app" target="_blank" rel="noopener noreferrer" style="display:inline-flex;align-items:center;gap:5px;">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/></svg>
+            Seguinos en Instagram
+          </a>
+        </div>
+        <span class="footer-studio">Diseñado por Studio XB</span>
+      </div>
     </div>
   </footer>
-
 </body>
 </html>
